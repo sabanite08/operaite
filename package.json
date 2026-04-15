@@ -2,6 +2,7 @@
   "name": "operaite",
   "version": "1.0.0",
   "description": "Operaite - Small Business Command Center",
+  "type": "module",
   "dependencies": {
     "stripe": "^14.0.0"
   }
