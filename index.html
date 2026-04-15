@@ -66,6 +66,14 @@
     .btn.active-platform { background: #EEEDFE; border-color: #534AB7; color: #534AB7; }
     .output-box { background: #f9f9f8; border: 1px solid #e8e8e5; border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 13.5px; line-height: 1.75; white-space: pre-wrap; display: none; }
     .output-box.visible { display: block; }
+    .template-picker { display: flex; gap: 10px; margin: 14px 0 4px; flex-wrap: wrap; }
+    .tpl-card { border: 2px solid #e8e8e5; border-radius: 8px; padding: 0; cursor: pointer; overflow: hidden; width: 90px; transition: border-color 0.15s; }
+    .tpl-card.selected { border-color: #534AB7; }
+    .tpl-card .tpl-header { height: 28px; }
+    .tpl-card .tpl-body { padding: 6px 7px; }
+    .tpl-card .tpl-line { height: 4px; border-radius: 2px; background: #e8e8e5; margin: 3px 0; }
+    .tpl-card .tpl-line.short { width: 60%; }
+    .tpl-card .tpl-label { font-size: 10px; color: #888; margin-top: 5px; text-align: center; padding-bottom: 5px; }
     .loading { color: #aaa; font-style: italic; }
     .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 500; }
     .badge-green { background: #E1F5EE; color: #0F6E56; }
@@ -341,7 +349,25 @@
           <div class="invoice-total" id="inv-subtotal" style="display:none;font-size:14px;color:#888;font-weight:400;margin-top:10px;">Subtotal: $0.00</div>
           <div class="invoice-total" id="inv-tax-line" style="display:none;font-size:14px;color:#888;font-weight:400;">Tax: $0.00</div>
           <div class="invoice-total" id="inv-total">Total: $0.00</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
+          <div style="font-size:12px;color:#999;margin-top:14px;margin-bottom:2px;">Template style</div>
+          <div class="template-picker" id="inv-tpl-picker">
+            <div class="tpl-card selected" data-tpl="classic">
+              <div class="tpl-header" style="background:#534AB7;"></div>
+              <div class="tpl-body"><div class="tpl-line"></div><div class="tpl-line short"></div><div class="tpl-line"></div></div>
+              <div class="tpl-label">Classic</div>
+            </div>
+            <div class="tpl-card" data-tpl="minimal">
+              <div class="tpl-header" style="background:#f8f8f6;border-bottom:2px solid #222;"></div>
+              <div class="tpl-body"><div class="tpl-line"></div><div class="tpl-line short"></div><div class="tpl-line"></div></div>
+              <div class="tpl-label">Minimal</div>
+            </div>
+            <div class="tpl-card" data-tpl="dark">
+              <div class="tpl-header" style="background:#1a1a2e;"></div>
+              <div class="tpl-body"><div class="tpl-line"></div><div class="tpl-line short"></div><div class="tpl-line"></div></div>
+              <div class="tpl-label">Dark</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
             <button class="btn primary" id="gen-invoice-btn">Generate invoice</button>
             <button class="btn" id="pdf-btn">Download PDF</button>
           </div>
@@ -589,7 +615,25 @@
               <span style="font-size:13px;color:#666;">%</span>
             </div>
           </div>
-          <button class="btn primary" id="gen-proposal-btn" style="margin-top:14px;">Generate proposal</button>
+          <div style="font-size:12px;color:#999;margin-top:14px;margin-bottom:2px;">Template style</div>
+          <div class="template-picker" id="prop-tpl-picker">
+            <div class="tpl-card selected" data-tpl="classic">
+              <div class="tpl-header" style="background:#534AB7;"></div>
+              <div class="tpl-body"><div class="tpl-line"></div><div class="tpl-line short"></div><div class="tpl-line"></div></div>
+              <div class="tpl-label">Classic</div>
+            </div>
+            <div class="tpl-card" data-tpl="minimal">
+              <div class="tpl-header" style="background:#f8f8f6;border-bottom:2px solid #222;"></div>
+              <div class="tpl-body"><div class="tpl-line"></div><div class="tpl-line short"></div><div class="tpl-line"></div></div>
+              <div class="tpl-label">Minimal</div>
+            </div>
+            <div class="tpl-card" data-tpl="dark">
+              <div class="tpl-header" style="background:#1a1a2e;"></div>
+              <div class="tpl-body"><div class="tpl-line"></div><div class="tpl-line short"></div><div class="tpl-line"></div></div>
+              <div class="tpl-label">Dark</div>
+            </div>
+          </div>
+          <button class="btn primary" id="gen-proposal-btn" style="margin-top:10px;">Generate proposal</button>
           <div id="prop-email-btns" style="display:none;margin-top:10px;">
             <div style="font-size:12px;color:#999;margin-bottom:6px;">Send via:</div>
             <div style="display:flex;gap:8px;">
@@ -730,7 +774,11 @@
   });
 
   // HTML invoice renderer
-  function buildInvoiceHTML(data) {
+  var tplColors = { classic: { bg: '#534AB7', accent: '#534AB7', text: '#fff', sub: 'rgba(255,255,255,0.75)' }, minimal: { bg: '#fff', accent: '#222', text: '#222', sub: '#888', border: '2px solid #222' }, dark: { bg: '#1a1a2e', accent: '#e2b04a', text: '#fff', sub: 'rgba(255,255,255,0.6)' } };
+
+  function buildInvoiceHTML(data, tpl) {
+    tpl = tpl || 'classic';
+    var c = tplColors[tpl];
     var rows = data.items.map(function(item) {
       return '<tr style="border-bottom:1px solid #f0f0ec;">' +
         '<td style="padding:10px 8px;font-size:13.5px;">' + item.desc + '</td>' +
@@ -741,16 +789,17 @@
     }).join('');
     var subtotalRow = data.taxOn ? '<tr><td colspan="3" style="text-align:right;padding:6px 8px;font-size:13px;color:#999;border-top:1px solid #f0f0ec;">Subtotal</td><td style="text-align:right;padding:6px 8px;font-size:13px;color:#999;border-top:1px solid #f0f0ec;">$' + data.subtotal.toFixed(2) + '</td></tr>' : '';
     var taxRow = data.taxOn ? '<tr><td colspan="3" style="text-align:right;padding:6px 8px;font-size:13px;color:#666;">Tax (' + data.taxRate + '%)</td><td style="text-align:right;padding:6px 8px;font-size:13px;color:#666;">$' + data.taxAmt.toFixed(2) + '</td></tr>' : '';
-    var fromExtra = (data.fromAddress ? '<div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px;">' + data.fromAddress + '</div>' : '') +
-      (data.fromPhone ? '<div style="font-size:12px;color:rgba(255,255,255,0.8);">' + data.fromPhone + '</div>' : '') +
-      (data.fromEmail ? '<div style="font-size:12px;color:rgba(255,255,255,0.8);">' + data.fromEmail + '</div>' : '');
+    var fromExtra = (data.fromAddress ? '<div style="font-size:12px;color:' + c.sub + ';margin-top:2px;">' + data.fromAddress + '</div>' : '') +
+      (data.fromPhone ? '<div style="font-size:12px;color:' + c.sub + ';">' + data.fromPhone + '</div>' : '') +
+      (data.fromEmail ? '<div style="font-size:12px;color:' + c.sub + ';">' + data.fromEmail + '</div>' : '');
     var toExtra = (data.toAddress ? '<div style="font-size:13px;color:#666;margin-top:3px;">' + data.toAddress + '</div>' : '') +
       (data.toPhone ? '<div style="font-size:13px;color:#888;">' + data.toPhone + '</div>' : '');
+    var headerBorder = c.border ? 'border-bottom:' + c.border + ';' : '';
     return '<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e8e8e5;">' +
-      '<div style="background:#534AB7;padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;">' +
-        '<div><div style="font-size:20px;font-weight:700;color:#fff;">' + data.fromName + '</div>' + fromExtra + '</div>' +
-        '<div style="text-align:right;"><div style="font-size:26px;font-weight:800;color:#fff;letter-spacing:-1px;">INVOICE</div>' +
-        '<div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;">' + data.date + '</div></div>' +
+      '<div style="background:' + c.bg + ';padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;' + headerBorder + '">' +
+        '<div><div style="font-size:20px;font-weight:700;color:' + c.text + ';">' + data.fromName + '</div>' + fromExtra + '</div>' +
+        '<div style="text-align:right;"><div style="font-size:26px;font-weight:800;color:' + c.accent + ';letter-spacing:-1px;">' + (tpl === 'minimal' ? 'INVOICE' : '<span style="color:' + c.text + '">INVOICE</span>') + '</div>' +
+        '<div style="font-size:12px;color:' + c.sub + ';margin-top:4px;">' + data.date + '</div></div>' +
       '</div>' +
       '<div style="padding:24px 28px;">' +
         '<div style="background:#f8f8f6;border-radius:8px;padding:14px 16px;margin-bottom:20px;">' +
@@ -766,8 +815,8 @@
           '</tr></thead>' +
           '<tbody>' + rows + '</tbody>' +
           '<tfoot>' + subtotalRow + taxRow +
-            '<tr><td colspan="3" style="text-align:right;padding:12px 8px;font-size:15px;font-weight:700;color:#534AB7;border-top:2px solid #534AB7;">Total</td>' +
-            '<td style="text-align:right;padding:12px 8px;font-size:15px;font-weight:700;color:#534AB7;border-top:2px solid #534AB7;">$' + data.total.toFixed(2) + '</td></tr>' +
+            '<tr><td colspan="3" style="text-align:right;padding:12px 8px;font-size:15px;font-weight:700;color:' + c.accent + ';border-top:2px solid ' + c.accent + ';">Total</td>' +
+            '<td style="text-align:right;padding:12px 8px;font-size:15px;font-weight:700;color:' + c.accent + ';border-top:2px solid ' + c.accent + ';">$' + data.total.toFixed(2) + '</td></tr>' +
           '</tfoot>' +
         '</table>' +
         '<div style="margin-top:20px;padding-top:14px;border-top:1px solid #f0f0ec;font-size:12px;color:#bbb;">Payment due within 14 days. Thank you for your business!</div>' +
@@ -775,16 +824,19 @@
   }
 
   // HTML proposal wrapper
-  function wrapProposalHTML(data, content) {
-    var fromExtra = (data.fromAddress ? '<div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px;">' + data.fromAddress + '</div>' : '') +
-      (data.fromPhone ? '<div style="font-size:12px;color:rgba(255,255,255,0.8);">' + data.fromPhone + '</div>' : '');
+  function wrapProposalHTML(data, content, tpl) {
+    tpl = tpl || 'classic';
+    var c = tplColors[tpl];
+    var fromExtra = (data.fromAddress ? '<div style="font-size:12px;color:' + c.sub + ';margin-top:2px;">' + data.fromAddress + '</div>' : '') +
+      (data.fromPhone ? '<div style="font-size:12px;color:' + c.sub + ';">' + data.fromPhone + '</div>' : '');
     var toExtra = (data.toAddress ? '<div style="font-size:13px;color:#666;margin-top:2px;">' + data.toAddress + '</div>' : '') +
       (data.toPhone ? '<div style="font-size:13px;color:#888;">' + data.toPhone + '</div>' : '');
+    var headerBorder = c.border ? 'border-bottom:' + c.border + ';' : '';
     return '<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e8e8e5;">' +
-      '<div style="background:#534AB7;padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;">' +
-        '<div><div style="font-size:20px;font-weight:700;color:#fff;">' + data.fromName + '</div>' + fromExtra + '</div>' +
-        '<div style="text-align:right;"><div style="font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;">PROPOSAL</div>' +
-        '<div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;">' + new Date().toLocaleDateString() + '</div></div>' +
+      '<div style="background:' + c.bg + ';padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;' + headerBorder + '">' +
+        '<div><div style="font-size:20px;font-weight:700;color:' + c.text + ';">' + data.fromName + '</div>' + fromExtra + '</div>' +
+        '<div style="text-align:right;"><div style="font-size:22px;font-weight:800;color:' + (tpl === 'minimal' ? c.accent : c.text) + ';letter-spacing:-0.5px;">PROPOSAL</div>' +
+        '<div style="font-size:12px;color:' + c.sub + ';margin-top:4px;">' + new Date().toLocaleDateString() + '</div></div>' +
       '</div>' +
       '<div style="padding:24px 28px;">' +
         '<div style="background:#f8f8f6;border-radius:8px;padding:14px 16px;margin-bottom:20px;">' +
@@ -794,6 +846,23 @@
         '<div style="font-size:14px;line-height:1.7;color:#333;white-space:pre-wrap;">' + content + '</div>' +
       '</div></div>';
   }
+
+  // Template pickers
+  var invTpl = 'classic', propTpl = 'classic';
+  document.querySelectorAll('#inv-tpl-picker .tpl-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      document.querySelectorAll('#inv-tpl-picker .tpl-card').forEach(function(c) { c.classList.remove('selected'); });
+      card.classList.add('selected');
+      invTpl = card.getAttribute('data-tpl');
+    });
+  });
+  document.querySelectorAll('#prop-tpl-picker .tpl-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      document.querySelectorAll('#prop-tpl-picker .tpl-card').forEach(function(c) { c.classList.remove('selected'); });
+      card.classList.add('selected');
+      propTpl = card.getAttribute('data-tpl');
+    });
+  });
 
   function setEmailLinks(prefix, subject, body) {
     var btns = document.getElementById(prefix + '-email-btns');
@@ -1030,7 +1099,7 @@
     var subtotal = items.reduce(function(a, i) { return a + i.qty * i.price; }, 0);
     var taxAmt = taxOn ? subtotal * (taxRate / 100) : 0;
     var total = subtotal + taxAmt;
-    var html = buildInvoiceHTML({ fromName: fromName, fromAddress: fromAddress, fromPhone: fromPhone, fromEmail: fromEmail, toName: toName, toAddress: toAddress, toPhone: toPhone, date: date, items: items, taxOn: taxOn, taxRate: taxRate, subtotal: subtotal, taxAmt: taxAmt, total: total });
+    var html = buildInvoiceHTML({ fromName: fromName, fromAddress: fromAddress, fromPhone: fromPhone, fromEmail: fromEmail, toName: toName, toAddress: toAddress, toPhone: toPhone, date: date, items: items, taxOn: taxOn, taxRate: taxRate, subtotal: subtotal, taxAmt: taxAmt, total: total }, invTpl);
     var out = document.getElementById('inv-output');
     out.className = 'output-box visible';
     out.innerHTML = html;
@@ -1267,7 +1336,7 @@
     out.innerHTML = '<span class="loading">Generating your proposal...</span>';
     var prompt = 'Write a short, simple project proposal. Project: ' + scope + '. ' + (price ? 'Price: ' + price + '.' : '') + taxStr + (timeline ? ' Timeline: ' + timeline + '.' : '') + ' Keep it brief and easy to read — just a few short sections: what the project is, what is included, the price, and how to get started. Plain business language, no fluff. Do not include from/to headers, those will be added separately.';
     var result = await callAI(prompt);
-    var html = wrapProposalHTML({ fromName: fromName, fromAddress: fromAddress, fromPhone: fromPhone, toName: toName, toAddress: toAddress, toPhone: toPhone }, result);
+    var html = wrapProposalHTML({ fromName: fromName, fromAddress: fromAddress, fromPhone: fromPhone, toName: toName, toAddress: toAddress, toPhone: toPhone }, result, propTpl);
     out.innerHTML = html;
     setEmailLinks('prop', 'Proposal from ' + fromName, result);
   });
