@@ -30,7 +30,7 @@
     .pricing-feature::before { content: '✓'; color: #534AB7; font-weight: 700; }
     .app { display: none; }
     .app.visible { display: flex; }
-    .sidebar { width: 220px; background: #fff; border-right: 1px solid #e8e8e5; padding: 1.5rem 1rem; flex-shrink: 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; }
+    .sidebar { width: 220px; background: #fff; border-right: 1px solid #e8e8e5; padding: 1.5rem 1rem; flex-shrink: 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; }
     .wordmark { display: flex; align-items: center; gap: 8px; margin-bottom: 0.25rem; }
     .wordmark-icon { width: 28px; height: 28px; background: #534AB7; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .logo { font-size: 17px; font-weight: 600; color: #1a1a1a; }
@@ -512,8 +512,6 @@
           <button class="btn primary" id="gen-faq-btn">Generate FAQ</button>
           <div class="output-box" id="faq-output"></div>
         </div>
-      </div>
-
       </div>
     </div>
   </div>
