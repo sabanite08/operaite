@@ -362,6 +362,9 @@
             <div style="display:flex;gap:8px;align-items:center;">
               <select id="acct-filter-month" style="width:auto;margin-top:0;font-size:13px;"></select>
               <button class="btn sm" id="acct-export-btn">Export CSV</button>
+              <button class="btn sm" id="acct-save-backup-btn">Save backup</button>
+              <label class="btn sm" for="acct-load-input" style="cursor:pointer;margin:0;">Load backup</label>
+              <input type="file" id="acct-load-input" accept=".json" style="display:none;">
             </div>
           </div>
           <div id="acct-list"><div style="color:#aaa;font-size:13.5px;text-align:center;padding:20px 0;">No entries yet. Add your first income or expense above.</div></div>
@@ -844,6 +847,36 @@
     document.getElementById('acct-form').style.display = 'none';
     populateMonthFilter();
     renderAcct();
+  });
+
+  document.getElementById('acct-save-backup-btn').addEventListener('click', function() {
+    var blob = new Blob([JSON.stringify(acctEntries, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'operaite-accounting-backup.json';
+    a.click();
+  });
+
+  document.getElementById('acct-load-input').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var data = JSON.parse(ev.target.result);
+        if (!Array.isArray(data)) throw new Error();
+        if (acctEntries.length && !confirm('This will replace your current data (' + acctEntries.length + ' entries). Continue?')) return;
+        acctEntries = data;
+        saveAcctEntries();
+        populateMonthFilter();
+        renderAcct();
+        alert('Backup loaded — ' + data.length + ' entries restored.');
+      } catch(err) {
+        alert('Invalid backup file. Please select a valid operaite backup.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
   });
 
   document.getElementById('acct-export-btn').addEventListener('click', function() {
