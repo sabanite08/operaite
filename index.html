@@ -214,39 +214,9 @@
 
       <div class="page" id="page-reviews">
         <div class="page-title">Review manager</div>
-        <div class="page-sub">Import reviews from your listings or paste them in manually</div>
+        <div class="page-sub">Paste a customer review and generate a professional response in seconds</div>
         <div class="card">
-          <div class="card-title">Import reviews from your listings</div>
-          <p style="font-size:13.5px;color:#888;margin-bottom:14px;">Enter your business name and city to pull in recent reviews.</p>
-          <div class="two-col">
-            <div>
-              <label style="margin-top:0;">Business name</label>
-              <input type="text" id="import-biz" placeholder="e.g. Mike's Auto Repair">
-            </div>
-            <div>
-              <label style="margin-top:0;">City</label>
-              <input type="text" id="import-city" placeholder="e.g. Birmingham, AL">
-            </div>
-          </div>
-          <div class="platform-row">
-            <button class="btn sm active-platform" id="plat-all">All platforms</button>
-            <button class="btn sm" id="plat-google">Google</button>
-            <button class="btn sm" id="plat-yelp">Yelp</button>
-            <button class="btn sm" id="plat-facebook">Facebook</button>
-            <button class="btn sm" id="plat-tripadvisor">TripAdvisor</button>
-          </div>
-          <button class="btn primary" id="import-btn">Import reviews</button>
-          <div id="import-status" style="font-size:13px;color:#888;margin-top:10px;display:none;"></div>
-        </div>
-        <div class="card" id="imported-card" style="display:none;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-            <div class="card-title" style="margin-bottom:0;">Imported reviews</div>
-            <div id="review-stats" style="font-size:13px;color:#888;"></div>
-          </div>
-          <div id="imported-list"></div>
-        </div>
-        <div class="card">
-          <div class="card-title">Or paste a review manually</div>
+          <div class="card-title">Respond to a review</div>
           <label style="margin-top:0;">Business name</label>
           <input type="text" id="rev-biz" placeholder="e.g. Mike's Auto Repair">
           <label>Customer review</label>
@@ -320,7 +290,6 @@
   var currentUser = null;
   try { currentUser = JSON.parse(localStorage.getItem('operaite_user') || 'null'); } catch(e) {}
 
-  var selectedPlatform = 'all';
   var stripe = null;
   var cardElement = null;
 
@@ -472,80 +441,6 @@
   document.getElementById('qa-reviews').addEventListener('click', function() { showPage('reviews'); });
   document.getElementById('qa-audit').addEventListener('click', function() { showPage('audit'); });
   document.getElementById('qa-invoice').addEventListener('click', function() { showPage('invoice'); });
-
-  // Platform buttons
-  var platforms = ['all', 'google', 'yelp', 'facebook', 'tripadvisor'];
-  platforms.forEach(function(p) {
-    var btn = document.getElementById('plat-' + p);
-    if (!btn) return;
-    btn.addEventListener('click', function() {
-      platforms.forEach(function(x) {
-        var b = document.getElementById('plat-' + x);
-        if (b) b.classList.remove('active-platform');
-      });
-      btn.classList.add('active-platform');
-      selectedPlatform = p;
-    });
-  });
-
-  // Import reviews
-  document.getElementById('import-btn').addEventListener('click', async function() {
-    var biz = document.getElementById('import-biz').value.trim();
-    var city = document.getElementById('import-city').value.trim();
-    if (!biz) { alert('Please enter your business name.'); return; }
-    var status = document.getElementById('import-status');
-    status.style.display = 'block';
-    status.textContent = 'Searching for reviews...';
-    var platMap = { all: 'Google, Yelp, Facebook, TripAdvisor', google: 'Google', yelp: 'Yelp', facebook: 'Facebook', tripadvisor: 'TripAdvisor' };
-    var platStr = platMap[selectedPlatform] || 'Google';
-    var locStr = city ? 'in ' + city : '';
-    var prompt = 'Generate 6 realistic customer reviews for "' + biz + '" ' + locStr + ' from these platforms: ' + platStr + '. Mix of ratings, mostly positive. Return ONLY valid JSON array, no markdown, no explanation: [{"platform":"Google","author":"Name L.","rating":5,"date":"1 week ago","text":"review text"}]';
-    try {
-      var result = await callAI(prompt);
-      var clean = result.replace(/```json/g, '').replace(/```/g, '').trim();
-      var reviews = JSON.parse(clean);
-      status.textContent = 'Found ' + reviews.length + ' reviews for "' + biz + '"';
-      renderReviews(reviews, biz);
-    } catch(e) {
-      status.textContent = 'Could not load reviews. Please try again.';
-    }
-  });
-
-  function renderReviews(reviews, biz) {
-    var card = document.getElementById('imported-card');
-    var list = document.getElementById('imported-list');
-    var stats = document.getElementById('review-stats');
-    var avg = (reviews.reduce(function(a, r) { return a + r.rating; }, 0) / reviews.length).toFixed(1);
-    stats.textContent = reviews.length + ' reviews · avg ' + avg + ' ★';
-    var colors = { Google: '#4285F4', Yelp: '#FF1A1A', Facebook: '#1877F2', TripAdvisor: '#00AF87' };
-    var html = '';
-    reviews.forEach(function(r, i) {
-      var stars = '';
-      for (var s = 0; s < 5; s++) stars += s < r.rating ? '★' : '☆';
-      var bc = r.rating >= 4 ? 'badge-green' : r.rating === 3 ? 'badge-amber' : 'badge-red';
-      var col = colors[r.platform] || '#888';
-      html += '<div class="review-item">';
-      html += '<div class="review-meta">';
-      html += '<span class="review-name">' + r.author + '</span>';
-      html += '<span class="stars">' + stars + '</span>';
-      html += '<span class="badge ' + bc + '">' + r.rating + ' stars</span>';
-      html += '<span style="font-size:11px;color:' + col + ';font-weight:600;margin-left:auto;">' + r.platform + '</span>';
-      html += '<span style="font-size:11px;color:#bbb;margin-left:6px;">' + r.date + '</span>';
-      html += '</div>';
-      html += '<div class="review-text">&quot;' + r.text + '&quot;</div>';
-      html += '<button class="btn sm respond-btn" data-text="' + r.text.replace(/"/g, '&quot;') + '" data-biz="' + biz.replace(/"/g, '&quot;') + '">Respond to this ↗</button>';
-      html += '</div>';
-    });
-    list.innerHTML = html;
-    card.style.display = 'block';
-    list.querySelectorAll('.respond-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        document.getElementById('rev-text').value = btn.getAttribute('data-text');
-        document.getElementById('rev-biz').value = btn.getAttribute('data-biz');
-        document.getElementById('rev-text').scrollIntoView({ behavior: 'smooth' });
-      });
-    });
-  }
 
   // Generate review response
   document.getElementById('gen-response-btn').addEventListener('click', async function() {
