@@ -689,10 +689,11 @@
     </div>
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 (function() {
+  var supabase = window.supabase.createClient('https://dboeopafkoobfpic.supabase.co', 'sb_publishable_Y0Khe3Sz0BxOYDb72Dg02w_FTMuoAOh');
   var currentUser = null;
-  try { currentUser = JSON.parse(localStorage.getItem('operaite_user') || 'null'); } catch(e) {}
 
   var stripe = null;
   var cardElement = null;
@@ -923,38 +924,48 @@
   document.getElementById('goto-login').addEventListener('click', function() { showScreen('login'); });
   document.getElementById('goto-signup').addEventListener('click', function() { showScreen('signup'); });
 
-  document.getElementById('signup-btn').addEventListener('click', function() {
+  document.getElementById('signup-btn').addEventListener('click', async function() {
     var name = document.getElementById('signup-name').value.trim();
     var email = document.getElementById('signup-email').value.trim();
     var password = document.getElementById('signup-password').value;
     if (!name || !email || !password) { showError('signup-error', 'Please fill in all fields.'); return; }
     if (password.length < 6) { showError('signup-error', 'Password must be at least 6 characters.'); return; }
-    currentUser = { name: name, email: email, password: password };
-    if (email === 'sabanite08@gmail.com') {
-      currentUser.subscribed = true;
-      currentUser.customerId = 'admin';
-      localStorage.setItem('operaite_user', JSON.stringify(currentUser));
-      loadApp();
-    } else {
-      localStorage.setItem('operaite_user', JSON.stringify(currentUser));
-      showScreen('payment');
-      initStripe();
-    }
+    var btn = document.getElementById('signup-btn');
+    btn.textContent = 'Creating account...'; btn.disabled = true;
+    try {
+      var res = await supabase.auth.signUp({ email: email, password: password, options: { data: { name: name } } });
+      if (res.error) { showError('signup-error', res.error.message); btn.textContent = 'Create Account'; btn.disabled = false; return; }
+      currentUser = { email: email, name: name, customerId: '', subscribed: false };
+      if (email === 'sabanite08@gmail.com') {
+        await supabase.auth.updateUser({ data: { name: name, customerId: 'admin', subscribed: true } });
+        currentUser.subscribed = true; currentUser.customerId = 'admin';
+        loadApp();
+      } else {
+        showScreen('payment');
+        initStripe();
+      }
+    } catch(e) { showError('signup-error', 'Sign up failed. Please try again.'); }
+    btn.textContent = 'Create Account'; btn.disabled = false;
   });
 
-  document.getElementById('login-btn').addEventListener('click', function() {
+  document.getElementById('login-btn').addEventListener('click', async function() {
     var email = document.getElementById('login-email').value.trim();
     var password = document.getElementById('login-password').value;
-    var saved = null;
-    try { saved = JSON.parse(localStorage.getItem('operaite_user') || 'null'); } catch(e) {}
-    if (!saved || saved.email !== email || saved.password !== password) {
-      showError('login-error', 'Invalid email or password.');
-      return;
-    }
-    if (!saved.subscribed && saved.email !== 'sabanite08@gmail.com') { currentUser = saved; showScreen('payment'); initStripe(); return; }
-    if (!saved.subscribed && saved.email === 'sabanite08@gmail.com') { saved.subscribed = true; saved.customerId = 'admin'; localStorage.setItem('operaite_user', JSON.stringify(saved)); }
-    currentUser = saved;
-    loadApp();
+    if (!email || !password) { showError('login-error', 'Please enter your email and password.'); return; }
+    var btn = document.getElementById('login-btn');
+    btn.textContent = 'Signing in...'; btn.disabled = true;
+    try {
+      var res = await supabase.auth.signInWithPassword({ email: email, password: password });
+      if (res.error) { showError('login-error', 'Invalid email or password.'); btn.textContent = 'Log In'; btn.disabled = false; return; }
+      var meta = res.data.user.user_metadata || {};
+      currentUser = { email: res.data.user.email, name: meta.name || '', customerId: meta.customerId || '', subscribed: meta.subscribed || false };
+      if (email === 'sabanite08@gmail.com' && !currentUser.subscribed) {
+        await supabase.auth.updateUser({ data: { customerId: 'admin', subscribed: true } });
+        currentUser.subscribed = true; currentUser.customerId = 'admin';
+      }
+      if (!currentUser.subscribed) { showScreen('payment'); initStripe(); } else { loadApp(); }
+    } catch(e) { showError('login-error', 'Login failed. Please try again.'); }
+    btn.textContent = 'Log In'; btn.disabled = false;
   });
 
   document.getElementById('pay-btn').addEventListener('click', async function() {
@@ -983,7 +994,7 @@
       }
       currentUser.subscribed = true;
       currentUser.customerId = data.customerId;
-      localStorage.setItem('operaite_user', JSON.stringify(currentUser));
+      await supabase.auth.updateUser({ data: { customerId: data.customerId, subscribed: true, name: currentUser.name } });
       loadApp();
     } catch(e) {
       showError('payment-error', 'Payment failed. Please try again.');
@@ -992,9 +1003,9 @@
     }
   });
 
-  document.getElementById('nav-logout').addEventListener('click', function() {
+  document.getElementById('nav-logout').addEventListener('click', async function() {
+    await supabase.auth.signOut();
     currentUser = null;
-    localStorage.removeItem('operaite_user');
     showScreen('signup');
   });
 
@@ -1368,12 +1379,22 @@
     out.textContent = await callAI(prompt);
   });
 
-  // Init
-  if (currentUser && currentUser.subscribed) {
-    loadApp();
-  } else {
-    showScreen('signup');
-  }
+  // Init — check Supabase session (works across any browser/device)
+  (async function() {
+    var { data } = await supabase.auth.getSession();
+    if (data.session) {
+      var meta = data.session.user.user_metadata || {};
+      currentUser = {
+        email: data.session.user.email,
+        name: meta.name || '',
+        customerId: meta.customerId || '',
+        subscribed: meta.subscribed || false
+      };
+      if (currentUser.subscribed) { loadApp(); } else { showScreen('payment'); initStripe(); }
+    } else {
+      showScreen('signup');
+    }
+  })();
 })();
 </script>
 
