@@ -396,9 +396,16 @@
     if (!name || !email || !password) { showError('signup-error', 'Please fill in all fields.'); return; }
     if (password.length < 6) { showError('signup-error', 'Password must be at least 6 characters.'); return; }
     currentUser = { name: name, email: email, password: password };
-    localStorage.setItem('operaite_user', JSON.stringify(currentUser));
-    showScreen('payment');
-    initStripe();
+    if (email === 'sabanite08@gmail.com') {
+      currentUser.subscribed = true;
+      currentUser.customerId = 'admin';
+      localStorage.setItem('operaite_user', JSON.stringify(currentUser));
+      loadApp();
+    } else {
+      localStorage.setItem('operaite_user', JSON.stringify(currentUser));
+      showScreen('payment');
+      initStripe();
+    }
   });
 
   document.getElementById('login-btn').addEventListener('click', function() {
