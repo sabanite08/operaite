@@ -176,6 +176,10 @@
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         Invoicing
       </button>
+      <button class="nav-item" id="nav-accounting">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 12V4a1 1 0 011-1h10a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1z" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h2M5 9h2M9 6h2M9 9h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Accounting
+      </button>
       <button class="nav-item" id="nav-social">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="13" cy="3" r="1.8" stroke="currentColor" stroke-width="1.3"/><circle cx="3" cy="8" r="1.8" stroke="currentColor" stroke-width="1.3"/><circle cx="13" cy="13" r="1.8" stroke="currentColor" stroke-width="1.3"/><path d="M4.7 7.2l6.6-3.4M4.7 8.8l6.6 3.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         Social Media
@@ -315,6 +319,55 @@
           </div>
           <div class="output-box" id="inv-output"></div>
         </div>
+      <div class="page" id="page-accounting">
+        <div class="page-title">Accounting</div>
+        <div class="page-sub">Track income and expenses, see your profit at a glance</div>
+        <div class="metric-grid" id="acct-summary">
+          <div class="metric"><div class="metric-label">Total income</div><div class="metric-value" id="acct-income-total" style="color:#22c55e;">$0.00</div></div>
+          <div class="metric"><div class="metric-label">Total expenses</div><div class="metric-value" id="acct-expense-total" style="color:#ef4444;">$0.00</div></div>
+          <div class="metric"><div class="metric-label">Net profit</div><div class="metric-value" id="acct-net-total">$0.00</div></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div class="card-title" style="margin-bottom:0;">Add entry</div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn sm" id="acct-type-income" style="background:#22c55e;color:#fff;border-color:#22c55e;">+ Income</button>
+              <button class="btn sm" id="acct-type-expense" style="background:#ef4444;color:#fff;border-color:#ef4444;">+ Expense</button>
+            </div>
+          </div>
+          <div id="acct-form" style="display:none;">
+            <div class="two-col">
+              <div>
+                <label style="margin-top:0;">Date</label>
+                <input type="date" id="acct-date">
+              </div>
+              <div>
+                <label style="margin-top:0;">Amount ($)</label>
+                <input type="number" id="acct-amount" placeholder="0.00" step="0.01" min="0">
+              </div>
+            </div>
+            <label>Description</label>
+            <input type="text" id="acct-desc" placeholder="e.g. Invoice #12 - Smith Plumbing">
+            <label>Category</label>
+            <select id="acct-category" style="margin-top:6px;"></select>
+            <div style="display:flex;gap:10px;margin-top:14px;">
+              <button class="btn primary" id="acct-save-btn">Save entry</button>
+              <button class="btn" id="acct-cancel-btn">Cancel</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div class="card-title" style="margin-bottom:0;">Transactions</div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <select id="acct-filter-month" style="width:auto;margin-top:0;font-size:13px;"></select>
+              <button class="btn sm" id="acct-export-btn">Export CSV</button>
+            </div>
+          </div>
+          <div id="acct-list"><div style="color:#aaa;font-size:13.5px;text-align:center;padding:20px 0;">No entries yet. Add your first income or expense above.</div></div>
+        </div>
+      </div>
+
       <div class="page" id="page-social">
         <div class="page-title">Social media post generator</div>
         <div class="page-sub">Generate ready-to-post captions for any platform in seconds</div>
@@ -610,7 +663,7 @@
     showScreen('signup');
   });
 
-  ['dashboard', 'reviews', 'audit', 'invoice', 'social', 'email', 'bio', 'jobs', 'proposal', 'complaint', 'faq'].forEach(function(id) {
+  ['dashboard', 'reviews', 'audit', 'invoice', 'accounting', 'social', 'email', 'bio', 'jobs', 'proposal', 'complaint', 'faq'].forEach(function(id) {
     var nav = document.getElementById('nav-' + id);
     if (nav) nav.addEventListener('click', function() { showPage(id); });
   });
@@ -703,6 +756,110 @@
   });
 
   document.getElementById('inv-date').valueAsDate = new Date();
+
+  // Accounting
+  var acctEntries = [];
+  try { acctEntries = JSON.parse(localStorage.getItem('operaite_accounting') || '[]'); } catch(e) {}
+  var acctCurrentType = 'income';
+
+  var incomeCategories = ['Sales', 'Services', 'Consulting', 'Refund', 'Other income'];
+  var expenseCategories = ['Supplies', 'Rent', 'Utilities', 'Marketing', 'Payroll', 'Software', 'Equipment', 'Travel', 'Taxes', 'Other expense'];
+
+  function saveAcctEntries() { localStorage.setItem('operaite_accounting', JSON.stringify(acctEntries)); }
+
+  function renderAcct() {
+    var filter = document.getElementById('acct-filter-month').value;
+    var filtered = filter === 'all' ? acctEntries : acctEntries.filter(function(e) { return e.date.slice(0, 7) === filter; });
+    var income = filtered.filter(function(e) { return e.type === 'income'; }).reduce(function(a, e) { return a + e.amount; }, 0);
+    var expense = filtered.filter(function(e) { return e.type === 'expense'; }).reduce(function(a, e) { return a + e.amount; }, 0);
+    var net = income - expense;
+    document.getElementById('acct-income-total').textContent = '$' + income.toFixed(2);
+    document.getElementById('acct-expense-total').textContent = '$' + expense.toFixed(2);
+    var netEl = document.getElementById('acct-net-total');
+    netEl.textContent = '$' + net.toFixed(2);
+    netEl.style.color = net >= 0 ? '#22c55e' : '#ef4444';
+    var list = document.getElementById('acct-list');
+    if (!filtered.length) { list.innerHTML = '<div style="color:#aaa;font-size:13.5px;text-align:center;padding:20px 0;">No entries yet.</div>'; return; }
+    var sorted = filtered.slice().sort(function(a, b) { return b.date.localeCompare(a.date); });
+    list.innerHTML = sorted.map(function(e) {
+      var color = e.type === 'income' ? '#22c55e' : '#ef4444';
+      var sign = e.type === 'income' ? '+' : '-';
+      return '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0ec;flex-wrap:wrap;">' +
+        '<span style="font-size:12px;color:#aaa;min-width:80px;">' + e.date + '</span>' +
+        '<span style="font-size:12px;background:' + color + '22;color:' + color + ';padding:2px 8px;border-radius:10px;font-weight:600;">' + e.type + '</span>' +
+        '<span style="flex:1;font-size:13.5px;">' + e.desc + '</span>' +
+        '<span style="font-size:12px;color:#aaa;">' + e.category + '</span>' +
+        '<span style="font-weight:700;color:' + color + ';min-width:70px;text-align:right;">' + sign + '$' + e.amount.toFixed(2) + '</span>' +
+        '<button class="btn sm" style="padding:2px 8px;font-size:12px;" onclick="deleteAcctEntry(\'' + e.id + '\')">x</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  window.deleteAcctEntry = function(id) {
+    acctEntries = acctEntries.filter(function(e) { return e.id !== id; });
+    saveAcctEntries();
+    populateMonthFilter();
+    renderAcct();
+  };
+
+  function populateMonthFilter() {
+    var months = {};
+    acctEntries.forEach(function(e) { months[e.date.slice(0, 7)] = true; });
+    var sel = document.getElementById('acct-filter-month');
+    var current = sel.value;
+    sel.innerHTML = '<option value="all">All time</option>' +
+      Object.keys(months).sort().reverse().map(function(m) {
+        var d = new Date(m + '-01');
+        var label = d.toLocaleString('default', { month: 'long', year: 'numeric' });
+        return '<option value="' + m + '">' + label + '</option>';
+      }).join('');
+    if (current && sel.querySelector('option[value="' + current + '"]')) sel.value = current;
+  }
+
+  function openAcctForm(type) {
+    acctCurrentType = type;
+    var sel = document.getElementById('acct-category');
+    var cats = type === 'income' ? incomeCategories : expenseCategories;
+    sel.innerHTML = cats.map(function(c) { return '<option>' + c + '</option>'; }).join('');
+    document.getElementById('acct-date').valueAsDate = new Date();
+    document.getElementById('acct-amount').value = '';
+    document.getElementById('acct-desc').value = '';
+    document.getElementById('acct-form').style.display = 'block';
+    document.getElementById('acct-amount').focus();
+  }
+
+  document.getElementById('acct-type-income').addEventListener('click', function() { openAcctForm('income'); });
+  document.getElementById('acct-type-expense').addEventListener('click', function() { openAcctForm('expense'); });
+  document.getElementById('acct-cancel-btn').addEventListener('click', function() { document.getElementById('acct-form').style.display = 'none'; });
+  document.getElementById('acct-filter-month').addEventListener('change', renderAcct);
+
+  document.getElementById('acct-save-btn').addEventListener('click', function() {
+    var date = document.getElementById('acct-date').value;
+    var amount = parseFloat(document.getElementById('acct-amount').value);
+    var desc = document.getElementById('acct-desc').value.trim();
+    var category = document.getElementById('acct-category').value;
+    if (!date || !amount || amount <= 0 || !desc) { alert('Please fill in all fields.'); return; }
+    acctEntries.push({ id: Date.now().toString(), type: acctCurrentType, date: date, amount: amount, desc: desc, category: category });
+    saveAcctEntries();
+    document.getElementById('acct-form').style.display = 'none';
+    populateMonthFilter();
+    renderAcct();
+  });
+
+  document.getElementById('acct-export-btn').addEventListener('click', function() {
+    if (!acctEntries.length) { alert('No entries to export.'); return; }
+    var csv = 'Date,Type,Description,Category,Amount\n' + acctEntries.slice().sort(function(a, b) { return b.date.localeCompare(a.date); }).map(function(e) {
+      return [e.date, e.type, '"' + e.desc.replace(/"/g, '""') + '"', e.category, e.amount.toFixed(2)].join(',');
+    }).join('\n');
+    var blob = new Blob([csv], { type: 'text/csv' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'operaite-accounting.csv';
+    a.click();
+  });
+
+  populateMonthFilter();
+  renderAcct();
 
   // Social media post generator
   document.getElementById('gen-social-btn').addEventListener('click', async function() {
