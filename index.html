@@ -176,6 +176,34 @@
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         Invoicing
       </button>
+      <button class="nav-item" id="nav-social">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="13" cy="3" r="1.8" stroke="currentColor" stroke-width="1.3"/><circle cx="3" cy="8" r="1.8" stroke="currentColor" stroke-width="1.3"/><circle cx="13" cy="13" r="1.8" stroke="currentColor" stroke-width="1.3"/><path d="M4.7 7.2l6.6-3.4M4.7 8.8l6.6 3.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Social Media
+      </button>
+      <button class="nav-item" id="nav-email">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 5.5l6.5 4 6.5-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Email Templates
+      </button>
+      <button class="nav-item" id="nav-bio">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 13.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Bio Writer
+      </button>
+      <button class="nav-item" id="nav-jobs">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="5.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 5.5V4a2 2 0 014 0v1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Job Postings
+      </button>
+      <button class="nav-item" id="nav-proposal">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M10 10.5l1.5 1.5 2.5-2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Proposals
+      </button>
+      <button class="nav-item" id="nav-complaint">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C4.4 1.5 1.5 4 1.5 7c0 1.5.6 2.8 1.7 3.8L2.5 14l3.5-1.5c.6.2 1.3.3 2 .3 3.6 0 6.5-2.5 6.5-5.8S11.6 1.5 8 1.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v.5M8 5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Complaint Handler
+      </button>
+      <button class="nav-item" id="nav-faq">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 6.5a1.5 1.5 0 012.8.5c0 1-1.3 1.5-1.3 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11.5" r=".6" fill="currentColor"/></svg>
+        FAQ Generator
+      </button>
       <div class="nav-bottom">
         <div class="user-email" id="user-email-display"></div>
         <button class="nav-item" id="nav-logout">
@@ -200,14 +228,20 @@
             <button class="btn" id="qa-reviews">Respond to reviews</button>
             <button class="btn" id="qa-audit">Run marketing audit</button>
             <button class="btn" id="qa-invoice">Create invoice</button>
+            <button class="btn" id="qa-social">Write social post</button>
+            <button class="btn" id="qa-email">Draft an email</button>
+            <button class="btn" id="qa-proposal">Create proposal</button>
           </div>
         </div>
         <div class="card">
           <div class="card-title">Getting started</div>
           <div class="steps">
-            1. Use <b>Review Manager</b> to import and respond to customer reviews.<br>
-            2. Use <b>Marketing Audit</b> to score and improve your online presence.<br>
-            3. Use <b>Invoicing</b> to generate and send professional invoices instantly.
+            1. Use <b>Review Manager</b> to respond to customer reviews professionally.<br>
+            2. Use <b>Social Media</b> to generate ready-to-post captions instantly.<br>
+            3. Use <b>Email Templates</b> to draft promotions, follow-ups, and announcements.<br>
+            4. Use <b>Marketing Audit</b> to score and improve your online presence.<br>
+            5. Use <b>Invoicing</b> &amp; <b>Proposals</b> to win and bill clients faster.<br>
+            6. Use <b>Bio Writer</b>, <b>Job Postings</b>, <b>Complaint Handler</b>, and <b>FAQ Generator</b> to run your business on autopilot.
           </div>
         </div>
       </div>
@@ -281,6 +315,149 @@
           </div>
           <div class="output-box" id="inv-output"></div>
         </div>
+      <div class="page" id="page-social">
+        <div class="page-title">Social media post generator</div>
+        <div class="page-sub">Generate ready-to-post captions for any platform in seconds</div>
+        <div class="card">
+          <label style="margin-top:0;">Business name</label>
+          <input type="text" id="soc-biz" placeholder="e.g. Bloom Flower Shop">
+          <label>What do you want to post about?</label>
+          <input type="text" id="soc-topic" placeholder="e.g. weekend sale, new product launch, thank you post">
+          <div style="display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;">
+            <select id="soc-platform" style="width:auto;margin-top:0;"><option>Facebook</option><option>Instagram</option><option>LinkedIn</option><option>All three</option></select>
+            <select id="soc-tone" style="width:auto;margin-top:0;"><option>Friendly</option><option>Professional</option><option>Exciting</option><option>Informative</option></select>
+            <button class="btn primary" style="margin-top:0;" id="gen-social-btn">Generate posts</button>
+          </div>
+          <div class="output-box" id="soc-output"></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-email">
+        <div class="page-title">Email template generator</div>
+        <div class="page-sub">Draft professional business emails in seconds</div>
+        <div class="card">
+          <label style="margin-top:0;">Business name</label>
+          <input type="text" id="em-biz" placeholder="e.g. Apex Plumbing">
+          <label>Email type</label>
+          <select id="em-type" style="margin-top:6px;">
+            <option>Promotional offer</option>
+            <option>Follow-up after service</option>
+            <option>Appointment reminder</option>
+            <option>Thank you / appreciation</option>
+            <option>Re-engage inactive customer</option>
+            <option>Announcement</option>
+          </select>
+          <label>Key details to include</label>
+          <textarea id="em-details" placeholder="e.g. 20% off all services this week, code SAVE20, expires Friday"></textarea>
+          <button class="btn primary" id="gen-email-btn">Generate email</button>
+          <div class="output-box" id="em-output"></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-bio">
+        <div class="page-title">Bio & about us writer</div>
+        <div class="page-sub">Generate a compelling business description for any platform</div>
+        <div class="card">
+          <label style="margin-top:0;">Business name</label>
+          <input type="text" id="bio-biz" placeholder="e.g. Summit Landscaping">
+          <label>Business type & what you do</label>
+          <input type="text" id="bio-type" placeholder="e.g. landscaping company serving residential and commercial clients">
+          <label>Years in business, location, anything special</label>
+          <textarea id="bio-details" placeholder="e.g. Family owned since 2008, based in Nashville TN, specializing in eco-friendly solutions"></textarea>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;">
+            <select id="bio-platform" style="width:auto;margin-top:0;"><option>Google Business</option><option>Facebook</option><option>Website About page</option><option>LinkedIn</option><option>Yelp</option></select>
+            <button class="btn primary" style="margin-top:0;" id="gen-bio-btn">Write bio</button>
+          </div>
+          <div class="output-box" id="bio-output"></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-jobs">
+        <div class="page-title">Job posting generator</div>
+        <div class="page-sub">Write a professional job listing that attracts the right candidates</div>
+        <div class="card">
+          <div class="two-col">
+            <div>
+              <label style="margin-top:0;">Business name</label>
+              <input type="text" id="job-biz" placeholder="e.g. Riverside Auto">
+            </div>
+            <div>
+              <label style="margin-top:0;">Job title</label>
+              <input type="text" id="job-title" placeholder="e.g. Front Desk Receptionist">
+            </div>
+          </div>
+          <label>Job type</label>
+          <select id="job-type" style="margin-top:6px;"><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Seasonal</option></select>
+          <label>Key responsibilities & requirements</label>
+          <textarea id="job-details" placeholder="e.g. Answer phones, schedule appointments, greet customers. Must have 1+ year experience, friendly personality."></textarea>
+          <button class="btn primary" id="gen-job-btn">Generate job posting</button>
+          <div class="output-box" id="job-output"></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-proposal">
+        <div class="page-title">Proposal & quote generator</div>
+        <div class="page-sub">Create a professional project proposal to send to clients</div>
+        <div class="card">
+          <div class="two-col">
+            <div>
+              <label style="margin-top:0;">Your business name</label>
+              <input type="text" id="prop-from" placeholder="Your Business LLC">
+            </div>
+            <div>
+              <label style="margin-top:0;">Client name</label>
+              <input type="text" id="prop-to" placeholder="Client Name or Company">
+            </div>
+          </div>
+          <label>Project / service description</label>
+          <textarea id="prop-scope" placeholder="e.g. Full website redesign including 5 pages, mobile responsive, contact form, and 30 days of revisions"></textarea>
+          <div class="two-col">
+            <div>
+              <label>Total price</label>
+              <input type="text" id="prop-price" placeholder="e.g. $2,500">
+            </div>
+            <div>
+              <label>Timeline</label>
+              <input type="text" id="prop-timeline" placeholder="e.g. 3 weeks">
+            </div>
+          </div>
+          <button class="btn primary" id="gen-proposal-btn">Generate proposal</button>
+          <div class="output-box" id="prop-output"></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-complaint">
+        <div class="page-title">Complaint handler</div>
+        <div class="page-sub">Turn difficult customer situations into professional, de-escalating responses</div>
+        <div class="card">
+          <label style="margin-top:0;">Business name</label>
+          <input type="text" id="comp-biz" placeholder="e.g. Bright Clean Laundry">
+          <label>What is the customer complaining about?</label>
+          <textarea id="comp-issue" placeholder="Paste or describe the complaint here..."></textarea>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;">
+            <select id="comp-channel" style="width:auto;margin-top:0;"><option>Email</option><option>In person / phone</option><option>Social media comment</option><option>Review response</option></select>
+            <select id="comp-outcome" style="width:auto;margin-top:0;"><option>Offer resolution</option><option>Apologize only</option><option>Politely decline request</option></select>
+            <button class="btn primary" style="margin-top:0;" id="gen-complaint-btn">Generate response</button>
+          </div>
+          <div class="output-box" id="comp-output"></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-faq">
+        <div class="page-title">FAQ generator</div>
+        <div class="page-sub">Generate a complete FAQ page for your business or website</div>
+        <div class="card">
+          <label style="margin-top:0;">Business name</label>
+          <input type="text" id="faq-biz" placeholder="e.g. Coastal HVAC">
+          <label>Business type & services</label>
+          <input type="text" id="faq-type" placeholder="e.g. HVAC repair and installation for residential homes">
+          <label>Anything specific customers always ask about?</label>
+          <textarea id="faq-details" placeholder="e.g. pricing, hours, service area, warranties, emergency calls (optional)"></textarea>
+          <button class="btn primary" id="gen-faq-btn">Generate FAQ</button>
+          <div class="output-box" id="faq-output"></div>
+        </div>
+      </div>
+
       </div>
     </div>
   </div>
@@ -433,7 +610,7 @@
     showScreen('signup');
   });
 
-  ['dashboard', 'reviews', 'audit', 'invoice'].forEach(function(id) {
+  ['dashboard', 'reviews', 'audit', 'invoice', 'social', 'email', 'bio', 'jobs', 'proposal', 'complaint', 'faq'].forEach(function(id) {
     var nav = document.getElementById('nav-' + id);
     if (nav) nav.addEventListener('click', function() { showPage(id); });
   });
@@ -441,6 +618,9 @@
   document.getElementById('qa-reviews').addEventListener('click', function() { showPage('reviews'); });
   document.getElementById('qa-audit').addEventListener('click', function() { showPage('audit'); });
   document.getElementById('qa-invoice').addEventListener('click', function() { showPage('invoice'); });
+  document.getElementById('qa-social').addEventListener('click', function() { showPage('social'); });
+  document.getElementById('qa-email').addEventListener('click', function() { showPage('email'); });
+  document.getElementById('qa-proposal').addEventListener('click', function() { showPage('proposal'); });
 
   // Generate review response
   document.getElementById('gen-response-btn').addEventListener('click', async function() {
@@ -523,6 +703,102 @@
   });
 
   document.getElementById('inv-date').valueAsDate = new Date();
+
+  // Social media post generator
+  document.getElementById('gen-social-btn').addEventListener('click', async function() {
+    var biz = document.getElementById('soc-biz').value.trim() || 'our business';
+    var topic = document.getElementById('soc-topic').value.trim();
+    var platform = document.getElementById('soc-platform').value;
+    var tone = document.getElementById('soc-tone').value;
+    if (!topic) { alert('Please enter what you want to post about.'); return; }
+    var out = document.getElementById('soc-output');
+    out.className = 'output-box visible';
+    out.innerHTML = '<span class="loading">Writing your posts...</span>';
+    var prompt = 'Write ' + (platform === 'All three' ? 'three separate social media posts — one each for Facebook, Instagram, and LinkedIn' : 'a ' + platform + ' post') + ' for "' + biz + '" about: ' + topic + '. Tone: ' + tone + '. ' + (platform === 'All three' ? 'Label each one clearly. ' : '') + 'Keep each post concise and include relevant hashtags.';
+    out.textContent = await callAI(prompt);
+  });
+
+  // Email template generator
+  document.getElementById('gen-email-btn').addEventListener('click', async function() {
+    var biz = document.getElementById('em-biz').value.trim() || 'our business';
+    var type = document.getElementById('em-type').value;
+    var details = document.getElementById('em-details').value.trim();
+    var out = document.getElementById('em-output');
+    out.className = 'output-box visible';
+    out.innerHTML = '<span class="loading">Drafting your email...</span>';
+    var prompt = 'Write a professional business email for "' + biz + '". Email type: ' + type + '. ' + (details ? 'Key details: ' + details + '.' : '') + ' Include a subject line, greeting, body, and sign-off. Keep it concise and persuasive.';
+    out.textContent = await callAI(prompt);
+  });
+
+  // Bio writer
+  document.getElementById('gen-bio-btn').addEventListener('click', async function() {
+    var biz = document.getElementById('bio-biz').value.trim() || 'our business';
+    var type = document.getElementById('bio-type').value.trim();
+    var details = document.getElementById('bio-details').value.trim();
+    var platform = document.getElementById('bio-platform').value;
+    if (!type) { alert('Please describe what your business does.'); return; }
+    var out = document.getElementById('bio-output');
+    out.className = 'output-box visible';
+    out.innerHTML = '<span class="loading">Writing your bio...</span>';
+    var prompt = 'Write a compelling "About Us" / bio for "' + biz + '" (' + type + ') optimized for ' + platform + '. ' + (details ? 'Additional info: ' + details + '.' : '') + ' Make it warm, credible, and concise. No fluff.';
+    out.textContent = await callAI(prompt);
+  });
+
+  // Job posting generator
+  document.getElementById('gen-job-btn').addEventListener('click', async function() {
+    var biz = document.getElementById('job-biz').value.trim() || 'our business';
+    var title = document.getElementById('job-title').value.trim();
+    var type = document.getElementById('job-type').value;
+    var details = document.getElementById('job-details').value.trim();
+    if (!title) { alert('Please enter a job title.'); return; }
+    var out = document.getElementById('job-output');
+    out.className = 'output-box visible';
+    out.innerHTML = '<span class="loading">Writing your job posting...</span>';
+    var prompt = 'Write a professional job posting for "' + biz + '" hiring a ' + type + ' ' + title + '. ' + (details ? 'Details: ' + details + '.' : '') + ' Include: job summary, responsibilities, requirements, and a closing call to action. Keep it clear and appealing to quality candidates.';
+    out.textContent = await callAI(prompt);
+  });
+
+  // Proposal generator
+  document.getElementById('gen-proposal-btn').addEventListener('click', async function() {
+    var from = document.getElementById('prop-from').value.trim() || 'My Business';
+    var to = document.getElementById('prop-to').value.trim() || 'Client';
+    var scope = document.getElementById('prop-scope').value.trim();
+    var price = document.getElementById('prop-price').value.trim();
+    var timeline = document.getElementById('prop-timeline').value.trim();
+    if (!scope) { alert('Please describe the project scope.'); return; }
+    var out = document.getElementById('prop-output');
+    out.className = 'output-box visible';
+    out.innerHTML = '<span class="loading">Generating your proposal...</span>';
+    var prompt = 'Write a professional project proposal. From: ' + from + '. To: ' + to + '. Scope: ' + scope + '. ' + (price ? 'Price: ' + price + '.' : '') + (timeline ? ' Timeline: ' + timeline + '.' : '') + ' Include: introduction, scope of work, deliverables, timeline, pricing, and next steps. Professional and persuasive tone.';
+    out.textContent = await callAI(prompt);
+  });
+
+  // Complaint handler
+  document.getElementById('gen-complaint-btn').addEventListener('click', async function() {
+    var biz = document.getElementById('comp-biz').value.trim() || 'our business';
+    var issue = document.getElementById('comp-issue').value.trim();
+    var channel = document.getElementById('comp-channel').value;
+    var outcome = document.getElementById('comp-outcome').value;
+    if (!issue) { alert('Please describe the complaint.'); return; }
+    var out = document.getElementById('comp-output');
+    out.className = 'output-box visible';
+    out.innerHTML = '<span class="loading">Drafting your response...</span>';
+    var prompt = 'You are a customer service expert for "' + biz + '". A customer has complained via ' + channel + ': "' + issue + '". Write a professional, empathetic response that ' + outcome.toLowerCase() + '. Keep it concise, de-escalating, and on-brand. Do not be defensive.';
+    out.textContent = await callAI(prompt);
+  });
+
+  // FAQ generator
+  document.getElementById('gen-faq-btn').addEventListener('click', async function() {
+    var biz = document.getElementById('faq-biz').value.trim() || 'our business';
+    var type = document.getElementById('faq-type').value.trim();
+    var details = document.getElementById('faq-details').value.trim();
+    if (!type) { alert('Please describe your business type and services.'); return; }
+    var out = document.getElementById('faq-output');
+    out.className = 'output-box visible';
+    out.innerHTML = '<span class="loading">Generating your FAQ...</span>';
+    var prompt = 'Generate a complete FAQ page for "' + biz + '", a ' + type + '. ' + (details ? 'Focus areas: ' + details + '.' : '') + ' Write 8-10 realistic questions customers actually ask, with clear and helpful answers. Format as Q: / A: pairs.';
+    out.textContent = await callAI(prompt);
+  });
 
   // Init
   if (currentUser && currentUser.subscribed) {
