@@ -222,9 +222,9 @@
         <div class="page-title">Good morning <span class="badge badge-purple">operaite.net</span></div>
         <div class="page-sub">Your small business command center</div>
         <div class="metric-grid">
-          <div class="metric"><div class="metric-label">Avg review rating</div><div class="metric-value purple">4.7</div></div>
-          <div class="metric"><div class="metric-label">Invoices sent</div><div class="metric-value">12</div></div>
-          <div class="metric"><div class="metric-label">Marketing score</div><div class="metric-value">68<span style="font-size:15px;color:#aaa">/100</span></div></div>
+          <div class="metric"><div class="metric-label">Net profit</div><div class="metric-value" id="dash-net" style="color:#22c55e;">$0.00</div></div>
+          <div class="metric"><div class="metric-label">Total income</div><div class="metric-value" id="dash-income">$0.00</div></div>
+          <div class="metric"><div class="metric-label">Total expenses</div><div class="metric-value" id="dash-expenses" style="color:#ef4444;">$0.00</div></div>
         </div>
         <div class="card">
           <div class="card-title">Quick actions</div>
@@ -558,12 +558,26 @@
     if (nav) nav.classList.add('active');
   }
 
+  function updateDashboard() {
+    var entries = [];
+    try { entries = JSON.parse(localStorage.getItem('operaite_accounting') || '[]'); } catch(e) {}
+    var income = entries.filter(function(e) { return e.type === 'income'; }).reduce(function(a, e) { return a + e.amount; }, 0);
+    var expense = entries.filter(function(e) { return e.type === 'expense'; }).reduce(function(a, e) { return a + e.amount; }, 0);
+    var net = income - expense;
+    document.getElementById('dash-income').textContent = '$' + income.toFixed(2);
+    document.getElementById('dash-expenses').textContent = '$' + expense.toFixed(2);
+    var netEl = document.getElementById('dash-net');
+    netEl.textContent = '$' + net.toFixed(2);
+    netEl.style.color = net >= 0 ? '#22c55e' : '#ef4444';
+  }
+
   function loadApp() {
     if (!currentUser) return;
     var emailEl = document.getElementById('user-email-display');
     if (emailEl) emailEl.textContent = currentUser.email;
     showScreen('app');
     showPage('dashboard');
+    updateDashboard();
   }
 
   function initStripe() {
@@ -847,6 +861,7 @@
     document.getElementById('acct-form').style.display = 'none';
     populateMonthFilter();
     renderAcct();
+    updateDashboard();
   });
 
   document.getElementById('acct-save-backup-btn').addEventListener('click', function() {
@@ -959,7 +974,7 @@
     var out = document.getElementById('prop-output');
     out.className = 'output-box visible';
     out.innerHTML = '<span class="loading">Generating your proposal...</span>';
-    var prompt = 'Write a professional project proposal. From: ' + from + '. To: ' + to + '. Scope: ' + scope + '. ' + (price ? 'Price: ' + price + '.' : '') + (timeline ? ' Timeline: ' + timeline + '.' : '') + ' Include: introduction, scope of work, deliverables, timeline, pricing, and next steps. Professional and persuasive tone.';
+    var prompt = 'Write a short, simple project proposal. From: ' + from + '. To: ' + to + '. Project: ' + scope + '. ' + (price ? 'Price: ' + price + '.' : '') + (timeline ? ' Timeline: ' + timeline + '.' : '') + ' Keep it brief and easy to read — just a few short sections: what the project is, what is included, the price, and how to get started. Plain business language, no fluff.';
     out.textContent = await callAI(prompt);
   });
 
