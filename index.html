@@ -378,7 +378,7 @@
     var res = await fetch('/api/ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: prompt, email: currentUser.email })
+      body: JSON.stringify({ prompt: prompt, customerId: currentUser.customerId })
     });
     var data = await res.json();
     if (data.error) return 'Error: ' + data.error;
