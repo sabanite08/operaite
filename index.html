@@ -164,6 +164,10 @@
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/></svg>
         Dashboard
       </button>
+      <button class="nav-item" id="nav-profile">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="6" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 13c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Business Profile
+      </button>
       <button class="nav-item" id="nav-reviews">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.7z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
         Review Manager
@@ -296,12 +300,20 @@
             <div>
               <label style="margin-top:0;">Your business name</label>
               <input type="text" id="inv-from" placeholder="Your Business LLC">
+              <label>Your address</label>
+              <input type="text" id="inv-from-address" placeholder="123 Main St, City, State ZIP">
+              <label>Your phone</label>
+              <input type="text" id="inv-from-phone" placeholder="(205) 555-0100">
               <label>Your email</label>
               <input type="text" id="inv-email" placeholder="you@yourbusiness.com">
             </div>
             <div>
               <label style="margin-top:0;">Client name</label>
               <input type="text" id="inv-to" placeholder="Client Name or Company">
+              <label>Client address</label>
+              <input type="text" id="inv-to-address" placeholder="456 Oak Ave, City, State ZIP">
+              <label>Client phone</label>
+              <input type="text" id="inv-to-phone" placeholder="(205) 555-0199">
               <label>Invoice date</label>
               <input type="date" id="inv-date">
             </div>
@@ -406,6 +418,53 @@
         </div>
       </div>
 
+      <div class="page" id="page-profile">
+        <div class="page-title">Business profile</div>
+        <div class="page-sub">Your info auto-fills into invoices and proposals</div>
+        <div class="card">
+          <div class="two-col">
+            <div>
+              <label style="margin-top:0;">Business name</label>
+              <input type="text" id="prof-name" placeholder="e.g. Apex Plumbing LLC">
+            </div>
+            <div>
+              <label style="margin-top:0;">Phone number</label>
+              <input type="text" id="prof-phone" placeholder="e.g. (205) 555-0100">
+            </div>
+          </div>
+          <label>Street address</label>
+          <input type="text" id="prof-address" placeholder="e.g. 123 Main Street">
+          <div class="two-col">
+            <div>
+              <label>City</label>
+              <input type="text" id="prof-city" placeholder="Birmingham">
+            </div>
+            <div style="display:flex;gap:8px;">
+              <div style="flex:1;">
+                <label>State</label>
+                <input type="text" id="prof-state" placeholder="AL">
+              </div>
+              <div style="flex:1;">
+                <label>ZIP</label>
+                <input type="text" id="prof-zip" placeholder="35201">
+              </div>
+            </div>
+          </div>
+          <div class="two-col">
+            <div>
+              <label>Email</label>
+              <input type="email" id="prof-email" placeholder="hello@yourbusiness.com">
+            </div>
+            <div>
+              <label>Website</label>
+              <input type="text" id="prof-website" placeholder="www.yourbusiness.com">
+            </div>
+          </div>
+          <button class="btn primary" id="prof-save-btn">Save profile</button>
+          <div id="prof-saved-msg" style="display:none;font-size:13px;color:#22c55e;margin-top:8px;">Profile saved! Your info will auto-fill into invoices and proposals.</div>
+        </div>
+      </div>
+
       <div class="page" id="page-social">
         <div class="page-title">Social media post generator</div>
         <div class="page-sub">Generate ready-to-post captions for any platform in seconds</div>
@@ -494,10 +553,18 @@
             <div>
               <label style="margin-top:0;">Your business name</label>
               <input type="text" id="prop-from" placeholder="Your Business LLC">
+              <label>Your address</label>
+              <input type="text" id="prop-from-address" placeholder="123 Main St, City, State ZIP">
+              <label>Your phone</label>
+              <input type="text" id="prop-from-phone" placeholder="(205) 555-0100">
             </div>
             <div>
               <label style="margin-top:0;">Client name</label>
               <input type="text" id="prop-to" placeholder="Client Name or Company">
+              <label>Client address</label>
+              <input type="text" id="prop-to-address" placeholder="456 Oak Ave, City, State ZIP">
+              <label>Client phone</label>
+              <input type="text" id="prop-to-phone" placeholder="(205) 555-0199">
             </div>
           </div>
           <label>Project / service description</label>
@@ -618,6 +685,116 @@
     if (nav) nav.classList.add('active');
   }
 
+  // Business profile
+  function loadProfile() {
+    var p = {};
+    try { p = JSON.parse(localStorage.getItem('operaite_profile') || '{}'); } catch(e) {}
+    return p;
+  }
+
+  function applyProfileToForms() {
+    var p = loadProfile();
+    var addr = [p.address, p.city && p.state ? p.city + ', ' + p.state + ' ' + (p.zip || '') : (p.city || '')].filter(Boolean).join(', ');
+    var fields = [
+      ['inv-from', p.name], ['inv-from-address', addr], ['inv-from-phone', p.phone], ['inv-email', p.email],
+      ['prop-from', p.name], ['prop-from-address', addr], ['prop-from-phone', p.phone]
+    ];
+    fields.forEach(function(f) { var el = document.getElementById(f[0]); if (el && f[1]) el.value = f[1]; });
+    // pre-fill profile form
+    if (p.name) document.getElementById('prof-name').value = p.name || '';
+    if (p.phone) document.getElementById('prof-phone').value = p.phone || '';
+    if (p.address) document.getElementById('prof-address').value = p.address || '';
+    if (p.city) document.getElementById('prof-city').value = p.city || '';
+    if (p.state) document.getElementById('prof-state').value = p.state || '';
+    if (p.zip) document.getElementById('prof-zip').value = p.zip || '';
+    if (p.email) document.getElementById('prof-email').value = p.email || '';
+    if (p.website) document.getElementById('prof-website').value = p.website || '';
+  }
+
+  document.getElementById('prof-save-btn').addEventListener('click', function() {
+    var p = {
+      name: document.getElementById('prof-name').value.trim(),
+      phone: document.getElementById('prof-phone').value.trim(),
+      address: document.getElementById('prof-address').value.trim(),
+      city: document.getElementById('prof-city').value.trim(),
+      state: document.getElementById('prof-state').value.trim(),
+      zip: document.getElementById('prof-zip').value.trim(),
+      email: document.getElementById('prof-email').value.trim(),
+      website: document.getElementById('prof-website').value.trim()
+    };
+    localStorage.setItem('operaite_profile', JSON.stringify(p));
+    applyProfileToForms();
+    var msg = document.getElementById('prof-saved-msg');
+    msg.style.display = 'block';
+    setTimeout(function() { msg.style.display = 'none'; }, 3000);
+  });
+
+  // HTML invoice renderer
+  function buildInvoiceHTML(data) {
+    var rows = data.items.map(function(item) {
+      return '<tr style="border-bottom:1px solid #f0f0ec;">' +
+        '<td style="padding:10px 8px;font-size:13.5px;">' + item.desc + '</td>' +
+        '<td style="padding:10px 8px;text-align:center;font-size:13.5px;">' + item.qty + '</td>' +
+        '<td style="padding:10px 8px;text-align:right;font-size:13.5px;">$' + parseFloat(item.price).toFixed(2) + '</td>' +
+        '<td style="padding:10px 8px;text-align:right;font-size:13.5px;font-weight:500;">$' + (item.qty * item.price).toFixed(2) + '</td>' +
+        '</tr>';
+    }).join('');
+    var subtotalRow = data.taxOn ? '<tr><td colspan="3" style="text-align:right;padding:6px 8px;font-size:13px;color:#999;border-top:1px solid #f0f0ec;">Subtotal</td><td style="text-align:right;padding:6px 8px;font-size:13px;color:#999;border-top:1px solid #f0f0ec;">$' + data.subtotal.toFixed(2) + '</td></tr>' : '';
+    var taxRow = data.taxOn ? '<tr><td colspan="3" style="text-align:right;padding:6px 8px;font-size:13px;color:#666;">Tax (' + data.taxRate + '%)</td><td style="text-align:right;padding:6px 8px;font-size:13px;color:#666;">$' + data.taxAmt.toFixed(2) + '</td></tr>' : '';
+    var fromExtra = (data.fromAddress ? '<div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px;">' + data.fromAddress + '</div>' : '') +
+      (data.fromPhone ? '<div style="font-size:12px;color:rgba(255,255,255,0.8);">' + data.fromPhone + '</div>' : '') +
+      (data.fromEmail ? '<div style="font-size:12px;color:rgba(255,255,255,0.8);">' + data.fromEmail + '</div>' : '');
+    var toExtra = (data.toAddress ? '<div style="font-size:13px;color:#666;margin-top:3px;">' + data.toAddress + '</div>' : '') +
+      (data.toPhone ? '<div style="font-size:13px;color:#888;">' + data.toPhone + '</div>' : '');
+    return '<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e8e8e5;">' +
+      '<div style="background:#534AB7;padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;">' +
+        '<div><div style="font-size:20px;font-weight:700;color:#fff;">' + data.fromName + '</div>' + fromExtra + '</div>' +
+        '<div style="text-align:right;"><div style="font-size:26px;font-weight:800;color:#fff;letter-spacing:-1px;">INVOICE</div>' +
+        '<div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;">' + data.date + '</div></div>' +
+      '</div>' +
+      '<div style="padding:24px 28px;">' +
+        '<div style="background:#f8f8f6;border-radius:8px;padding:14px 16px;margin-bottom:20px;">' +
+          '<div style="font-size:10.5px;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Bill To</div>' +
+          '<div style="font-weight:600;font-size:14px;">' + data.toName + '</div>' + toExtra +
+        '</div>' +
+        '<table style="width:100%;border-collapse:collapse;">' +
+          '<thead><tr style="background:#f8f8f6;">' +
+            '<th style="text-align:left;padding:9px 8px;font-size:11px;color:#999;text-transform:uppercase;">Description</th>' +
+            '<th style="text-align:center;padding:9px 8px;font-size:11px;color:#999;text-transform:uppercase;">Qty</th>' +
+            '<th style="text-align:right;padding:9px 8px;font-size:11px;color:#999;text-transform:uppercase;">Price</th>' +
+            '<th style="text-align:right;padding:9px 8px;font-size:11px;color:#999;text-transform:uppercase;">Amount</th>' +
+          '</tr></thead>' +
+          '<tbody>' + rows + '</tbody>' +
+          '<tfoot>' + subtotalRow + taxRow +
+            '<tr><td colspan="3" style="text-align:right;padding:12px 8px;font-size:15px;font-weight:700;color:#534AB7;border-top:2px solid #534AB7;">Total</td>' +
+            '<td style="text-align:right;padding:12px 8px;font-size:15px;font-weight:700;color:#534AB7;border-top:2px solid #534AB7;">$' + data.total.toFixed(2) + '</td></tr>' +
+          '</tfoot>' +
+        '</table>' +
+        '<div style="margin-top:20px;padding-top:14px;border-top:1px solid #f0f0ec;font-size:12px;color:#bbb;">Payment due within 14 days. Thank you for your business!</div>' +
+      '</div></div>';
+  }
+
+  // HTML proposal wrapper
+  function wrapProposalHTML(data, content) {
+    var fromExtra = (data.fromAddress ? '<div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px;">' + data.fromAddress + '</div>' : '') +
+      (data.fromPhone ? '<div style="font-size:12px;color:rgba(255,255,255,0.8);">' + data.fromPhone + '</div>' : '');
+    var toExtra = (data.toAddress ? '<div style="font-size:13px;color:#666;margin-top:2px;">' + data.toAddress + '</div>' : '') +
+      (data.toPhone ? '<div style="font-size:13px;color:#888;">' + data.toPhone + '</div>' : '');
+    return '<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e8e8e5;">' +
+      '<div style="background:#534AB7;padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;">' +
+        '<div><div style="font-size:20px;font-weight:700;color:#fff;">' + data.fromName + '</div>' + fromExtra + '</div>' +
+        '<div style="text-align:right;"><div style="font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;">PROPOSAL</div>' +
+        '<div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;">' + new Date().toLocaleDateString() + '</div></div>' +
+      '</div>' +
+      '<div style="padding:24px 28px;">' +
+        '<div style="background:#f8f8f6;border-radius:8px;padding:14px 16px;margin-bottom:20px;">' +
+          '<div style="font-size:10.5px;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Prepared For</div>' +
+          '<div style="font-weight:600;font-size:14px;">' + data.toName + '</div>' + toExtra +
+        '</div>' +
+        '<div style="font-size:14px;line-height:1.7;color:#333;white-space:pre-wrap;">' + content + '</div>' +
+      '</div></div>';
+  }
+
   function setEmailLinks(prefix, subject, body) {
     var btns = document.getElementById(prefix + '-email-btns');
     if (!btns) return;
@@ -649,6 +826,7 @@
     showScreen('app');
     showPage('dashboard');
     updateDashboard();
+    applyProfileToForms();
   }
 
   function initStripe() {
@@ -751,7 +929,7 @@
     showScreen('signup');
   });
 
-  ['dashboard', 'reviews', 'audit', 'invoice', 'accounting', 'social', 'email', 'bio', 'jobs', 'proposal', 'complaint', 'faq'].forEach(function(id) {
+  ['dashboard', 'profile', 'reviews', 'audit', 'invoice', 'accounting', 'social', 'email', 'bio', 'jobs', 'proposal', 'complaint', 'faq'].forEach(function(id) {
     var nav = document.getElementById('nav-' + id);
     if (nav) nav.addEventListener('click', function() { showPage(id); });
   });
@@ -830,39 +1008,41 @@
   });
   document.getElementById('inv-tax-rate').addEventListener('input', updateTotal);
 
-  document.getElementById('gen-invoice-btn').addEventListener('click', async function() {
-    var from = document.getElementById('inv-from').value.trim() || 'My Business';
-    var to = document.getElementById('inv-to').value.trim() || 'Client';
-    var date = document.getElementById('inv-date').value || new Date().toLocaleDateString();
+  document.getElementById('gen-invoice-btn').addEventListener('click', function() {
+    var fromName = document.getElementById('inv-from').value.trim() || 'My Business';
+    var fromAddress = document.getElementById('inv-from-address').value.trim();
+    var fromPhone = document.getElementById('inv-from-phone').value.trim();
+    var fromEmail = document.getElementById('inv-email').value.trim();
+    var toName = document.getElementById('inv-to').value.trim() || 'Client';
+    var toAddress = document.getElementById('inv-to-address').value.trim();
+    var toPhone = document.getElementById('inv-to-phone').value.trim();
+    var date = document.getElementById('inv-date').value ? new Date(document.getElementById('inv-date').value + 'T00:00:00').toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}) : new Date().toLocaleDateString();
     var items = [];
     document.querySelectorAll('.invoice-row').forEach(function(row) {
-      var desc = row.querySelector('.item-desc').value;
-      var qty = row.querySelector('.item-qty').value;
-      var price = row.querySelector('.item-price').value;
-      if (desc) items.push(desc + ' x' + qty + ' @ $' + price);
+      var desc = row.querySelector('.item-desc').value.trim();
+      var qty = parseFloat(row.querySelector('.item-qty').value) || 1;
+      var price = parseFloat(row.querySelector('.item-price').value) || 0;
+      if (desc) items.push({ desc: desc, qty: qty, price: price });
     });
     if (!items.length) { alert('Please add at least one line item.'); return; }
     var taxOn = document.getElementById('inv-tax-toggle').checked;
     var taxRate = parseFloat(document.getElementById('inv-tax-rate').value) || 0;
-    var subtotal = 0;
-    document.querySelectorAll('.invoice-row').forEach(function(row) {
-      subtotal += (parseFloat(row.querySelector('.item-qty').value) || 0) * (parseFloat(row.querySelector('.item-price').value) || 0);
-    });
+    var subtotal = items.reduce(function(a, i) { return a + i.qty * i.price; }, 0);
     var taxAmt = taxOn ? subtotal * (taxRate / 100) : 0;
-    var taxStr = taxOn ? ' Subtotal: $' + subtotal.toFixed(2) + '. Tax (' + taxRate + '%): $' + taxAmt.toFixed(2) + '. Total: $' + (subtotal + taxAmt).toFixed(2) + '.' : ' Total: $' + subtotal.toFixed(2) + '.';
+    var total = subtotal + taxAmt;
+    var html = buildInvoiceHTML({ fromName: fromName, fromAddress: fromAddress, fromPhone: fromPhone, fromEmail: fromEmail, toName: toName, toAddress: toAddress, toPhone: toPhone, date: date, items: items, taxOn: taxOn, taxRate: taxRate, subtotal: subtotal, taxAmt: taxAmt, total: total });
     var out = document.getElementById('inv-output');
     out.className = 'output-box visible';
-    out.innerHTML = '<span class="loading">Generating your invoice...</span>';
-    var result = await callAI('Create a professional plain-text invoice. From: ' + from + ', To: ' + to + ', Date: ' + date + ', Items: ' + items.join(', ') + '.' + taxStr + ' Include all details, a professional note, and payment terms (due in 14 days).');
-    out.textContent = result;
-    setEmailLinks('inv', 'Invoice from ' + from, result);
+    out.innerHTML = html;
+    var plainText = fromName + ' Invoice\nDate: ' + date + '\nBill To: ' + toName + (toAddress ? '\n' + toAddress : '') + '\n\n' + items.map(function(i) { return i.desc + ' x' + i.qty + ' = $' + (i.qty * i.price).toFixed(2); }).join('\n') + '\n\nTotal: $' + total.toFixed(2);
+    setEmailLinks('inv', 'Invoice from ' + fromName, plainText);
   });
 
   document.getElementById('pdf-btn').addEventListener('click', function() {
-    var content = document.getElementById('inv-output').textContent;
-    if (!content || content.includes('Generating')) { alert('Generate the invoice first.'); return; }
+    var out = document.getElementById('inv-output');
+    if (!out.innerHTML || out.innerHTML.includes('loading')) { alert('Generate the invoice first.'); return; }
     var win = window.open('', '_blank');
-    win.document.write('<html><head><title>Invoice - Operaite</title></head><body><pre style="font-family:monospace;padding:2rem;font-size:14px;line-height:1.7;">' + content + '</pre></body></html>');
+    win.document.write('<html><head><title>Invoice - Operaite</title><style>body{margin:2rem;font-family:-apple-system,sans-serif;}@media print{body{margin:0;}}</style></head><body>' + out.innerHTML + '</body></html>');
     win.document.close();
     win.print();
   });
@@ -1064,8 +1244,12 @@
   });
 
   document.getElementById('gen-proposal-btn').addEventListener('click', async function() {
-    var from = document.getElementById('prop-from').value.trim() || 'My Business';
-    var to = document.getElementById('prop-to').value.trim() || 'Client';
+    var fromName = document.getElementById('prop-from').value.trim() || 'My Business';
+    var fromAddress = document.getElementById('prop-from-address').value.trim();
+    var fromPhone = document.getElementById('prop-from-phone').value.trim();
+    var toName = document.getElementById('prop-to').value.trim() || 'Client';
+    var toAddress = document.getElementById('prop-to-address').value.trim();
+    var toPhone = document.getElementById('prop-to-phone').value.trim();
     var scope = document.getElementById('prop-scope').value.trim();
     var price = document.getElementById('prop-price').value.trim();
     var timeline = document.getElementById('prop-timeline').value.trim();
@@ -1075,17 +1259,17 @@
     if (taxOn && price) {
       var priceNum = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
       var taxAmt = priceNum * (taxRate / 100);
-      var totalWithTax = priceNum + taxAmt;
-      taxStr = ' Tax: ' + taxRate + '% ($' + taxAmt.toFixed(2) + '). Total including tax: $' + totalWithTax.toFixed(2) + '.';
+      taxStr = ' Tax: ' + taxRate + '% ($' + taxAmt.toFixed(2) + '). Total including tax: $' + (priceNum + taxAmt).toFixed(2) + '.';
     }
     if (!scope) { alert('Please describe the project scope.'); return; }
     var out = document.getElementById('prop-output');
     out.className = 'output-box visible';
     out.innerHTML = '<span class="loading">Generating your proposal...</span>';
-    var prompt = 'Write a short, simple project proposal. From: ' + from + '. To: ' + to + '. Project: ' + scope + '. ' + (price ? 'Price: ' + price + '.' : '') + taxStr + (timeline ? ' Timeline: ' + timeline + '.' : '') + ' Keep it brief and easy to read — just a few short sections: what the project is, what is included, the price, and how to get started. Plain business language, no fluff.';
+    var prompt = 'Write a short, simple project proposal. Project: ' + scope + '. ' + (price ? 'Price: ' + price + '.' : '') + taxStr + (timeline ? ' Timeline: ' + timeline + '.' : '') + ' Keep it brief and easy to read — just a few short sections: what the project is, what is included, the price, and how to get started. Plain business language, no fluff. Do not include from/to headers, those will be added separately.';
     var result = await callAI(prompt);
-    out.textContent = result;
-    setEmailLinks('prop', 'Proposal from ' + from, result);
+    var html = wrapProposalHTML({ fromName: fromName, fromAddress: fromAddress, fromPhone: fromPhone, toName: toName, toAddress: toAddress, toPhone: toPhone }, result);
+    out.innerHTML = html;
+    setEmailLinks('prop', 'Proposal from ' + fromName, result);
   });
 
   // Complaint handler
