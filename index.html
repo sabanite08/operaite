@@ -276,11 +276,29 @@
     .lp-section-p.c { max-width:520px; margin:0 auto 3rem; text-align:center; }
     /* Features */
     .lp-feat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-top:3rem; }
-    .lp-feat-card { background:#fff; border:1px solid #e8e8e5; border-radius:14px; padding:1.75rem 1.5rem; transition:box-shadow 0.15s, border-color 0.15s; }
-    .lp-feat-card:hover { box-shadow:0 6px 24px rgba(83,74,183,0.1); border-color:#c5c2ed; }
-    .lp-feat-icon { width:42px; height:42px; border-radius:11px; background:#EEEDFE; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:1rem; }
+    .lp-feat-card { background:#fff; border:1px solid #e8e8e5; border-radius:14px; padding:1.75rem 1.5rem; transition:box-shadow 0.15s, border-color 0.15s, transform 0.15s; cursor:pointer; }
+    .lp-feat-card:hover { box-shadow:0 6px 24px rgba(83,74,183,0.1); border-color:#c5c2ed; transform:translateY(-2px); }
+    .lp-feat-card.active { border-color:#534AB7; box-shadow:0 6px 28px rgba(83,74,183,0.18); background:#faf9ff; transform:translateY(-2px); }
+    .lp-feat-card.active .lp-feat-icon { background:#534AB7; }
+    .lp-feat-icon { width:42px; height:42px; border-radius:11px; background:#EEEDFE; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:1rem; transition:background 0.15s; }
     .lp-feat-title { font-size:15px; font-weight:700; color:#1a1a1a; margin-bottom:0.4rem; }
     .lp-feat-desc { font-size:13.5px; color:#777; line-height:1.6; }
+    /* Feature preview panel */
+    .lp-feat-preview { overflow:hidden; max-height:0; opacity:0; transition:max-height 0.4s ease, opacity 0.3s ease; margin-top:1.5rem; }
+    .lp-feat-preview.open { max-height:500px; opacity:1; }
+    .lp-feat-preview-inner { background:#fff; border:1px solid #e0ddf5; border-radius:16px; padding:2rem; display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; }
+    .lp-prev-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#534AB7; margin-bottom:0.6rem; }
+    .lp-prev-input { width:100%; box-sizing:border-box; border:1px solid #e0ddf5; border-radius:8px; padding:0.6rem 0.8rem; font-size:13px; color:#333; background:#f9f9fc; resize:none; font-family:inherit; }
+    .lp-prev-btn { display:inline-block; background:#534AB7; color:#fff; border-radius:8px; padding:0.5rem 1.1rem; font-size:13px; font-weight:600; margin-top:0.75rem; }
+    .lp-prev-output { background:#f4f3f8; border-radius:10px; padding:1rem 1.2rem; font-size:13px; color:#444; line-height:1.65; }
+    .lp-prev-output em { display:block; font-size:11px; color:#534AB7; font-weight:700; font-style:normal; margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.05em; }
+    .lp-prev-stat { display:flex; justify-content:space-between; align-items:center; padding:0.55rem 0; border-bottom:1px solid #ede9f8; font-size:13px; }
+    .lp-prev-stat:last-child { border-bottom:none; }
+    .lp-prev-stat span:last-child { font-weight:700; color:#1a1a1a; }
+    .lp-prev-pill { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; margin-right:4px; margin-bottom:4px; }
+    .lp-prev-pill.g { background:#d1fae5; color:#065f46; }
+    .lp-prev-pill.p { background:#ede9fc; color:#534AB7; }
+    .lp-prev-pill.a { background:#fef3c7; color:#92400e; }
     /* How it works */
     .lp-how { background:#f9f9f8; }
     .lp-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:2.5rem; margin-top:3rem; position:relative; }
@@ -430,36 +448,39 @@
           <p class="lp-section-p">One subscription covers every tool — no add-ons, no upsells, no per-seat pricing.</p>
         </div>
         <div class="lp-feat-grid">
-          <div class="lp-feat-card">
+          <div class="lp-feat-card" onclick="lpFeatClick(this,'reviews')">
             <div class="lp-feat-icon">⭐</div>
             <div class="lp-feat-title">AI Review Manager</div>
             <div class="lp-feat-desc">Reply to every Google and Yelp review in seconds. AI crafts responses that sound just like you.</div>
           </div>
-          <div class="lp-feat-card">
+          <div class="lp-feat-card" onclick="lpFeatClick(this,'invoicing')">
             <div class="lp-feat-icon">📄</div>
             <div class="lp-feat-title">Invoicing &amp; Proposals</div>
             <div class="lp-feat-desc">Professional invoices and proposals generated in under a minute, auto-filled from your business profile.</div>
           </div>
-          <div class="lp-feat-card">
+          <div class="lp-feat-card" onclick="lpFeatClick(this,'marketing')">
             <div class="lp-feat-icon">📊</div>
             <div class="lp-feat-title">Marketing Audit</div>
             <div class="lp-feat-desc">Instantly score your online presence and get a prioritized list of improvements to act on today.</div>
           </div>
-          <div class="lp-feat-card">
+          <div class="lp-feat-card" onclick="lpFeatClick(this,'accounting')">
             <div class="lp-feat-icon">💰</div>
             <div class="lp-feat-title">Accounting Tracker</div>
             <div class="lp-feat-desc">Track income and expenses without a spreadsheet. See your net profit at a glance, anytime.</div>
           </div>
-          <div class="lp-feat-card">
+          <div class="lp-feat-card" onclick="lpFeatClick(this,'social')">
             <div class="lp-feat-icon">📱</div>
             <div class="lp-feat-title">Social Media AI</div>
             <div class="lp-feat-desc">Generate captions, hashtags, and post ideas for any platform — on demand, in your voice.</div>
           </div>
-          <div class="lp-feat-card">
+          <div class="lp-feat-card" onclick="lpFeatClick(this,'more')">
             <div class="lp-feat-icon">✨</div>
             <div class="lp-feat-title">5 More Tools</div>
             <div class="lp-feat-desc">Bio writer, FAQ generator, email templates, job postings, and complaint handler — all included.</div>
           </div>
+        </div>
+        <div class="lp-feat-preview" id="lp-feat-preview">
+          <div class="lp-feat-preview-inner" id="lp-feat-preview-inner"></div>
         </div>
       </div>
     </section>
@@ -1398,6 +1419,34 @@
 
   var stripe = null;
   var cardElement = null;
+
+  // Landing page feature preview
+  var lpFeatPreviews = {
+    reviews: '<div><div class="lp-prev-label">Paste a customer review</div><textarea class="lp-prev-input" rows="3" readonly>"Great service! Fast, professional, and the team was incredibly friendly. Will definitely be coming back and recommending to friends."</textarea><div class="lp-prev-btn">✨ Generate AI Response</div></div><div><div class="lp-prev-label">AI-generated response</div><div class="lp-prev-output"><em>Ready in seconds</em>Thank you so much for your wonderful feedback! We\'re thrilled to hear you had such a great experience with our team. It means the world to us when customers take the time to share kind words. We look forward to seeing you again soon — and thank you for the referrals!</div></div>',
+    invoicing: '<div><div class="lp-prev-label">Invoice details</div><div class="lp-prev-output" style="font-size:12px;line-height:2;"><strong>Invoice #1042</strong><br><div class="lp-prev-stat"><span>Client</span><span>Johnson Co.</span></div><div class="lp-prev-stat"><span>Web Design — 10 hrs</span><span>$1,500</span></div><div class="lp-prev-stat"><span>SEO Setup</span><span>$500</span></div><div class="lp-prev-stat"><span>Tax (8%)</span><span>$160</span></div><div class="lp-prev-stat" style="font-size:14px"><span><strong>Total Due</strong></span><span><strong>$2,160</strong></span></div></div></div><div><div class="lp-prev-label">What you get</div><div class="lp-prev-output"><em>3 professional templates</em>Choose Classic, Minimal, or Dark. Your business name, address, and logo auto-fill from your profile — just add the line items and send.<br><br><span class="lp-prev-pill g">Classic</span><span class="lp-prev-pill p">Minimal</span><span class="lp-prev-pill a">Dark</span></div></div>',
+    marketing: '<div><div class="lp-prev-label">Your presence score</div><div class="lp-prev-output"><em>Overall rating</em><div style="font-size:32px;font-weight:800;color:#534AB7;margin:0.3rem 0;">72 / 100</div><div class="lp-prev-stat"><span>Google Business Profile</span><span style="color:#10B981">✔ Good</span></div><div class="lp-prev-stat"><span>Website SEO</span><span style="color:#F59E0B">⚠ Needs work</span></div><div class="lp-prev-stat"><span>Social Media</span><span style="color:#EF4444">✘ Weak</span></div></div></div><div><div class="lp-prev-label">Top improvements</div><div class="lp-prev-output"><em>Prioritized action list</em>1. Add 15+ photos to your Google Business Profile<br><br>2. Write meta descriptions for your top 5 pages<br><br>3. Post consistently — aim for 3x per week on Instagram</div></div>',
+    accounting: '<div><div class="lp-prev-label">Monthly snapshot</div><div class="lp-prev-output"><div class="lp-prev-stat"><span>Total Revenue</span><span style="color:#10B981">$12,400</span></div><div class="lp-prev-stat"><span>Total Expenses</span><span style="color:#EF4444">$3,200</span></div><div class="lp-prev-stat" style="font-size:15px"><span><strong>Net Profit</strong></span><span style="color:#534AB7"><strong>$9,200</strong></span></div><div class="lp-prev-stat"><span>Invoices Paid</span><span>11</span></div><div class="lp-prev-stat"><span>Invoices Pending</span><span style="color:#F59E0B">3</span></div></div></div><div><div class="lp-prev-label">What you track</div><div class="lp-prev-output"><em>No spreadsheets needed</em>Log income and expenses in seconds. See revenue, profit, and outstanding invoices at a glance — updated every time you add a transaction.</div></div>',
+    social: '<div><div class="lp-prev-label">Choose a platform</div><div style="margin-bottom:1rem"><span class="lp-prev-pill p" style="font-size:13px;padding:6px 14px;cursor:pointer">Instagram</span><span class="lp-prev-pill g" style="font-size:13px;padding:6px 14px;cursor:pointer">LinkedIn</span><span class="lp-prev-pill a" style="font-size:13px;padding:6px 14px;cursor:pointer">Facebook</span></div><div class="lp-prev-output" style="font-size:12px;color:#888">Topic: "New service launch — residential cleaning"</div><div class="lp-prev-btn" style="margin-top:0.75rem">✨ Generate Post</div></div><div><div class="lp-prev-label">Generated caption</div><div class="lp-prev-output"><em>Instagram — ready to copy</em>Big news — we\'re now offering residential cleaning! 🏠✨ Whether it\'s a deep clean or regular maintenance, we\'ve got you covered. Book your first session and see the difference.<br><br>#SmallBusiness #CleaningService #HomeClean #BookNow</div></div>',
+    more: '<div><div class="lp-prev-label">Also included</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem"><div class="lp-prev-output" style="padding:0.8rem"><em>✉️ Email Templates</em>Professional emails for follow-ups, quotes, and onboarding — ready in one click.</div><div class="lp-prev-output" style="padding:0.8rem"><em>👤 Bio Writer</em>A sharp, professional bio for your website, LinkedIn, or press kit.</div><div class="lp-prev-output" style="padding:0.8rem"><em>📋 FAQ Generator</em>Turn your services into a full FAQ page customers will actually read.</div><div class="lp-prev-output" style="padding:0.8rem"><em>💼 Job Postings</em>Write clear, compelling job listings that attract the right candidates.</div><div class="lp-prev-output" style="padding:0.8rem;grid-column:1/-1"><em>😤 Complaint Handler</em>Paste a difficult message — get a calm, professional response that defuses it.</div></div></div><div><div class="lp-prev-label">All powered by AI</div><div class="lp-prev-output"><em>Every tool works the same way</em>Fill in a few details about your business, hit generate, and get polished, professional output in seconds. Everything auto-fills from your Business Profile so you\'re never starting from scratch.</div></div>'
+  };
+
+  function lpFeatClick(card, id) {
+    var preview = document.getElementById('lp-feat-preview');
+    var inner = document.getElementById('lp-feat-preview-inner');
+    var cards = document.querySelectorAll('.lp-feat-card');
+    var alreadyActive = card.classList.contains('active');
+    cards.forEach(function(c) { c.classList.remove('active'); });
+    if (alreadyActive) {
+      preview.classList.remove('open');
+      return;
+    }
+    card.classList.add('active');
+    inner.innerHTML = lpFeatPreviews[id] || '';
+    preview.classList.add('open');
+    setTimeout(function() {
+      preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 50);
+  }
 
   function showScreen(name) {
     var screens = ['landing', 'signup', 'login', 'payment', 'app', 'forgot', 'newpassword'];
