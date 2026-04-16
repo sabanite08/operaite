@@ -36,7 +36,7 @@
     .logo { font-size: 17px; font-weight: 600; color: #fff; }
     .logo span { color: #9b93f0; }
     .tagline { font-size: 11px; color: rgba(255,255,255,0.28); margin-bottom: 2rem; padding-left: 36px; }
-    .nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 8px; font-size: 13.5px; color: rgba(255,255,255,0.5); cursor: pointer; margin-bottom: 2px; border: none; background: none; width: 100%; text-align: left; }
+    .nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 8px; font-size: 13.5px; color: rgba(255,255,255,0.7); cursor: pointer; margin-bottom: 2px; border: none; background: none; width: 100%; text-align: left; }
     .nav-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.88); }
     .nav-item.active { background: rgba(255,255,255,0.13); color: #fff; font-weight: 500; }
     .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
@@ -47,8 +47,12 @@
     .page.active { display: block; }
     .page-title { font-size: 22px; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: -0.3px; }
     .page-sub { font-size: 14px; color: #888; margin-bottom: 1.75rem; }
+    .page-hdr { display:flex; align-items:center; gap:1rem; margin-bottom:1.75rem; padding:1.25rem 1.5rem; background:#fff; border:1px solid #e8e8e5; border-radius:14px; box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+    .page-hdr-icon { width:48px; height:48px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+    .page-hdr .page-title { margin-bottom:0.2rem; }
+    .page-hdr .page-sub { margin-bottom:0; }
     .card { background: #fff; border: 1px solid #e8e8e5; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-    .card-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #444; }
+    .card-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #1a1a1a; padding-left: 10px; border-left: 3px solid #534AB7; }
     .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
     .metric { background: #fff; border: 1px solid #e8e8e5; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
     .metric-green { border-top: 3px solid #22c55e; }
@@ -677,6 +681,10 @@
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Marketing Audit
       </button>
+      <button class="nav-item" id="nav-proposal">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M10 10.5l1.5 1.5 2.5-2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Proposals
+      </button>
       <button class="nav-item" id="nav-invoice">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         Invoicing
@@ -701,10 +709,6 @@
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="5.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 5.5V4a2 2 0 014 0v1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         Job Postings
       </button>
-      <button class="nav-item" id="nav-proposal">
-        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M10 10.5l1.5 1.5 2.5-2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Proposals
-      </button>
       <button class="nav-item" id="nav-complaint">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C4.4 1.5 1.5 4 1.5 7c0 1.5.6 2.8 1.7 3.8L2.5 14l3.5-1.5c.6.2 1.3.3 2 .3 3.6 0 6.5-2.5 6.5-5.8S11.6 1.5 8 1.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v.5M8 5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         Complaint Handler
@@ -724,8 +728,13 @@
 
     <div class="main">
       <div class="page active" id="page-dashboard">
-        <div class="page-title">Good morning <span class="badge badge-purple">operaite.net</span></div>
-        <div class="page-sub">Your small business command center</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#EEEDFE;">⚡</div>
+          <div>
+            <div class="page-title">Good morning <span class="badge badge-purple">operaite.net</span></div>
+            <div class="page-sub">Your small business command center</div>
+          </div>
+        </div>
         <div class="metric-grid">
           <div class="metric metric-purple"><div class="metric-label">Invoices sent</div><div class="metric-value">--</div></div>
           <div class="metric metric-blue"><div class="metric-label">Marketing score</div><div class="metric-value">--<span style="font-size:15px;color:#aaa">/100</span></div></div>
@@ -760,8 +769,13 @@
       </div>
 
       <div class="page" id="page-reviews">
-        <div class="page-title">Review manager</div>
-        <div class="page-sub">Paste a customer review and generate a professional response in seconds</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#FEF3C7;">⭐</div>
+          <div>
+            <div class="page-title">Review manager</div>
+            <div class="page-sub">Paste a customer review and generate a professional response in seconds</div>
+          </div>
+        </div>
         <div class="card">
           <div class="card-title">Respond to a review</div>
           <label style="margin-top:0;">Business name</label>
@@ -777,8 +791,13 @@
       </div>
 
       <div class="page" id="page-audit">
-        <div class="page-title">Marketing audit</div>
-        <div class="page-sub">Get an AI-powered score and improvement plan for your online presence</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#DBEAFE;">📊</div>
+          <div>
+            <div class="page-title">Marketing audit</div>
+            <div class="page-sub">Get an AI-powered score and improvement plan for your online presence</div>
+          </div>
+        </div>
         <div class="card">
           <label style="margin-top:0;">Business name</label>
           <input type="text" id="aud-name" placeholder="e.g. Downtown Dental">
@@ -794,8 +813,13 @@
       </div>
 
       <div class="page" id="page-invoice">
-        <div class="page-title">Invoice generator</div>
-        <div class="page-sub">Create a professional invoice in seconds</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#EEEDFE;">📄</div>
+          <div>
+            <div class="page-title">Invoice generator</div>
+            <div class="page-sub">Create a professional invoice in seconds</div>
+          </div>
+        </div>
         <div class="card">
           <div class="two-col">
             <div>
@@ -886,8 +910,13 @@
       </div>
 
       <div class="page" id="page-accounting">
-        <div class="page-title">Accounting</div>
-        <div class="page-sub">Track income and expenses, see your profit at a glance</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#DCFCE7;">💰</div>
+          <div>
+            <div class="page-title">Accounting</div>
+            <div class="page-sub">Track income and expenses, see your profit at a glance</div>
+          </div>
+        </div>
         <div class="metric-grid" id="acct-summary">
           <div class="metric"><div class="metric-label">Total income</div><div class="metric-value" id="acct-income-total" style="color:#22c55e;">$0.00</div></div>
           <div class="metric"><div class="metric-label">Total expenses</div><div class="metric-value" id="acct-expense-total" style="color:#ef4444;">$0.00</div></div>
@@ -938,8 +967,13 @@
       </div>
 
       <div class="page" id="page-profile">
-        <div class="page-title">Business profile</div>
-        <div class="page-sub">Your info auto-fills into invoices and proposals</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#F3F4F6;">🏢</div>
+          <div>
+            <div class="page-title">Business profile</div>
+            <div class="page-sub">Your info auto-fills into invoices and proposals</div>
+          </div>
+        </div>
         <div class="card">
           <div class="two-col">
             <div>
@@ -985,8 +1019,13 @@
       </div>
 
       <div class="page" id="page-social">
-        <div class="page-title">Social media post generator</div>
-        <div class="page-sub">Generate ready-to-post captions for any platform in seconds</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#FCE7F3;">📱</div>
+          <div>
+            <div class="page-title">Social media post generator</div>
+            <div class="page-sub">Generate ready-to-post captions for any platform in seconds</div>
+          </div>
+        </div>
         <div class="card">
           <label style="margin-top:0;">Business name</label>
           <input type="text" id="soc-biz" placeholder="e.g. Bloom Flower Shop">
@@ -1002,8 +1041,13 @@
       </div>
 
       <div class="page" id="page-email">
-        <div class="page-title">Email template generator</div>
-        <div class="page-sub">Draft professional business emails in seconds</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#E0F2FE;">✉️</div>
+          <div>
+            <div class="page-title">Email template generator</div>
+            <div class="page-sub">Draft professional business emails in seconds</div>
+          </div>
+        </div>
         <div class="card">
           <label style="margin-top:0;">Business name</label>
           <input type="text" id="em-biz" placeholder="e.g. Apex Plumbing">
@@ -1024,8 +1068,13 @@
       </div>
 
       <div class="page" id="page-bio">
-        <div class="page-title">Bio & about us writer</div>
-        <div class="page-sub">Generate a compelling business description for any platform</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#ECFDF5;">✍️</div>
+          <div>
+            <div class="page-title">Bio &amp; about us writer</div>
+            <div class="page-sub">Generate a compelling business description for any platform</div>
+          </div>
+        </div>
         <div class="card">
           <label style="margin-top:0;">Business name</label>
           <input type="text" id="bio-biz" placeholder="e.g. Summit Landscaping">
@@ -1042,8 +1091,13 @@
       </div>
 
       <div class="page" id="page-jobs">
-        <div class="page-title">Job posting generator</div>
-        <div class="page-sub">Write a professional job listing that attracts the right candidates</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#FEFCE8;">💼</div>
+          <div>
+            <div class="page-title">Job posting generator</div>
+            <div class="page-sub">Write a professional job listing that attracts the right candidates</div>
+          </div>
+        </div>
         <div class="card">
           <div class="two-col">
             <div>
@@ -1065,8 +1119,13 @@
       </div>
 
       <div class="page" id="page-proposal">
-        <div class="page-title">Proposal & quote generator</div>
-        <div class="page-sub">Create a professional project proposal to send to clients</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#EDE9FE;">📋</div>
+          <div>
+            <div class="page-title">Proposal &amp; quote generator</div>
+            <div class="page-sub">Create a professional project proposal to send to clients</div>
+          </div>
+        </div>
         <div class="card">
           <div class="two-col">
             <div>
@@ -1149,8 +1208,13 @@
       </div>
 
       <div class="page" id="page-complaint">
-        <div class="page-title">Complaint handler</div>
-        <div class="page-sub">Turn difficult customer situations into professional, de-escalating responses</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#FEE2E2;">💬</div>
+          <div>
+            <div class="page-title">Complaint handler</div>
+            <div class="page-sub">Turn difficult customer situations into professional, de-escalating responses</div>
+          </div>
+        </div>
         <div class="card">
           <label style="margin-top:0;">Business name</label>
           <input type="text" id="comp-biz" placeholder="e.g. Bright Clean Laundry">
@@ -1166,8 +1230,13 @@
       </div>
 
       <div class="page" id="page-faq">
-        <div class="page-title">FAQ generator</div>
-        <div class="page-sub">Generate a complete FAQ page for your business or website</div>
+        <div class="page-hdr">
+          <div class="page-hdr-icon" style="background:#F0F9FF;">❓</div>
+          <div>
+            <div class="page-title">FAQ generator</div>
+            <div class="page-sub">Generate a complete FAQ page for your business or website</div>
+          </div>
+        </div>
         <div class="card">
           <label style="margin-top:0;">Business name</label>
           <input type="text" id="faq-biz" placeholder="e.g. Coastal HVAC">
