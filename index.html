@@ -1158,6 +1158,8 @@
         <div class="card">
           <label style="margin-top:0;">Business name</label>
           <input type="text" id="soc-biz" placeholder="e.g. Bloom Flower Shop">
+          <label>What type of business is it?</label>
+          <input type="text" id="soc-biztype" placeholder="e.g. flower shop, software company, plumbing service">
           <label>What do you want to post about?</label>
           <input type="text" id="soc-topic" placeholder="e.g. weekend sale, new product launch, thank you post">
           <div style="display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;">
@@ -2107,6 +2109,7 @@
   // Social media post generator
   document.getElementById('gen-social-btn').addEventListener('click', async function() {
     var biz = document.getElementById('soc-biz').value.trim() || 'our business';
+    var biztype = document.getElementById('soc-biztype').value.trim();
     var topic = document.getElementById('soc-topic').value.trim();
     var platform = document.getElementById('soc-platform').value;
     var tone = document.getElementById('soc-tone').value;
@@ -2114,7 +2117,8 @@
     var out = document.getElementById('soc-output');
     out.className = 'output-box visible';
     out.innerHTML = '<span class="loading">Writing your posts...</span>';
-    var prompt = 'Write ' + (platform === 'All three' ? 'three separate social media posts — one each for Facebook, Instagram, and LinkedIn' : 'a ' + platform + ' post') + ' for "' + biz + '" about: ' + topic + '. Tone: ' + tone + '. ' + (platform === 'All three' ? 'Label each one clearly. ' : '') + 'Keep each post concise and include relevant hashtags.';
+    var bizContext = biztype ? 'a ' + biztype + ' called "' + biz + '"' : '"' + biz + '" (a local business)';
+    var prompt = 'You are writing social media content for ' + bizContext + '. The business name is just a name — do not make assumptions about what the business does based on its name. Use only the business type provided to understand what they do.\n\nWrite ' + (platform === 'All three' ? 'three separate social media posts — one each for Facebook, Instagram, and LinkedIn' : 'a ' + platform + ' post') + ' about: ' + topic + '. Tone: ' + tone + '. ' + (platform === 'All three' ? 'Label each one clearly. ' : '') + 'Keep each post concise and include relevant hashtags.';
     out.textContent = await callAI(prompt);
   });
 
