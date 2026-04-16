@@ -1430,7 +1430,7 @@
     more: '<div><div class="lp-prev-label">Also included</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem"><div class="lp-prev-output" style="padding:0.8rem"><em>✉️ Email Templates</em>Professional emails for follow-ups, quotes, and onboarding — ready in one click.</div><div class="lp-prev-output" style="padding:0.8rem"><em>👤 Bio Writer</em>A sharp, professional bio for your website, LinkedIn, or press kit.</div><div class="lp-prev-output" style="padding:0.8rem"><em>📋 FAQ Generator</em>Turn your services into a full FAQ page customers will actually read.</div><div class="lp-prev-output" style="padding:0.8rem"><em>💼 Job Postings</em>Write clear, compelling job listings that attract the right candidates.</div><div class="lp-prev-output" style="padding:0.8rem;grid-column:1/-1"><em>😤 Complaint Handler</em>Paste a difficult message — get a calm, professional response that defuses it.</div></div></div><div><div class="lp-prev-label">All powered by AI</div><div class="lp-prev-output"><em>Every tool works the same way</em>Fill in a few details about your business, hit generate, and get polished, professional output in seconds. Everything auto-fills from your Business Profile so you\'re never starting from scratch.</div></div>'
   };
 
-  function lpFeatClick(card, id) {
+  window.lpFeatClick = function lpFeatClick(card, id) {
     var preview = document.getElementById('lp-feat-preview');
     var inner = document.getElementById('lp-feat-preview-inner');
     var cards = document.querySelectorAll('.lp-feat-card');
