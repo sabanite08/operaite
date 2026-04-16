@@ -100,24 +100,481 @@
     .steps { font-size: 13.5px; color: #666; line-height: 2; }
     .steps b { color: #1a1a1a; }
     .platform-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    /* Split signup screen */
+    .auth-split { min-height: 100vh; display: flex; align-items: stretch; }
+    .auth-hero { flex: 1; background: linear-gradient(150deg, #534AB7 0%, #2d2580 100%); padding: 3rem 3.5rem; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+    .auth-hero::before { content: ''; position: absolute; top: -120px; right: -120px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 65%); pointer-events: none; }
+    .auth-hero::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 350px; height: 350px; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%); pointer-events: none; }
+    .auth-hero-wordmark { display: flex; align-items: center; gap: 10px; margin-bottom: 2.5rem; }
+    .auth-hero-wordmark-icon { width: 38px; height: 38px; background: rgba(255,255,255,0.18); border-radius: 11px; display: flex; align-items: center; justify-content: center; }
+    .auth-hero-wordmark-text { font-size: 24px; font-weight: 700; color: white; }
+    .auth-hero-wordmark-text span { color: rgba(255,255,255,0.55); }
+    .auth-hero-headline { font-size: 40px; font-weight: 800; color: white; line-height: 1.15; margin-bottom: 1rem; letter-spacing: -0.5px; }
+    .auth-hero-sub { font-size: 16px; color: rgba(255,255,255,0.68); line-height: 1.65; margin-bottom: 2rem; max-width: 380px; }
+    .auth-hero-feats { display: flex; flex-direction: column; gap: 10px; margin-bottom: 2.5rem; }
+    .auth-hero-feat { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.88); font-size: 14px; }
+    .auth-hero-feat-icon { width: 28px; height: 28px; background: rgba(255,255,255,0.14); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .auth-form-panel { width: 460px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; padding: 2.5rem; background: #f9f9f8; }
+    @media (max-width: 900px) { .auth-split { flex-direction: column; } .auth-hero { padding: 2.5rem 2rem; } .auth-hero-headline { font-size: 28px; } .auth-form-panel { width: 100%; } .auth-scene { display: none; } }
+
+    /* ===== Landing Page ===== */
+    .lp { background:#fff; }
+    .lp-nav { position:fixed; top:0; left:0; right:0; z-index:200; height:62px; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid #e8e8e5; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; }
+    .lp-nav-brand { display:flex; align-items:center; gap:9px; }
+    .lp-nav-brand-icon { width:32px; height:32px; background:#534AB7; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .lp-nav-brand-name { font-size:18px; font-weight:700; color:#1a1a1a; }
+    .lp-nav-brand-name span { color:#534AB7; }
+    .lp-nav-links { display:flex; align-items:center; gap:8px; }
+    .lp-nav-link { background:none; border:none; font-family:inherit; font-size:14px; color:#555; padding:8px 14px; border-radius:8px; cursor:pointer; }
+    .lp-nav-link:hover { background:#f3f3f1; color:#1a1a1a; }
+    .lp-nav-btn { background:#534AB7; border:none; font-family:inherit; font-size:14px; font-weight:600; color:#fff; padding:9px 20px; border-radius:9px; cursor:pointer; }
+    .lp-nav-btn:hover { background:#3C3489; }
+    .lp-wrap { max-width:1060px; margin:0 auto; padding:0 2rem; }
+    /* Hero */
+    .lp-hero { padding:110px 2rem 0; text-align:center; }
+    .lp-hero-inner { max-width:700px; margin:0 auto; }
+    .lp-eyebrow { display:inline-flex; align-items:center; gap:6px; background:#EEEDFE; color:#534AB7; font-size:12px; font-weight:700; padding:5px 14px; border-radius:20px; margin-bottom:1.5rem; letter-spacing:0.05em; text-transform:uppercase; }
+    .lp-h1 { font-size:60px; font-weight:800; color:#1a1a1a; line-height:1.07; letter-spacing:-2px; margin-bottom:1.25rem; }
+    .lp-h1 em { color:#534AB7; font-style:normal; }
+    .lp-hero-sub { font-size:18px; color:#666; line-height:1.65; margin-bottom:2.25rem; max-width:520px; margin-left:auto; margin-right:auto; }
+    .lp-hero-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:0.75rem; }
+    .lp-btn-lg { padding:14px 28px; font-size:15px; font-weight:600; border-radius:10px; cursor:pointer; border:none; font-family:inherit; transition:background 0.15s; }
+    .lp-btn-lg.primary { background:#534AB7; color:#fff; }
+    .lp-btn-lg.primary:hover { background:#3C3489; }
+    .lp-btn-lg.ghost { background:#fff; color:#1a1a1a; border:1.5px solid #d4d4ce; }
+    .lp-btn-lg.ghost:hover { background:#f3f3f1; }
+    .lp-hero-note { font-size:12.5px; color:#c0c0bb; margin-bottom:3.5rem; }
+    /* Mockup */
+    .lp-mockup-outer { max-width:960px; margin:0 auto; border-radius:16px 16px 0 0; overflow:hidden; box-shadow:0 0 0 1px #e0e0db, 0 24px 72px rgba(83,74,183,0.15), 0 8px 28px rgba(0,0,0,0.07); }
+    .lp-mockup-bar { height:36px; background:#f3f3f1; border-bottom:1px solid #e8e8e5; display:flex; align-items:center; padding:0 16px; gap:7px; }
+    .lp-mockup-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+    .lp-mockup-urlbar { flex:1; max-width:260px; margin:0 auto; height:20px; background:#e8e8e5; border-radius:6px; display:flex; align-items:center; justify-content:center; }
+    .lp-mockup-urlbar span { font-size:10.5px; color:#999; }
+    .lp-mockup-body { display:flex; height:440px; background:#f9f9f8; }
+    .lp-mock-sidebar { width:195px; background:#fff; border-right:1px solid #e8e8e5; padding:14px 10px; flex-shrink:0; }
+    .lp-mock-wordmark { display:flex; align-items:center; gap:7px; margin-bottom:12px; padding:4px 8px; }
+    .lp-mock-wm-icon { width:22px; height:22px; background:#534AB7; border-radius:6px; flex-shrink:0; }
+    .lp-mock-wm-text { font-size:14px; font-weight:700; color:#1a1a1a; }
+    .lp-mock-wm-text span { color:#534AB7; }
+    .lp-mock-nav { display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:7px; font-size:12px; color:#888; margin-bottom:1px; }
+    .lp-mock-nav.on { background:#EEEDFE; color:#534AB7; font-weight:500; }
+    .lp-mock-nav-ic { width:12px; height:12px; border-radius:3px; background:currentColor; opacity:0.4; flex-shrink:0; }
+    .lp-mock-main { flex:1; padding:22px 24px; overflow:hidden; }
+    .lp-mock-page-title { font-size:15px; font-weight:600; margin-bottom:3px; }
+    .lp-mock-page-sub { font-size:11px; color:#bbb; margin-bottom:14px; }
+    .lp-mock-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-bottom:12px; }
+    .lp-mock-metric { background:#fff; border:1px solid #e8e8e5; border-radius:8px; padding:10px 12px; }
+    .lp-mock-m-label { font-size:9px; color:#bbb; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.04em; }
+    .lp-mock-m-val { font-size:20px; font-weight:700; }
+    .lp-mock-m-val.green { color:#22c55e; }
+    .lp-mock-m-val.purple { color:#534AB7; }
+    .lp-mock-card { background:#fff; border:1px solid #e8e8e5; border-radius:9px; padding:12px 14px; margin-bottom:9px; }
+    .lp-mock-card-ttl { font-size:11px; font-weight:600; margin-bottom:9px; color:#1a1a1a; }
+    .lp-mock-row { display:flex; align-items:center; justify-content:space-between; padding:5px 0; border-bottom:1px solid #f5f5f3; font-size:11px; }
+    .lp-mock-row:last-child { border:none; padding-bottom:0; }
+    .lp-mock-row-name { color:#555; }
+    .lp-mock-row-amt { font-weight:600; display:flex; align-items:center; gap:5px; }
+    .lp-mock-pill { display:inline-block; font-size:9px; padding:2px 7px; border-radius:5px; font-weight:600; }
+    .lp-mock-pill.g { background:#E1F5EE; color:#0F6E56; }
+    .lp-mock-pill.a { background:#FAEEDA; color:#854F0B; }
+    .lp-mock-pill.p { background:#EEEDFE; color:#534AB7; }
+    /* Proof bar */
+    .lp-proof { background:#f9f9f8; border-top:1px solid #e8e8e5; border-bottom:1px solid #e8e8e5; padding:1.5rem 2rem; }
+    .lp-proof-inner { max-width:900px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1.25rem; }
+    .lp-proof-txt { font-size:14px; color:#999; font-style:italic; }
+    .lp-proof-stats { display:flex; gap:3rem; }
+    .lp-proof-stat { text-align:center; }
+    .lp-proof-stat strong { display:block; font-size:22px; font-weight:800; color:#534AB7; line-height:1; }
+    .lp-proof-stat span { font-size:11.5px; color:#aaa; }
+    /* Sections */
+    .lp-section { padding:80px 2rem; }
+    .lp-section-inner { max-width:1000px; margin:0 auto; }
+    .lp-section-tag { display:inline-block; font-size:11.5px; font-weight:700; color:#534AB7; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.75rem; }
+    .lp-section-h2 { font-size:38px; font-weight:800; color:#1a1a1a; letter-spacing:-0.8px; line-height:1.15; margin-bottom:0.75rem; }
+    .lp-section-p { font-size:16px; color:#777; line-height:1.65; }
+    .lp-section-p.c { max-width:520px; margin:0 auto 3rem; text-align:center; }
+    /* Features */
+    .lp-feat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-top:3rem; }
+    .lp-feat-card { background:#fff; border:1px solid #e8e8e5; border-radius:14px; padding:1.75rem 1.5rem; transition:box-shadow 0.15s, border-color 0.15s; }
+    .lp-feat-card:hover { box-shadow:0 6px 24px rgba(83,74,183,0.1); border-color:#c5c2ed; }
+    .lp-feat-icon { width:42px; height:42px; border-radius:11px; background:#EEEDFE; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:1rem; }
+    .lp-feat-title { font-size:15px; font-weight:700; color:#1a1a1a; margin-bottom:0.4rem; }
+    .lp-feat-desc { font-size:13.5px; color:#777; line-height:1.6; }
+    /* How it works */
+    .lp-how { background:#f9f9f8; }
+    .lp-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:2.5rem; margin-top:3rem; position:relative; }
+    .lp-steps::before { content:''; position:absolute; top:24px; left:calc(16.7% + 18px); right:calc(16.7% + 18px); height:1px; background:#534AB7; opacity:0.15; }
+    .lp-step { text-align:center; }
+    .lp-step-num { width:48px; height:48px; border-radius:50%; background:#534AB7; color:#fff; font-size:18px; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto 1.1rem; position:relative; z-index:1; }
+    .lp-step-title { font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:0.5rem; }
+    .lp-step-desc { font-size:13.5px; color:#777; line-height:1.65; }
+    /* Pricing */
+    .lp-pricing-section { text-align:center; }
+    .lp-pricing-card { max-width:440px; margin:2.5rem auto 0; background:#fff; border:2px solid #534AB7; border-radius:20px; padding:2.5rem 2rem; text-align:left; box-shadow:0 12px 40px rgba(83,74,183,0.12); }
+    .lp-price-amt { font-size:54px; font-weight:800; color:#534AB7; letter-spacing:-2px; line-height:1; }
+    .lp-price-per { font-size:15px; color:#999; margin-bottom:1.75rem; }
+    .lp-price-feats { margin-bottom:2rem; }
+    .lp-price-feat { display:flex; align-items:center; gap:10px; font-size:14px; color:#444; padding:6px 0; border-bottom:1px solid #f3f3f1; }
+    .lp-price-feat:last-child { border:none; }
+    .lp-price-feat::before { content:'✓'; color:#534AB7; font-weight:800; font-size:13px; flex-shrink:0; }
+    .lp-price-btn { width:100%; padding:14px; background:#534AB7; color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; }
+    .lp-price-btn:hover { background:#3C3489; }
+    .lp-price-note { font-size:12px; color:#bbb; text-align:center; margin-top:0.75rem; }
+    /* CTA Banner */
+    .lp-cta-banner { background:linear-gradient(135deg,#534AB7 0%,#2d2580 100%); padding:80px 2rem; text-align:center; }
+    .lp-cta-banner h2 { font-size:40px; font-weight:800; color:#fff; letter-spacing:-1px; margin-bottom:0.75rem; }
+    .lp-cta-banner p { font-size:17px; color:rgba(255,255,255,0.7); margin-bottom:2rem; }
+    .lp-btn-white { background:#fff; color:#534AB7; border:none; border-radius:10px; padding:14px 32px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; }
+    .lp-btn-white:hover { background:#f0effd; }
+    /* Footer */
+    .lp-footer { background:#1a1a1a; padding:2.25rem 2rem; }
+    .lp-footer-inner { max-width:1000px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1.25rem; }
+    .lp-footer-brand { display:flex; align-items:center; gap:8px; }
+    .lp-footer-brand-icon { width:26px; height:26px; background:#534AB7; border-radius:7px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .lp-footer-brand-name { font-size:16px; font-weight:700; color:#fff; }
+    .lp-footer-brand-name span { color:#7b74d4; }
+    .lp-footer-links { display:flex; gap:1.75rem; }
+    .lp-footer-links a { font-size:13px; color:#666; text-decoration:none; cursor:pointer; }
+    .lp-footer-links a:hover { color:#fff; }
+    .lp-footer-copy { font-size:12px; color:#555; }
+    @media (max-width:800px) {
+      .lp-h1 { font-size:38px; letter-spacing:-1px; }
+      .lp-feat-grid { grid-template-columns:1fr 1fr; }
+      .lp-proof-inner { flex-direction:column; align-items:flex-start; }
+      .lp-footer-inner { flex-direction:column; align-items:flex-start; }
+    }
+    @media (max-width:600px) {
+      .lp-nav { padding:0 1.25rem; }
+      .lp-h1 { font-size:30px; letter-spacing:-0.5px; }
+      .lp-section-h2 { font-size:26px; }
+      .lp-feat-grid { grid-template-columns:1fr; }
+      .lp-steps { grid-template-columns:1fr; }
+      .lp-steps::before { display:none; }
+      .lp-mock-sidebar { display:none; }
+      .lp-cta-banner h2 { font-size:28px; }
+    }
   </style>
 </head>
 <body>
 
-  <div class="auth-wrap" id="screen-signup">
-    <div class="auth-card">
-      <div class="auth-logo">
-        <div class="auth-logo-icon"><svg width="16" height="16" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-        <span class="auth-logo-text">Opera<span>ite</span></span>
+  <!-- ===== Landing Page ===== -->
+  <div id="screen-landing" class="lp">
+    <nav class="lp-nav">
+      <div class="lp-nav-brand">
+        <div class="lp-nav-brand-icon"><svg width="16" height="16" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <span class="lp-nav-brand-name">Opera<span>ite</span></span>
       </div>
-      <div class="auth-title">Create your account</div>
-      <div class="auth-sub">Start your small business command center</div>
-      <div class="auth-error" id="signup-error"></div>
-      <input class="auth-input" type="text" id="signup-name" placeholder="Your name">
-      <input class="auth-input" type="email" id="signup-email" placeholder="Email address">
-      <input class="auth-input" type="password" id="signup-password" placeholder="Password (min 6 characters)">
-      <button class="auth-btn" id="signup-btn">Create account &amp; subscribe — $29/mo</button>
-      <div class="auth-link">Already have an account? <a id="goto-login">Sign in</a></div>
+      <div class="lp-nav-links">
+        <button class="lp-nav-link" id="lp-nav-signin">Sign in</button>
+        <button class="lp-nav-btn" id="lp-nav-cta">Get started</button>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="lp-hero">
+      <div class="lp-hero-inner">
+        <div class="lp-eyebrow">✦ AI-powered for small business</div>
+        <h1 class="lp-h1">Run your whole business<br>from <em>one place.</em></h1>
+        <p class="lp-hero-sub">Invoices, review responses, marketing audits, social content — all powered by AI. Built for the owner who wears every hat.</p>
+        <div class="lp-hero-actions">
+          <button class="lp-btn-lg primary" id="lp-hero-cta">Get started — $29/mo</button>
+          <button class="lp-btn-lg ghost" id="lp-hero-signin">Sign in</button>
+        </div>
+        <div class="lp-hero-note">No contracts. Cancel anytime.</div>
+      </div>
+      <!-- App Mockup -->
+      <div class="lp-mockup-outer">
+        <div class="lp-mockup-bar">
+          <div class="lp-mockup-dot" style="background:#ff5f57"></div>
+          <div class="lp-mockup-dot" style="background:#febc2e"></div>
+          <div class="lp-mockup-dot" style="background:#28c840"></div>
+          <div class="lp-mockup-urlbar"><span>operaite.net</span></div>
+        </div>
+        <div class="lp-mockup-body">
+          <div class="lp-mock-sidebar">
+            <div class="lp-mock-wordmark">
+              <div class="lp-mock-wm-icon"></div>
+              <span class="lp-mock-wm-text">Opera<span>ite</span></span>
+            </div>
+            <div class="lp-mock-nav on"><div class="lp-mock-nav-ic"></div> Dashboard</div>
+            <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Business Profile</div>
+            <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Review Manager</div>
+            <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Marketing Audit</div>
+            <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Invoicing</div>
+            <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Accounting</div>
+            <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Social Media</div>
+            <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Proposals</div>
+          </div>
+          <div class="lp-mock-main">
+            <div class="lp-mock-page-title">Good morning, Sarah 👋</div>
+            <div class="lp-mock-page-sub">Your small business command center</div>
+            <div class="lp-mock-metrics">
+              <div class="lp-mock-metric"><div class="lp-mock-m-label">Net profit</div><div class="lp-mock-m-val green">$8,240</div></div>
+              <div class="lp-mock-metric"><div class="lp-mock-m-label">Total income</div><div class="lp-mock-m-val">$12,400</div></div>
+              <div class="lp-mock-metric"><div class="lp-mock-m-label">Marketing score</div><div class="lp-mock-m-val purple">74<span style="font-size:11px;color:#aaa;font-weight:400">/100</span></div></div>
+            </div>
+            <div class="lp-mock-card">
+              <div class="lp-mock-card-ttl">Recent invoices</div>
+              <div class="lp-mock-row"><span class="lp-mock-row-name">Web Design — Johnson Co.</span><span class="lp-mock-row-amt">$2,400 <span class="lp-mock-pill g">Paid</span></span></div>
+              <div class="lp-mock-row"><span class="lp-mock-row-name">Monthly Retainer — Acme</span><span class="lp-mock-row-amt">$1,800 <span class="lp-mock-pill a">Pending</span></span></div>
+              <div class="lp-mock-row"><span class="lp-mock-row-name">Logo Package — Rivera LLC</span><span class="lp-mock-row-amt">$850 <span class="lp-mock-pill g">Paid</span></span></div>
+            </div>
+            <div class="lp-mock-card" style="display:flex;align-items:center;gap:12px;padding:10px 14px;">
+              <div style="flex:1"><div style="font-size:11px;font-weight:600;margin-bottom:3px;color:#1a1a1a;">New Google review received</div><div style="font-size:10px;color:#888;">★★★★★ "Absolutely fantastic service, would highly recommend to anyone…"</div></div>
+              <span class="lp-mock-pill p" style="white-space:nowrap;padding:4px 9px;">Reply with AI →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proof bar -->
+    <div class="lp-proof">
+      <div class="lp-proof-inner">
+        <span class="lp-proof-txt">Trusted by small business owners across the US</span>
+        <div class="lp-proof-stats">
+          <div class="lp-proof-stat"><strong>10+</strong><span>AI tools included</span></div>
+          <div class="lp-proof-stat"><strong>$29</strong><span>flat per month</span></div>
+          <div class="lp-proof-stat"><strong>5 min</strong><span>to get started</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <section class="lp-section">
+      <div class="lp-section-inner">
+        <div style="max-width:560px;">
+          <div class="lp-section-tag">What's included</div>
+          <h2 class="lp-section-h2">Everything you need.<br>Nothing you don't.</h2>
+          <p class="lp-section-p">One subscription covers every tool — no add-ons, no upsells, no per-seat pricing.</p>
+        </div>
+        <div class="lp-feat-grid">
+          <div class="lp-feat-card">
+            <div class="lp-feat-icon">⭐</div>
+            <div class="lp-feat-title">AI Review Manager</div>
+            <div class="lp-feat-desc">Reply to every Google and Yelp review in seconds. AI crafts responses that sound just like you.</div>
+          </div>
+          <div class="lp-feat-card">
+            <div class="lp-feat-icon">📄</div>
+            <div class="lp-feat-title">Invoicing &amp; Proposals</div>
+            <div class="lp-feat-desc">Professional invoices and proposals generated in under a minute, auto-filled from your business profile.</div>
+          </div>
+          <div class="lp-feat-card">
+            <div class="lp-feat-icon">📊</div>
+            <div class="lp-feat-title">Marketing Audit</div>
+            <div class="lp-feat-desc">Instantly score your online presence and get a prioritized list of improvements to act on today.</div>
+          </div>
+          <div class="lp-feat-card">
+            <div class="lp-feat-icon">💰</div>
+            <div class="lp-feat-title">Accounting Tracker</div>
+            <div class="lp-feat-desc">Track income and expenses without a spreadsheet. See your net profit at a glance, anytime.</div>
+          </div>
+          <div class="lp-feat-card">
+            <div class="lp-feat-icon">📱</div>
+            <div class="lp-feat-title">Social Media AI</div>
+            <div class="lp-feat-desc">Generate captions, hashtags, and post ideas for any platform — on demand, in your voice.</div>
+          </div>
+          <div class="lp-feat-card">
+            <div class="lp-feat-icon">✨</div>
+            <div class="lp-feat-title">5 More Tools</div>
+            <div class="lp-feat-desc">Bio writer, FAQ generator, email templates, job postings, and complaint handler — all included.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="lp-section lp-how">
+      <div class="lp-section-inner" style="text-align:center;">
+        <div class="lp-section-tag">Getting started</div>
+        <h2 class="lp-section-h2">Up and running in 3 minutes</h2>
+        <p class="lp-section-p c">No setup wizard. No onboarding calls. Sign up and start using your tools immediately.</p>
+        <div class="lp-steps">
+          <div class="lp-step">
+            <div class="lp-step-num">1</div>
+            <div class="lp-step-title">Create your account</div>
+            <div class="lp-step-desc">Sign up with your email and subscribe for $29/mo. Takes about 30 seconds.</div>
+          </div>
+          <div class="lp-step">
+            <div class="lp-step-num">2</div>
+            <div class="lp-step-title">Fill in your business profile</div>
+            <div class="lp-step-desc">Enter your business name and details once. It auto-fills your invoices, proposals, and every tool.</div>
+          </div>
+          <div class="lp-step">
+            <div class="lp-step-num">3</div>
+            <div class="lp-step-title">Start using your tools</div>
+            <div class="lp-step-desc">Every tool is ready immediately. Generate your first invoice or run your first marketing audit today.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="lp-section lp-pricing-section" id="lp-pricing">
+      <div class="lp-section-inner" style="text-align:center;">
+        <div class="lp-section-tag">Pricing</div>
+        <h2 class="lp-section-h2">Simple, honest pricing</h2>
+        <p class="lp-section-p c">One plan. Every tool. No surprises.</p>
+        <div class="lp-pricing-card">
+          <div class="lp-price-amt">$29</div>
+          <div class="lp-price-per">per month — cancel anytime</div>
+          <div class="lp-price-feats">
+            <div class="lp-price-feat">AI Review Manager — reply to every review</div>
+            <div class="lp-price-feat">Invoice &amp; Proposal Generator</div>
+            <div class="lp-price-feat">Marketing Audit Tool</div>
+            <div class="lp-price-feat">Accounting &amp; Income Tracker</div>
+            <div class="lp-price-feat">Social Media Content AI</div>
+            <div class="lp-price-feat">5 additional AI tools</div>
+            <div class="lp-price-feat">Unlimited AI requests</div>
+            <div class="lp-price-feat">Business Profile auto-fill across all tools</div>
+          </div>
+          <button class="lp-price-btn" id="lp-pricing-cta">Get started for $29/mo</button>
+          <div class="lp-price-note">No setup fees. No contracts. Cancel from your account anytime.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <div class="lp-cta-banner">
+      <div class="lp-wrap">
+        <h2>Ready to simplify your business?</h2>
+        <p>Join small business owners who stopped juggling tools and started getting things done.</p>
+        <button class="lp-btn-white" id="lp-bottom-cta">Start for $29/mo — no contracts</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="lp-footer">
+      <div class="lp-footer-inner">
+        <div class="lp-footer-brand">
+          <div class="lp-footer-brand-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <span class="lp-footer-brand-name">Opera<span>ite</span></span>
+        </div>
+        <div class="lp-footer-links">
+          <a id="lp-footer-signin">Sign in</a>
+          <a id="lp-footer-signup">Sign up</a>
+        </div>
+        <div class="lp-footer-copy">© 2026 Operaite. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="auth-split" id="screen-signup" style="display:none;">
+    <!-- Hero panel -->
+    <div class="auth-hero">
+      <div class="auth-hero-wordmark">
+        <div class="auth-hero-wordmark-icon"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <span class="auth-hero-wordmark-text">Opera<span>ite</span></span>
+      </div>
+      <div class="auth-hero-headline">Your business,<br>on autopilot.</div>
+      <div class="auth-hero-sub">The AI-powered command center built for small business owners. Stop juggling tools — run everything from one place.</div>
+      <div class="auth-hero-feats">
+        <div class="auth-hero-feat"><div class="auth-hero-feat-icon">📄</div> Invoices &amp; proposals in seconds</div>
+        <div class="auth-hero-feat"><div class="auth-hero-feat-icon">⭐</div> AI review responses that win customers</div>
+        <div class="auth-hero-feat"><div class="auth-hero-feat-icon">📊</div> Marketing audits &amp; social content</div>
+        <div class="auth-hero-feat"><div class="auth-hero-feat-icon">💰</div> Simple accounting &amp; financial tracking</div>
+      </div>
+      <!-- Illustration: 3 people working -->
+      <svg class="auth-scene" viewBox="0 0 420 210" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;">
+        <!-- Decorative background blobs -->
+        <ellipse cx="80" cy="180" rx="70" ry="18" fill="rgba(255,255,255,0.06)"/>
+        <ellipse cx="210" cy="188" rx="70" ry="18" fill="rgba(255,255,255,0.06)"/>
+        <ellipse cx="345" cy="180" rx="65" ry="18" fill="rgba(255,255,255,0.06)"/>
+
+        <!-- === Person 1: Laptop / Invoicing === -->
+        <rect x="28" y="178" width="100" height="5" rx="2.5" fill="rgba(255,255,255,0.22)"/>
+        <ellipse cx="78" cy="158" rx="20" ry="23" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="78" cy="120" r="20" fill="rgba(255,255,255,0.55)"/>
+        <ellipse cx="78" cy="107" rx="19" ry="8" fill="rgba(255,200,140,0.55)"/>
+        <circle cx="72" cy="119" r="2.5" fill="#3C3489"/>
+        <circle cx="84" cy="119" r="2.5" fill="#3C3489"/>
+        <path d="M72 127 Q78 132 84 127" stroke="#3C3489" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M58 154 Q44 166 40 178" stroke="rgba(255,255,255,0.3)" stroke-width="9" stroke-linecap="round"/>
+        <path d="M98 154 Q106 166 104 178" stroke="rgba(255,255,255,0.3)" stroke-width="9" stroke-linecap="round"/>
+        <rect x="33" y="164" width="70" height="17" rx="3" fill="rgba(255,255,255,0.65)"/>
+        <rect x="35" y="166" width="66" height="13" rx="2" fill="#EEEDFE"/>
+        <rect x="39" y="169" width="25" height="3" rx="1.5" fill="#534AB7" opacity="0.7"/>
+        <rect x="39" y="174" width="50" height="2" rx="1" fill="#534AB7" opacity="0.25"/>
+        <rect x="39" y="177" width="38" height="2" rx="1" fill="#534AB7" opacity="0.25"/>
+        <!-- Floating invoice card -->
+        <rect x="4" y="60" width="70" height="52" rx="8" fill="rgba(255,255,255,0.93)"/>
+        <rect x="10" y="67" width="32" height="8" rx="3" fill="#534AB7"/>
+        <text x="14" y="74" font-size="6" fill="white" font-family="sans-serif" font-weight="bold">INVOICE</text>
+        <rect x="10" y="80" width="52" height="2.5" rx="1.5" fill="#e0e0db"/>
+        <rect x="10" y="85" width="40" height="2.5" rx="1.5" fill="#e0e0db"/>
+        <rect x="10" y="90" width="46" height="2.5" rx="1.5" fill="#e0e0db"/>
+        <rect x="38" y="99" width="26" height="7" rx="3" fill="#534AB7" opacity="0.75"/>
+        <text x="41" y="105" font-size="5" fill="white" font-family="sans-serif">$2,400.00</text>
+        <path d="M52 112 Q62 116 68 122" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+        <!-- === Person 2: Center - Happy with stars === -->
+        <ellipse cx="210" cy="160" rx="22" ry="26" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="210" cy="118" r="22" fill="rgba(255,255,255,0.55)"/>
+        <ellipse cx="210" cy="103" rx="21" ry="9" fill="rgba(140,180,255,0.5)"/>
+        <path d="M200 116 Q203 113 206 116" stroke="#3C3489" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M214 116 Q217 113 220 116" stroke="#3C3489" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M201 125 Q210 133 219 125" stroke="#3C3489" stroke-width="2" stroke-linecap="round"/>
+        <path d="M188 158 Q174 145 172 128" stroke="rgba(255,255,255,0.35)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M232 158 Q244 150 242 136" stroke="rgba(255,255,255,0.35)" stroke-width="10" stroke-linecap="round"/>
+        <rect x="234" y="112" width="22" height="36" rx="5" fill="rgba(255,255,255,0.85)"/>
+        <rect x="236" y="116" width="18" height="26" rx="2" fill="#EEEDFE"/>
+        <text x="237" y="124" font-size="7" fill="#EF9F27">★★★</text>
+        <text x="239" y="132" font-size="7" fill="#EF9F27">★★</text>
+        <rect x="236" y="134" width="14" height="2.5" rx="1" fill="#534AB7" opacity="0.4"/>
+        <rect x="236" y="138" width="10" height="2.5" rx="1" fill="#534AB7" opacity="0.3"/>
+        <!-- Stars floating above -->
+        <text x="175" y="88" font-size="16" fill="rgba(255,215,0,0.85)">★ ★ ★ ★ ★</text>
+        <!-- Sparkles -->
+        <text x="155" y="115" font-size="13" fill="rgba(255,255,255,0.5)">✦</text>
+        <text x="258" y="105" font-size="10" fill="rgba(255,255,255,0.4)">✦</text>
+
+        <!-- === Person 3: Chart / Analytics === -->
+        <rect x="288" y="178" width="106" height="5" rx="2.5" fill="rgba(255,255,255,0.22)"/>
+        <ellipse cx="345" cy="158" rx="20" ry="23" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="345" cy="120" r="20" fill="rgba(255,255,255,0.55)"/>
+        <ellipse cx="345" cy="107" rx="19" ry="8" fill="rgba(200,150,255,0.55)"/>
+        <circle cx="339" cy="119" r="2.5" fill="#3C3489"/>
+        <circle cx="351" cy="119" r="2.5" fill="#3C3489"/>
+        <path d="M339 127 Q345 132 351 127" stroke="#3C3489" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M325 154 Q310 166 306 178" stroke="rgba(255,255,255,0.3)" stroke-width="9" stroke-linecap="round"/>
+        <path d="M365 154 Q374 166 372 178" stroke="rgba(255,255,255,0.3)" stroke-width="9" stroke-linecap="round"/>
+        <rect x="298" y="164" width="94" height="17" rx="3" fill="rgba(255,255,255,0.65)"/>
+        <rect x="300" y="166" width="90" height="13" rx="2" fill="#EEEDFE"/>
+        <rect x="305" y="170" width="10" height="8" rx="1.5" fill="#534AB7" opacity="0.3"/>
+        <rect x="318" y="167" width="10" height="11" rx="1.5" fill="#534AB7" opacity="0.5"/>
+        <rect x="331" y="164" width="10" height="14" rx="1.5" fill="#534AB7" opacity="0.75"/>
+        <rect x="344" y="166" width="10" height="12" rx="1.5" fill="#22c55e" opacity="0.8"/>
+        <rect x="357" y="168" width="10" height="10" rx="1.5" fill="#534AB7" opacity="0.5"/>
+        <rect x="370" y="165" width="10" height="13" rx="1.5" fill="#22c55e" opacity="0.7"/>
+        <!-- Floating chart card -->
+        <rect x="340" y="52" width="74" height="58" rx="8" fill="rgba(255,255,255,0.93)"/>
+        <rect x="347" y="59" width="36" height="4" rx="2" fill="#534AB7" opacity="0.45"/>
+        <rect x="349" y="96" width="10" height="14" rx="2" fill="#534AB7" opacity="0.3"/>
+        <rect x="362" y="86" width="10" height="24" rx="2" fill="#534AB7" opacity="0.55"/>
+        <rect x="375" y="76" width="10" height="34" rx="2" fill="#534AB7" opacity="0.8"/>
+        <rect x="388" y="80" width="10" height="30" rx="2" fill="#22c55e" opacity="0.85"/>
+        <path d="M349 100 Q362 88 375 76 L395 68" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/>
+        <line x1="345" y1="110" x2="405" y2="110" stroke="#e8e8e5" stroke-width="1"/>
+        <text x="388" y="68" font-size="11" fill="#22c55e" font-weight="bold">↑</text>
+        <path d="M363 110 Q355 114 350 120" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-dasharray="3 2"/>
+      </svg>
+    </div>
+    <!-- Form panel -->
+    <div class="auth-form-panel">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <div class="auth-logo-icon"><svg width="16" height="16" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <span class="auth-logo-text">Opera<span>ite</span></span>
+        </div>
+        <div class="auth-title">Create your account</div>
+        <div class="auth-sub">Start your small business command center</div>
+        <div class="auth-error" id="signup-error"></div>
+        <input class="auth-input" type="text" id="signup-name" placeholder="Your name">
+        <input class="auth-input" type="email" id="signup-email" placeholder="Email address">
+        <input class="auth-input" type="password" id="signup-password" placeholder="Password (min 6 characters)">
+        <button class="auth-btn" id="signup-btn">Create account &amp; subscribe — $29/mo</button>
+        <div class="auth-link">Already have an account? <a id="goto-login">Sign in</a></div>
+      </div>
     </div>
   </div>
 
@@ -731,7 +1188,7 @@
   var cardElement = null;
 
   function showScreen(name) {
-    var screens = ['signup', 'login', 'payment', 'app', 'forgot', 'newpassword'];
+    var screens = ['landing', 'signup', 'login', 'payment', 'app', 'forgot', 'newpassword'];
     screens.forEach(function(s) {
       var el = document.getElementById('screen-' + s);
       if (el) el.style.display = 'none';
@@ -741,6 +1198,9 @@
     if (name === 'app') {
       target.style.display = 'flex';
       target.classList.add('visible');
+    } else if (name === 'landing') {
+      target.style.display = 'block';
+      window.scrollTo(0, 0);
     } else {
       target.style.display = 'flex';
     }
@@ -952,6 +1412,16 @@
     return data.result;
   }
 
+  // Landing page buttons
+  document.getElementById('lp-nav-signin').addEventListener('click', function() { showScreen('login'); });
+  document.getElementById('lp-nav-cta').addEventListener('click', function() { showScreen('signup'); });
+  document.getElementById('lp-hero-cta').addEventListener('click', function() { showScreen('signup'); });
+  document.getElementById('lp-hero-signin').addEventListener('click', function() { showScreen('login'); });
+  document.getElementById('lp-pricing-cta').addEventListener('click', function() { showScreen('signup'); });
+  document.getElementById('lp-bottom-cta').addEventListener('click', function() { showScreen('signup'); });
+  document.getElementById('lp-footer-signin').addEventListener('click', function() { showScreen('login'); });
+  document.getElementById('lp-footer-signup').addEventListener('click', function() { showScreen('signup'); });
+
   // Event listeners
   document.getElementById('goto-login').addEventListener('click', function() { showScreen('login'); });
   document.getElementById('goto-signup').addEventListener('click', function() { showScreen('signup'); });
@@ -1083,7 +1553,7 @@
   document.getElementById('nav-logout').addEventListener('click', async function() {
     await supabase.auth.signOut();
     currentUser = null;
-    showScreen('signup');
+    showScreen('landing');
   });
 
   ['dashboard', 'profile', 'reviews', 'audit', 'invoice', 'accounting', 'social', 'email', 'bio', 'jobs', 'proposal', 'complaint', 'faq'].forEach(function(id) {
@@ -1469,7 +1939,7 @@
       };
       if (currentUser.subscribed) { loadApp(); } else { showScreen('payment'); initStripe(); }
     } else {
-      showScreen('signup');
+      showScreen('landing');
     }
   })();
 })();
