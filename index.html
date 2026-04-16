@@ -1137,7 +1137,25 @@
               <input type="text" id="prof-website" placeholder="www.yourbusiness.com">
             </div>
           </div>
-          <button class="btn primary" id="prof-save-btn">Save profile</button>
+          <label>Currency</label>
+          <select id="prof-currency" style="margin-top:6px;">
+            <option value="$">$ — US Dollar (USD)</option>
+            <option value="€">€ — Euro (EUR)</option>
+            <option value="£">£ — British Pound (GBP)</option>
+            <option value="C$">C$ — Canadian Dollar (CAD)</option>
+            <option value="A$">A$ — Australian Dollar (AUD)</option>
+            <option value="R">R — South African Rand (ZAR)</option>
+            <option value="₦">₦ — Nigerian Naira (NGN)</option>
+            <option value="₹">₹ — Indian Rupee (INR)</option>
+            <option value="¥">¥ — Japanese Yen (JPY)</option>
+            <option value="CHF">CHF — Swiss Franc (CHF)</option>
+            <option value="kr">kr — Swedish/Norwegian Krone</option>
+            <option value="R$">R$ — Brazilian Real (BRL)</option>
+            <option value="MX$">MX$ — Mexican Peso (MXN)</option>
+            <option value="د.إ">د.إ — UAE Dirham (AED)</option>
+            <option value="NZ$">NZ$ — New Zealand Dollar (NZD)</option>
+          </select>
+          <button class="btn primary" id="prof-save-btn" style="margin-top:16px;">Save profile</button>
           <div id="prof-saved-msg" style="display:none;font-size:13px;color:#22c55e;margin-top:8px;">Profile saved! Your info will auto-fill into invoices and proposals.</div>
         </div>
       </div>
@@ -1513,6 +1531,16 @@
     updateSidePanel(id);
   }
 
+  // Currency helper
+  function getCurrencySymbol() {
+    var p = {};
+    try { p = JSON.parse(localStorage.getItem('operaite_profile') || '{}'); } catch(e) {}
+    return p.currency || '$';
+  }
+  function fmt(amount) {
+    return getCurrencySymbol() + parseFloat(amount).toFixed(2);
+  }
+
   // Business profile
   function loadProfile() {
     var p = {};
@@ -1537,6 +1565,7 @@
     if (p.zip) document.getElementById('prof-zip').value = p.zip || '';
     if (p.email) document.getElementById('prof-email').value = p.email || '';
     if (p.website) document.getElementById('prof-website').value = p.website || '';
+    if (p.currency) document.getElementById('prof-currency').value = p.currency || '$';
   }
 
   document.getElementById('prof-save-btn').addEventListener('click', function() {
@@ -1548,7 +1577,8 @@
       state: document.getElementById('prof-state').value.trim(),
       zip: document.getElementById('prof-zip').value.trim(),
       email: document.getElementById('prof-email').value.trim(),
-      website: document.getElementById('prof-website').value.trim()
+      website: document.getElementById('prof-website').value.trim(),
+      currency: document.getElementById('prof-currency').value
     };
     localStorage.setItem('operaite_profile', JSON.stringify(p));
     applyProfileToForms();
@@ -1567,12 +1597,12 @@
       return '<tr style="border-bottom:1px solid #f0f0ec;">' +
         '<td style="padding:10px 8px;font-size:13.5px;">' + item.desc + '</td>' +
         '<td style="padding:10px 8px;text-align:center;font-size:13.5px;">' + item.qty + '</td>' +
-        '<td style="padding:10px 8px;text-align:right;font-size:13.5px;">$' + parseFloat(item.price).toFixed(2) + '</td>' +
-        '<td style="padding:10px 8px;text-align:right;font-size:13.5px;font-weight:500;">$' + (item.qty * item.price).toFixed(2) + '</td>' +
+        '<td style="padding:10px 8px;text-align:right;font-size:13.5px;">' + fmt(item.price) + '</td>' +
+        '<td style="padding:10px 8px;text-align:right;font-size:13.5px;font-weight:500;">' + fmt(item.qty * item.price) + '</td>' +
         '</tr>';
     }).join('');
-    var subtotalRow = data.taxOn ? '<tr><td colspan="3" style="text-align:right;padding:6px 8px;font-size:13px;color:#999;border-top:1px solid #f0f0ec;">Subtotal</td><td style="text-align:right;padding:6px 8px;font-size:13px;color:#999;border-top:1px solid #f0f0ec;">$' + data.subtotal.toFixed(2) + '</td></tr>' : '';
-    var taxRow = data.taxOn ? '<tr><td colspan="3" style="text-align:right;padding:6px 8px;font-size:13px;color:#666;">Tax (' + data.taxRate + '%)</td><td style="text-align:right;padding:6px 8px;font-size:13px;color:#666;">$' + data.taxAmt.toFixed(2) + '</td></tr>' : '';
+    var subtotalRow = data.taxOn ? '<tr><td colspan="3" style="text-align:right;padding:6px 8px;font-size:13px;color:#999;border-top:1px solid #f0f0ec;">Subtotal</td><td style="text-align:right;padding:6px 8px;font-size:13px;color:#999;border-top:1px solid #f0f0ec;">' + fmt(data.subtotal) + '</td></tr>' : '';
+    var taxRow = data.taxOn ? '<tr><td colspan="3" style="text-align:right;padding:6px 8px;font-size:13px;color:#666;">Tax (' + data.taxRate + '%)</td><td style="text-align:right;padding:6px 8px;font-size:13px;color:#666;">' + fmt(data.taxAmt) + '</td></tr>' : '';
     var fromExtra = (data.fromAddress ? '<div style="font-size:12px;color:' + c.sub + ';margin-top:2px;">' + data.fromAddress + '</div>' : '') +
       (data.fromPhone ? '<div style="font-size:12px;color:' + c.sub + ';">' + data.fromPhone + '</div>' : '') +
       (data.fromEmail ? '<div style="font-size:12px;color:' + c.sub + ';">' + data.fromEmail + '</div>' : '');
@@ -1600,7 +1630,7 @@
           '<tbody>' + rows + '</tbody>' +
           '<tfoot>' + subtotalRow + taxRow +
             '<tr><td colspan="3" style="text-align:right;padding:12px 8px;font-size:15px;font-weight:700;color:' + c.accent + ';border-top:2px solid ' + c.accent + ';">Total</td>' +
-            '<td style="text-align:right;padding:12px 8px;font-size:15px;font-weight:700;color:' + c.accent + ';border-top:2px solid ' + c.accent + ';">$' + data.total.toFixed(2) + '</td></tr>' +
+            '<td style="text-align:right;padding:12px 8px;font-size:15px;font-weight:700;color:' + c.accent + ';border-top:2px solid ' + c.accent + ';">' + fmt(data.total) + '</td></tr>' +
           '</tfoot>' +
         '</table>' +
         '<div style="margin-top:20px;padding-top:14px;border-top:1px solid #f0f0ec;font-size:12px;color:#bbb;">Payment due within 14 days. Thank you for your business!</div>' +
@@ -1665,10 +1695,10 @@
     var income = entries.filter(function(e) { return e.type === 'income'; }).reduce(function(a, e) { return a + e.amount; }, 0);
     var expense = entries.filter(function(e) { return e.type === 'expense'; }).reduce(function(a, e) { return a + e.amount; }, 0);
     var net = income - expense;
-    document.getElementById('dash-income').textContent = '$' + income.toFixed(2);
-    document.getElementById('dash-expenses').textContent = '$' + expense.toFixed(2);
+    document.getElementById('dash-income').textContent = fmt(income);
+    document.getElementById('dash-expenses').textContent = fmt(expense);
     var netEl = document.getElementById('dash-net');
-    netEl.textContent = '$' + net.toFixed(2);
+    netEl.textContent = fmt(net);
     netEl.style.color = net >= 0 ? '#22c55e' : '#ef4444';
   }
 
@@ -1919,9 +1949,9 @@
     var total = subtotal + taxAmt;
     document.getElementById('inv-subtotal').style.display = taxOn ? 'block' : 'none';
     document.getElementById('inv-tax-line').style.display = taxOn ? 'block' : 'none';
-    document.getElementById('inv-subtotal').textContent = 'Subtotal: $' + subtotal.toFixed(2);
-    document.getElementById('inv-tax-line').textContent = 'Tax (' + taxRate + '%): $' + taxAmt.toFixed(2);
-    document.getElementById('inv-total').textContent = 'Total: $' + total.toFixed(2);
+    document.getElementById('inv-subtotal').textContent = 'Subtotal: ' + fmt(subtotal);
+    document.getElementById('inv-tax-line').textContent = 'Tax (' + taxRate + '%): ' + fmt(taxAmt);
+    document.getElementById('inv-total').textContent = 'Total: ' + fmt(total);
   }
 
   document.getElementById('inv-tax-toggle').addEventListener('change', function() {
@@ -1956,7 +1986,7 @@
     var out = document.getElementById('inv-output');
     out.className = 'output-box visible';
     out.innerHTML = html;
-    var plainText = fromName + ' Invoice\nDate: ' + date + '\nBill To: ' + toName + (toAddress ? '\n' + toAddress : '') + '\n\n' + items.map(function(i) { return i.desc + ' x' + i.qty + ' = $' + (i.qty * i.price).toFixed(2); }).join('\n') + '\n\nTotal: $' + total.toFixed(2);
+    var plainText = fromName + ' Invoice\nDate: ' + date + '\nBill To: ' + toName + (toAddress ? '\n' + toAddress : '') + '\n\n' + items.map(function(i) { return i.desc + ' x' + i.qty + ' = ' + fmt(i.qty * i.price); }).join('\n') + '\n\nTotal: ' + fmt(total);
     setEmailLinks('inv', 'Invoice from ' + fromName, plainText);
   });
 
@@ -1987,10 +2017,10 @@
     var income = filtered.filter(function(e) { return e.type === 'income'; }).reduce(function(a, e) { return a + e.amount; }, 0);
     var expense = filtered.filter(function(e) { return e.type === 'expense'; }).reduce(function(a, e) { return a + e.amount; }, 0);
     var net = income - expense;
-    document.getElementById('acct-income-total').textContent = '$' + income.toFixed(2);
-    document.getElementById('acct-expense-total').textContent = '$' + expense.toFixed(2);
+    document.getElementById('acct-income-total').textContent = fmt(income);
+    document.getElementById('acct-expense-total').textContent = fmt(expense);
     var netEl = document.getElementById('acct-net-total');
-    netEl.textContent = '$' + net.toFixed(2);
+    netEl.textContent = fmt(net);
     netEl.style.color = net >= 0 ? '#22c55e' : '#ef4444';
     var list = document.getElementById('acct-list');
     if (!filtered.length) { list.innerHTML = '<div style="color:#aaa;font-size:13.5px;text-align:center;padding:20px 0;">No entries yet.</div>'; return; }
@@ -2003,7 +2033,7 @@
         '<span style="font-size:12px;background:' + color + '22;color:' + color + ';padding:2px 8px;border-radius:10px;font-weight:600;">' + e.type + '</span>' +
         '<span style="flex:1;font-size:13.5px;">' + e.desc + '</span>' +
         '<span style="font-size:12px;color:#aaa;">' + e.category + '</span>' +
-        '<span style="font-weight:700;color:' + color + ';min-width:70px;text-align:right;">' + sign + '$' + e.amount.toFixed(2) + '</span>' +
+        '<span style="font-weight:700;color:' + color + ';min-width:70px;text-align:right;">' + sign + fmt(e.amount) + '</span>' +
         '<button class="btn sm" style="padding:2px 8px;font-size:12px;" onclick="deleteAcctEntry(\'' + e.id + '\')">x</button>' +
         '</div>';
     }).join('');
@@ -2183,7 +2213,7 @@
     if (taxOn && price) {
       var priceNum = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
       var taxAmt = priceNum * (taxRate / 100);
-      taxStr = ' Tax: ' + taxRate + '% ($' + taxAmt.toFixed(2) + '). Total including tax: $' + (priceNum + taxAmt).toFixed(2) + '.';
+      taxStr = ' Tax: ' + taxRate + '% (' + fmt(taxAmt) + '). Total including tax: ' + fmt(priceNum + taxAmt) + '.';
     }
     if (!scope) { alert('Please describe the project scope.'); return; }
     var out = document.getElementById('prop-output');
