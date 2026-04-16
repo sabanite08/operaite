@@ -64,10 +64,13 @@
     .page-hero-text { position:relative; z-index:1; }
     .page-hero-title { font-size:22px; font-weight:700; color:#fff; margin-bottom:0.3rem; letter-spacing:-0.3px; }
     .page-hero-sub { font-size:14px; color:rgba(255,255,255,0.75); line-height:1.5; }
-    .card { background: #fff; border: 1.5px solid #dbd9f0; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(83,74,183,0.07); }
+    .page-hero-right { margin-left:auto; display:flex; flex-direction:column; gap:7px; align-items:flex-end; position:relative; z-index:1; flex-shrink:0; }
+    .page-hero-pill { background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.28); border-radius:20px; padding:5px 13px; font-size:12px; font-weight:500; color:rgba(255,255,255,0.93); white-space:nowrap; }
+    @media (max-width:700px) { .page-hero-right { display:none; } }
+    .card { background: #fff; border: 2px solid #c4bfe8; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(83,74,183,0.07); }
     .card-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #1a1a1a; padding-left: 10px; border-left: 3px solid #534AB7; }
     .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
-    .metric { background: #fff; border: 1.5px solid #dbd9f0; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 2px 8px rgba(83,74,183,0.07); }
+    .metric { background: #fff; border: 2px solid #c4bfe8; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 2px 8px rgba(83,74,183,0.07); }
     .metric-green { border-top: 3px solid #22c55e; }
     .metric-red { border-top: 3px solid #ef4444; }
     .metric-purple { border-top: 3px solid #534AB7; }
@@ -747,6 +750,11 @@
             <div class="page-hero-title" id="dash-greeting">Good morning</div>
             <div class="page-hero-sub">Your small business command center — operaite.net</div>
           </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">Real-time metrics</span>
+            <span class="page-hero-pill">10+ AI tools</span>
+            <span class="page-hero-pill">One command center</span>
+          </div>
         </div>
         <div class="metric-grid">
           <div class="metric metric-purple"><div class="metric-label">Invoices sent</div><div class="metric-value">--</div></div>
@@ -788,6 +796,11 @@
             <div class="page-hero-title">Review manager</div>
             <div class="page-hero-sub">Paste a customer review and generate a professional response in seconds</div>
           </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">AI-powered replies</span>
+            <span class="page-hero-pill">Any platform</span>
+            <span class="page-hero-pill">Professional tone</span>
+          </div>
         </div>
         <div class="card">
           <div class="card-title">Respond to a review</div>
@@ -810,6 +823,11 @@
             <div class="page-hero-title">Marketing audit</div>
             <div class="page-hero-sub">Get an AI-powered score and improvement plan for your online presence</div>
           </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">Instant scoring</span>
+            <span class="page-hero-pill">Actionable insights</span>
+            <span class="page-hero-pill">Track monthly progress</span>
+          </div>
         </div>
         <div class="card">
           <label style="margin-top:0;">Business name</label>
@@ -831,6 +849,11 @@
           <div class="page-hero-text">
             <div class="page-hero-title">Invoice generator</div>
             <div class="page-hero-sub">Create a professional invoice in seconds</div>
+          </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">Instant PDF download</span>
+            <span class="page-hero-pill">3 template styles</span>
+            <span class="page-hero-pill">Send via Gmail or Outlook</span>
           </div>
         </div>
         <div class="card">
@@ -929,6 +952,11 @@
             <div class="page-hero-title">Accounting</div>
             <div class="page-hero-sub">Track income and expenses, see your profit at a glance</div>
           </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">Income &amp; expenses</span>
+            <span class="page-hero-pill">CSV export</span>
+            <span class="page-hero-pill">Real-time P&amp;L</span>
+          </div>
         </div>
         <div class="metric-grid" id="acct-summary">
           <div class="metric"><div class="metric-label">Total income</div><div class="metric-value" id="acct-income-total" style="color:#22c55e;">$0.00</div></div>
@@ -986,6 +1014,11 @@
             <div class="page-hero-title">Business profile</div>
             <div class="page-hero-sub">Your info auto-fills into invoices, proposals, and every tool</div>
           </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">Set once, use always</span>
+            <span class="page-hero-pill">Auto-fills all tools</span>
+            <span class="page-hero-pill">Professional documents</span>
+          </div>
         </div>
         <div class="card">
           <div class="two-col">
@@ -1038,6 +1071,11 @@
             <div class="page-hero-title">Social media post generator</div>
             <div class="page-hero-sub">Generate ready-to-post captions for any platform in seconds</div>
           </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">Facebook, Instagram, LinkedIn</span>
+            <span class="page-hero-pill">Multiple tones</span>
+            <span class="page-hero-pill">Hashtags included</span>
+          </div>
         </div>
         <div class="card">
           <label style="margin-top:0;">Business name</label>
@@ -1059,6 +1097,11 @@
           <div class="page-hero-text">
             <div class="page-hero-title">Email template generator</div>
             <div class="page-hero-sub">Draft professional business emails in seconds</div>
+          </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">6 email types</span>
+            <span class="page-hero-pill">Copy &amp; send ready</span>
+            <span class="page-hero-pill">Any business type</span>
           </div>
         </div>
         <div class="card">
@@ -1087,6 +1130,11 @@
             <div class="page-hero-title">Bio &amp; about us writer</div>
             <div class="page-hero-sub">Generate a compelling business description for any platform</div>
           </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">5 platforms</span>
+            <span class="page-hero-pill">SEO-friendly</span>
+            <span class="page-hero-pill">Any business type</span>
+          </div>
         </div>
         <div class="card">
           <label style="margin-top:0;">Business name</label>
@@ -1109,6 +1157,11 @@
           <div class="page-hero-text">
             <div class="page-hero-title">Job posting generator</div>
             <div class="page-hero-sub">Write a professional job listing that attracts the right candidates</div>
+          </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">Full-time, part-time &amp; more</span>
+            <span class="page-hero-pill">Post-ready copy</span>
+            <span class="page-hero-pill">Attract top talent</span>
           </div>
         </div>
         <div class="card">
@@ -1137,6 +1190,11 @@
           <div class="page-hero-text">
             <div class="page-hero-title">Proposal &amp; quote generator</div>
             <div class="page-hero-sub">Create a professional project proposal to send to clients</div>
+          </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">Auto-filled from profile</span>
+            <span class="page-hero-pill">3 template styles</span>
+            <span class="page-hero-pill">Send via Gmail or Outlook</span>
           </div>
         </div>
         <div class="card">
@@ -1227,6 +1285,11 @@
             <div class="page-hero-title">Complaint handler</div>
             <div class="page-hero-sub">Turn difficult customer situations into professional, de-escalating responses</div>
           </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">4 response channels</span>
+            <span class="page-hero-pill">De-escalating tone</span>
+            <span class="page-hero-pill">Preserve the relationship</span>
+          </div>
         </div>
         <div class="card">
           <label style="margin-top:0;">Business name</label>
@@ -1248,6 +1311,11 @@
           <div class="page-hero-text">
             <div class="page-hero-title">FAQ generator</div>
             <div class="page-hero-sub">Generate a complete FAQ page for your business or website</div>
+          </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">10+ questions generated</span>
+            <span class="page-hero-pill">Ready to publish</span>
+            <span class="page-hero-pill">Reduce support load</span>
           </div>
         </div>
         <div class="card">
