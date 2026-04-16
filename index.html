@@ -42,9 +42,19 @@
     .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
     .nav-bottom { margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; }
     .user-email { font-size: 11px; color: rgba(255,255,255,0.3); padding: 0 10px; margin-bottom: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .main { flex: 1; margin-left: 220px; padding: 2rem 2.25rem; max-width: 880px; }
-    .page { display: none; }
+    .main { flex: 1; margin-left: 220px; padding: 2rem 2.25rem; display: flex; gap: 1.5rem; align-items: flex-start; }
+    .page { display: none; flex: 1; min-width: 0; }
     .page.active { display: block; }
+    .app-side-panel { width: 280px; flex-shrink: 0; position: sticky; top: 2rem; }
+    .page-info-card { background: #fff; border: 1.5px solid #dbd9f0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(83,74,183,0.08); }
+    .page-info-header { padding: 1.1rem 1.25rem; }
+    .page-info-header-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .page-info-header-sub { font-size: 11.5px; color: rgba(255,255,255,0.75); }
+    .page-info-body { padding: 1.25rem; }
+    .page-info-tip { display: flex; gap: 10px; font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 0.9rem; }
+    .page-info-tip:last-child { margin-bottom: 0; }
+    .page-info-tip-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    @media (max-width: 1100px) { .app-side-panel { display: none; } }
     .page-title { font-size: 22px; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: -0.3px; }
     .page-sub { font-size: 14px; color: #888; margin-bottom: 1.75rem; }
     .page-hero { border-radius:16px; padding:2rem 2.25rem; margin-bottom:1.75rem; display:flex; align-items:center; gap:1.5rem; position:relative; overflow:hidden; }
@@ -54,10 +64,10 @@
     .page-hero-text { position:relative; z-index:1; }
     .page-hero-title { font-size:22px; font-weight:700; color:#fff; margin-bottom:0.3rem; letter-spacing:-0.3px; }
     .page-hero-sub { font-size:14px; color:rgba(255,255,255,0.75); line-height:1.5; }
-    .card { background: #fff; border: 1px solid #e8e8e5; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    .card { background: #fff; border: 1.5px solid #dbd9f0; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(83,74,183,0.07); }
     .card-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #1a1a1a; padding-left: 10px; border-left: 3px solid #534AB7; }
     .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
-    .metric { background: #fff; border: 1px solid #e8e8e5; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    .metric { background: #fff; border: 1.5px solid #dbd9f0; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 2px 8px rgba(83,74,183,0.07); }
     .metric-green { border-top: 3px solid #22c55e; }
     .metric-red { border-top: 3px solid #ef4444; }
     .metric-purple { border-top: 3px solid #534AB7; }
@@ -1251,6 +1261,7 @@
           <div class="output-box" id="faq-output"></div>
         </div>
       </div>
+    <div id="app-side-panel" class="app-side-panel"></div>
     </div>
   </div>
 
@@ -1289,6 +1300,33 @@
     el.style.display = 'block';
   }
 
+  var pageInfo = {
+    dashboard: { grad:'linear-gradient(135deg,#534AB7,#2d2580)', title:'Quick tips', sub:'Get the most out of Operaite', tips:[['🏢','Fill in your Business Profile first — it auto-fills every tool.'],['📊','Run a Marketing Audit to see your current online presence score.'],['⭐','Respond to recent reviews to build trust with new customers.'],['💡','Use Quick Actions on this page for instant access to any tool.']] },
+    reviews:   { grad:'linear-gradient(135deg,#F59E0B,#B45309)',  title:'Review tips',   sub:'Respond like a pro every time',     tips:[['⏰','Respond within 24–48 hours to show customers you\'re attentive.'],['✏️','Personalize the AI response with a detail from the review.'],['⭐','Always thank 5-star reviewers — they are your best free marketing.'],['👀','Responses are public and seen by every future potential customer.']] },
+    audit:     { grad:'linear-gradient(135deg,#3B82F6,#1D4ED8)',  title:'Audit tips',    sub:'Improve your online presence',       tips:[['📍','A complete Google Business Profile alone can boost your score significantly.'],['🔄','Run the audit monthly to track how your improvements pay off.'],['⬆️','Focus on the highest-impact suggestions first for the best ROI.'],['📸','Adding photos to your Google listing increases engagement noticeably.']] },
+    proposal:  { grad:'linear-gradient(135deg,#6366F1,#3730A3)',  title:'Proposal tips', sub:'Win more clients',                   tips:[['⚡','Send proposals within 24 hours while the conversation is fresh.'],['📅','Include a clear timeline — clients love knowing what to expect.'],['💵','Break costs down line by line to justify your price and build trust.'],['📩','Follow up 3 days after sending if you haven\'t heard back yet.']] },
+    invoice:   { grad:'linear-gradient(135deg,#8B5CF6,#6D28D9)',  title:'Invoice tips',  sub:'Get paid faster',                    tips:[['📅','Set a clear due date — Net 15 or Net 30 are standard for small businesses.'],['📎','Download the PDF and attach it directly to your email.'],['🔔','Send a friendly reminder 3 days before the due date.'],['📋','Use proposals to get client approval first, then convert to an invoice.']] },
+    accounting:{ grad:'linear-gradient(135deg,#10B981,#047857)',  title:'Bookkeeping tips', sub:'Keep your books clean',           tips:[['📆','Log income and expenses as they happen — don\'t wait until month-end.'],['📤','Export to CSV monthly to share with your accountant or tax preparer.'],['🔑','Keep personal and business expenses completely separate.'],['🧾','Track every expense — even small ones add up over a year.']] },
+    profile:   { grad:'linear-gradient(135deg,#475569,#1e293b)',  title:'Profile tips',  sub:'Set it once, use it everywhere',     tips:[['⚡','Filling this in once auto-fills every invoice, proposal, and doc you create.'],['📞','Keep your phone number current — it appears on all client-facing docs.'],['🌐','Add your website — it looks more professional on invoices.'],['🔄','Update your profile any time your business info changes.']] },
+    social:    { grad:'linear-gradient(135deg,#EC4899,#9D174D)',  title:'Social tips',   sub:'Posts that get results',             tips:[['📅','Post consistently — 3–4 times per week is ideal for most businesses.'],['#️⃣','Instagram performs best with 5–10 relevant, specific hashtags.'],['💼','LinkedIn posts get the most reach Tuesday–Thursday mornings.'],['❓','End every post with a call to action or question to boost engagement.']] },
+    email:     { grad:'linear-gradient(135deg,#06B6D4,#0E7490)',  title:'Email tips',    sub:'Emails that actually get opened',    tips:[['📬','Keep subject lines under 50 characters for better open rates on mobile.'],['👤','Personalize when possible — even just a first name improves clicks.'],['📅','Send promotional emails Tuesday–Thursday for highest open rates.'],['🔗','Include one clear call-to-action — not five.']] },
+    bio:       { grad:'linear-gradient(135deg,#14B8A6,#0F766E)',  title:'Bio tips',      sub:'Make a strong first impression',     tips:[['✂️','Keep your bio under 150 words — concise bios get read more often.'],['🎯','Lead with what you do and who you help, not your founding story.'],['📍','Always include your location and service area for local SEO.'],['🔄','Update your bio every 6–12 months to keep it fresh and current.']] },
+    jobs:      { grad:'linear-gradient(135deg,#F97316,#C2410C)',  title:'Hiring tips',   sub:'Attract the right candidates',       tips:[['🎯','Be specific about responsibilities — vague posts attract vague applicants.'],['💰','Job listings with a salary range get up to 30% more applications.'],['📋','Separate must-haves from nice-to-haves to widen your candidate pool.'],['📢','Post on Indeed, ZipRecruiter, and your Google Business profile.']] },
+    complaint: { grad:'linear-gradient(135deg,#EF4444,#991B1B)',  title:'Complaint tips',sub:'Turn critics into loyal fans',       tips:[['⚡','Respond quickly — 60% of customers judge businesses by response time.'],['🤝','Acknowledge the issue before offering a solution — it defuses tension.'],['📵','Move heated conversations offline (phone or email) when possible.'],['🌟','A well-handled complaint can turn a critic into your biggest advocate.']] },
+    faq:       { grad:'linear-gradient(135deg,#0EA5E9,#0369A1)',  title:'FAQ tips',      sub:'Reduce repetitive questions',         tips:[['📥','Include your most-asked questions — check DMs and voicemails for ideas.'],['✂️','Keep each answer under 100 words — short and scannable always wins.'],['🔄','Update your FAQ page every 6 months as your business evolves.'],['📉','A good FAQ page can reduce customer service inquiries by up to 40%.']] }
+  };
+
+  function updateSidePanel(pageId) {
+    var panel = document.getElementById('app-side-panel');
+    if (!panel) return;
+    var info = pageInfo[pageId];
+    if (!info) { panel.innerHTML = ''; return; }
+    var tipsHtml = info.tips.map(function(t) {
+      return '<div class="page-info-tip"><span class="page-info-tip-icon">' + t[0] + '</span><span>' + t[1] + '</span></div>';
+    }).join('');
+    panel.innerHTML = '<div class="page-info-card"><div class="page-info-header" style="background:' + info.grad + '"><div class="page-info-header-title">' + info.title + '</div><div class="page-info-header-sub">' + info.sub + '</div></div><div class="page-info-body">' + tipsHtml + '</div></div>';
+  }
+
   function showPage(id) {
     document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
     document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
@@ -1296,6 +1334,7 @@
     if (page) page.classList.add('active');
     var nav = document.getElementById('nav-' + id);
     if (nav) nav.classList.add('active');
+    updateSidePanel(id);
   }
 
   // Business profile
