@@ -248,7 +248,15 @@
     .lp-nav-btn:hover { background:#3C3489; }
     .lp-wrap { max-width:1060px; margin:0 auto; padding:0 2rem; }
     /* Hero */
-    .lp-hero { padding:110px 2rem 0; text-align:center; }
+    .lp-hero { padding:110px 2rem 0; text-align:center; position:relative; overflow:hidden; }
+    .lp-hero::before { content:''; position:absolute; top:-30%; left:-20%; right:-20%; bottom:-30%; pointer-events:none; z-index:0; background:radial-gradient(circle at 25% 25%, rgba(83,74,183,0.13) 0%, transparent 35%), radial-gradient(circle at 75% 60%, rgba(124,58,237,0.10) 0%, transparent 40%), radial-gradient(circle at 50% 100%, rgba(83,74,183,0.08) 0%, transparent 45%); animation: lpHeroFlow 24s ease-in-out infinite alternate; }
+    .lp-hero-inner, .lp-mockup-outer { position:relative; z-index:1; }
+    @keyframes lpHeroFlow {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      50% { transform: translate(-3%, -2%) rotate(2deg) scale(1.05); }
+      100% { transform: translate(2%, 1%) rotate(-1deg) scale(0.98); }
+    }
+    @media (prefers-reduced-motion: reduce) { .lp-hero::before { animation: none; } }
     .lp-hero-inner { max-width:700px; margin:0 auto; }
     .lp-eyebrow { display:inline-flex; align-items:center; gap:6px; background:#EEEDFE; color:#534AB7; font-size:12px; font-weight:700; padding:5px 14px; border-radius:20px; margin-bottom:1.5rem; letter-spacing:0.05em; text-transform:uppercase; }
     .lp-h1 { font-size:60px; font-weight:800; color:#1a1a1a; line-height:1.07; letter-spacing:-2px; margin-bottom:1.25rem; }
@@ -312,13 +320,23 @@
     .lp-section-p.c { max-width:520px; margin:0 auto 3rem; text-align:center; }
     /* Features */
     .lp-feat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-top:3rem; }
-    .lp-feat-card { background:#fff; border:1px solid #e8e8e5; border-radius:14px; padding:1.75rem 1.5rem; transition:box-shadow 0.15s, border-color 0.15s, transform 0.15s; cursor:pointer; }
+    .lp-feat-card { background:#fff; border:1px solid #e8e8e5; border-radius:14px; padding:1.75rem 1.5rem; transition:box-shadow 0.15s, border-color 0.15s, transform 0.15s; cursor:pointer; position:relative; overflow:hidden; }
     .lp-feat-card:hover { box-shadow:0 6px 24px rgba(83,74,183,0.1); border-color:#c5c2ed; transform:translateY(-2px); }
     .lp-feat-card.active { border-color:#534AB7; box-shadow:0 6px 28px rgba(83,74,183,0.18); background:#faf9ff; transform:translateY(-2px); }
     .lp-feat-card.active .lp-feat-icon { background:#534AB7; }
     .lp-feat-icon { width:42px; height:42px; border-radius:11px; background:#EEEDFE; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:1rem; transition:background 0.15s; }
     .lp-feat-title { font-size:15px; font-weight:700; color:#1a1a1a; margin-bottom:0.4rem; }
     .lp-feat-desc { font-size:13.5px; color:#777; line-height:1.6; }
+    .lp-feat-card.span-2 { grid-column:span 2; }
+    .lp-feat-card.featured { background:linear-gradient(135deg,#FAF9FF 0%,#F4F2FE 100%); border-color:#dbd9f0; padding:2rem 1.75rem; }
+    .lp-feat-card.featured .lp-feat-icon { width:48px; height:48px; font-size:24px; background:#534AB7; color:#fff; }
+    .lp-feat-card.featured .lp-feat-title { font-size:18px; }
+    .lp-feat-card.featured .lp-feat-desc { font-size:14.5px; }
+    .lp-feat-card.is-new::after { content:'NEW'; position:absolute; top:14px; right:14px; font-size:10px; font-weight:800; color:#fff; background:#10B981; padding:3px 8px; border-radius:5px; letter-spacing:0.05em; }
+    .lp-feat-card-visual { margin-top:1rem; padding:1rem 1.25rem; background:rgba(255,255,255,0.7); border:1px solid rgba(83,74,183,0.12); border-radius:10px; font-size:12.5px; color:#666; line-height:1.55; }
+    .lp-feat-card-visual .lp-feat-card-visual-row { display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px dashed rgba(83,74,183,0.15); }
+    .lp-feat-card-visual .lp-feat-card-visual-row:last-child { border-bottom:none; }
+    .lp-feat-card-visual strong { color:#534AB7; }
     /* Feature preview panel */
     .lp-feat-preview { overflow:hidden; max-height:0; opacity:0; transition:max-height 0.4s ease, opacity 0.3s ease; margin-top:1.5rem; }
     .lp-feat-preview.open { max-height:500px; opacity:1; }
@@ -401,6 +419,7 @@
     @media (max-width:800px) {
       .lp-h1 { font-size:38px; letter-spacing:-1px; }
       .lp-feat-grid { grid-template-columns:1fr 1fr; }
+      .lp-feat-card.span-2 { grid-column:span 2; }
       .lp-proof-inner { flex-direction:column; align-items:flex-start; }
       .lp-footer-inner { flex-direction:column; align-items:flex-start; }
     }
@@ -409,6 +428,7 @@
       .lp-h1 { font-size:30px; letter-spacing:-0.5px; }
       .lp-section-h2 { font-size:26px; }
       .lp-feat-grid { grid-template-columns:1fr; }
+      .lp-feat-card.span-2 { grid-column:span 1; }
       .lp-steps { grid-template-columns:1fr; }
       .lp-steps::before { display:none; }
       .lp-mock-sidebar { display:none; }
@@ -465,8 +485,8 @@
             <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Marketing Audit</div>
             <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Invoicing</div>
             <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Accounting</div>
+            <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Scheduling</div>
             <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Social Media</div>
-            <div class="lp-mock-nav"><div class="lp-mock-nav-ic"></div> Proposals</div>
           </div>
           <div class="lp-mock-main">
             <div class="lp-mock-page-title">Good morning, Sarah 👋</div>
@@ -512,35 +532,48 @@
           <p class="lp-section-p">One subscription covers every tool — no add-ons, no upsells, no per-seat pricing.</p>
         </div>
         <div class="lp-feat-grid">
-          <div class="lp-feat-card" onclick="lpFeatClick(this,'reviews')">
+          <div class="lp-feat-card span-2 featured" onclick="lpFeatClick(this,'reviews')">
             <div class="lp-feat-icon">⭐</div>
             <div class="lp-feat-title">AI Review Manager</div>
-            <div class="lp-feat-desc">Reply to every Google and Yelp review in seconds. AI crafts responses that sound just like you.</div>
+            <div class="lp-feat-desc">Reply to every Google and Yelp review in seconds. AI crafts responses that sound just like you — empathetic, on-brand, and ready to send.</div>
+            <div class="lp-feat-card-visual">
+              <div class="lp-feat-card-visual-row"><span>⭐⭐⭐⭐⭐ "Fast, friendly, professional…"</span><strong>Reply →</strong></div>
+              <div class="lp-feat-card-visual-row"><span>⭐⭐⭐⭐ "Solid work, fair price."</span><strong>Reply →</strong></div>
+            </div>
           </div>
           <div class="lp-feat-card" onclick="lpFeatClick(this,'invoicing')">
             <div class="lp-feat-icon">📄</div>
             <div class="lp-feat-title">Invoicing &amp; Proposals</div>
-            <div class="lp-feat-desc">Professional invoices and proposals generated in under a minute, auto-filled from your business profile.</div>
+            <div class="lp-feat-desc">Professional invoices and proposals in under a minute, auto-filled from your business profile.</div>
+          </div>
+          <div class="lp-feat-card is-new" onclick="lpFeatClick(this,'scheduling')">
+            <div class="lp-feat-icon">📅</div>
+            <div class="lp-feat-title">Scheduling</div>
+            <div class="lp-feat-desc">Book jobs and appointments, see them on a calendar, and send branded confirmation emails in one click.</div>
           </div>
           <div class="lp-feat-card" onclick="lpFeatClick(this,'marketing')">
             <div class="lp-feat-icon">📊</div>
             <div class="lp-feat-title">Marketing Audit</div>
-            <div class="lp-feat-desc">Instantly score your online presence and get a prioritized list of improvements to act on today.</div>
+            <div class="lp-feat-desc">Instantly score your online presence and get a prioritized list of improvements.</div>
           </div>
           <div class="lp-feat-card" onclick="lpFeatClick(this,'accounting')">
             <div class="lp-feat-icon">💰</div>
             <div class="lp-feat-title">Accounting Tracker</div>
-            <div class="lp-feat-desc">Track income and expenses without a spreadsheet. See your net profit at a glance, anytime.</div>
+            <div class="lp-feat-desc">Track income and expenses without a spreadsheet. See net profit at a glance.</div>
           </div>
-          <div class="lp-feat-card" onclick="lpFeatClick(this,'social')">
+          <div class="lp-feat-card span-2 featured" onclick="lpFeatClick(this,'social')">
             <div class="lp-feat-icon">📱</div>
             <div class="lp-feat-title">Social Media AI</div>
-            <div class="lp-feat-desc">Generate captions, hashtags, and post ideas for any platform — on demand, in your voice.</div>
+            <div class="lp-feat-desc">Generate captions, hashtags, and post ideas for Instagram, LinkedIn, Facebook, and more — on demand, in your voice. Stop staring at a blank caption box.</div>
+            <div class="lp-feat-card-visual">
+              <div class="lp-feat-card-visual-row"><span>Instagram · LinkedIn · Facebook</span><strong>Generate →</strong></div>
+              <div class="lp-feat-card-visual-row"><span>Captions, hashtags, post ideas</span><strong>In your voice</strong></div>
+            </div>
           </div>
           <div class="lp-feat-card" onclick="lpFeatClick(this,'more')">
             <div class="lp-feat-icon">✨</div>
-            <div class="lp-feat-title">5 More Tools</div>
-            <div class="lp-feat-desc">Scheduling, bio writer, email templates, job postings, and complaint handler — all included.</div>
+            <div class="lp-feat-title">4 More Tools</div>
+            <div class="lp-feat-desc">Bio writer, email templates, job postings, and complaint handler — all included.</div>
           </div>
         </div>
         <div class="lp-feat-preview" id="lp-feat-preview">
@@ -1663,7 +1696,8 @@
     marketing: '<div><div class="lp-prev-label">Your presence score</div><div class="lp-prev-output"><em>Overall rating</em><div style="font-size:32px;font-weight:800;color:#534AB7;margin:0.3rem 0;">72 / 100</div><div class="lp-prev-stat"><span>Google Business Profile</span><span style="color:#10B981">✔ Good</span></div><div class="lp-prev-stat"><span>Website SEO</span><span style="color:#F59E0B">⚠ Needs work</span></div><div class="lp-prev-stat"><span>Social Media</span><span style="color:#EF4444">✘ Weak</span></div></div></div><div><div class="lp-prev-label">Top improvements</div><div class="lp-prev-output"><em>Prioritized action list</em>1. Add 15+ photos to your Google Business Profile<br><br>2. Write meta descriptions for your top 5 pages<br><br>3. Post consistently — aim for 3x per week on Instagram</div></div>',
     accounting: '<div><div class="lp-prev-label">Monthly snapshot</div><div class="lp-prev-output"><div class="lp-prev-stat"><span>Total Revenue</span><span style="color:#10B981">$12,400</span></div><div class="lp-prev-stat"><span>Total Expenses</span><span style="color:#EF4444">$3,200</span></div><div class="lp-prev-stat" style="font-size:15px"><span><strong>Net Profit</strong></span><span style="color:#534AB7"><strong>$9,200</strong></span></div><div class="lp-prev-stat"><span>Invoices Paid</span><span>11</span></div><div class="lp-prev-stat"><span>Invoices Pending</span><span style="color:#F59E0B">3</span></div></div></div><div><div class="lp-prev-label">What you track</div><div class="lp-prev-output"><em>No spreadsheets needed</em>Log income and expenses in seconds. See revenue, profit, and outstanding invoices at a glance — updated every time you add a transaction.</div></div>',
     social: '<div><div class="lp-prev-label">Choose a platform</div><div style="margin-bottom:1rem"><span class="lp-prev-pill p" style="font-size:13px;padding:6px 14px;cursor:pointer">Instagram</span><span class="lp-prev-pill g" style="font-size:13px;padding:6px 14px;cursor:pointer">LinkedIn</span><span class="lp-prev-pill a" style="font-size:13px;padding:6px 14px;cursor:pointer">Facebook</span></div><div class="lp-prev-output" style="font-size:12px;color:#888">Topic: "New service launch — residential cleaning"</div><div class="lp-prev-btn" style="margin-top:0.75rem">✨ Generate Post</div></div><div><div class="lp-prev-label">Generated caption</div><div class="lp-prev-output"><em>Instagram — ready to copy</em>Big news — we\'re now offering residential cleaning! 🏠✨ Whether it\'s a deep clean or regular maintenance, we\'ve got you covered. Book your first session and see the difference.<br><br>#SmallBusiness #CleaningService #HomeClean #BookNow</div></div>',
-    more: '<div><div class="lp-prev-label">Also included</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem"><div class="lp-prev-output" style="padding:0.8rem"><em>✉️ Email Templates</em>Professional emails for follow-ups, quotes, and onboarding — ready in one click.</div><div class="lp-prev-output" style="padding:0.8rem"><em>👤 Bio Writer</em>A sharp, professional bio for your website, LinkedIn, or press kit.</div><div class="lp-prev-output" style="padding:0.8rem"><em>📅 Scheduling</em>Book jobs and appointments, send branded confirmation emails, and see everything on a calendar.</div><div class="lp-prev-output" style="padding:0.8rem"><em>💼 Job Postings</em>Write clear, compelling job listings that attract the right candidates.</div><div class="lp-prev-output" style="padding:0.8rem;grid-column:1/-1"><em>😤 Complaint Handler</em>Paste a difficult message — get a calm, professional response that defuses it.</div></div></div><div><div class="lp-prev-label">All powered by AI</div><div class="lp-prev-output"><em>Every tool works the same way</em>Fill in a few details about your business, hit generate, and get polished, professional output in seconds. Everything auto-fills from your Business Profile so you\'re never starting from scratch.</div></div>'
+    scheduling: '<div><div class="lp-prev-label">Upcoming this week</div><div class="lp-prev-output" style="font-size:12px;line-height:1.6;"><div class="lp-prev-stat"><span><strong>Mon, Apr 27 · 10:00 AM</strong><br><span style="color:#888">Plumbing repair — John Smith</span></span><span class="lp-prev-pill p">Job</span></div><div class="lp-prev-stat"><span><strong>Tue, Apr 28 · 2:30 PM</strong><br><span style="color:#888">Initial consultation — Acme Co.</span></span><span class="lp-prev-pill a">Appt</span></div><div class="lp-prev-stat"><span><strong>Thu, Apr 30 · 9:00 AM</strong><br><span style="color:#888">HVAC service — Rivera LLC</span></span><span class="lp-prev-pill p">Job</span></div></div></div><div><div class="lp-prev-label">One-click confirmation email</div><div class="lp-prev-output"><em>Branded &amp; auto-filled</em>Subject: <strong>Your Business — Job Confirmation: Plumbing repair · Mon Apr 27</strong><br><br>Hi John, your plumbing repair with Your Business is confirmed for Monday Apr 27 at 10:00 AM. Need to reschedule? Just reply.<br><br><span class="lp-prev-pill g">Gmail</span><span class="lp-prev-pill p">Outlook</span><span class="lp-prev-pill a">Mailto</span></div></div>',
+    more: '<div><div class="lp-prev-label">Also included</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem"><div class="lp-prev-output" style="padding:0.8rem"><em>✉️ Email Templates</em>Professional emails for follow-ups, quotes, and onboarding — ready in one click.</div><div class="lp-prev-output" style="padding:0.8rem"><em>👤 Bio Writer</em>A sharp, professional bio for your website, LinkedIn, or press kit.</div><div class="lp-prev-output" style="padding:0.8rem"><em>💼 Job Postings</em>Write clear, compelling job listings that attract the right candidates.</div><div class="lp-prev-output" style="padding:0.8rem"><em>😤 Complaint Handler</em>Paste a difficult message — get a calm, professional response that defuses it.</div></div></div><div><div class="lp-prev-label">All powered by AI</div><div class="lp-prev-output"><em>Every tool works the same way</em>Fill in a few details about your business, hit generate, and get polished, professional output in seconds. Everything auto-fills from your Business Profile so you\'re never starting from scratch.</div></div>'
   };
 
   window.lpFeatClick = function lpFeatClick(card, id) {
