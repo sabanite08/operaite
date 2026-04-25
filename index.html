@@ -235,8 +235,9 @@
     @media (max-width: 700px) { .sched-cal-cell { min-height: 56px; padding: 4px; } .sched-cal-item { font-size: 9.5px; padding: 1px 3px; } .sched-item { flex-wrap: wrap; } .sched-item-actions { width: 100%; } }
 
     /* ===== Landing Page ===== */
-    .lp { background:#fff; }
-    .lp-nav { position:fixed; top:0; left:0; right:0; z-index:200; height:62px; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid #e8e8e5; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; }
+    .lp { background:transparent; }
+    .lp-nav, .lp-hero, .lp-section { position:relative; z-index:1; }
+    .lp-nav { position:fixed; top:0; left:0; right:0; z-index:200; height:62px; background:rgba(255,255,255,0.78); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid rgba(232,232,229,0.7); display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; }
     .lp-nav-brand { display:flex; align-items:center; gap:9px; }
     .lp-nav-brand-icon { width:48px; height:48px; background:#534AB7; border-radius:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .lp-nav-brand-name { font-size:26px; font-weight:700; color:#1a1a1a; }
@@ -247,18 +248,20 @@
     .lp-nav-btn { background:#534AB7; border:none; font-family:inherit; font-size:14px; font-weight:600; color:#fff; padding:9px 20px; border-radius:9px; cursor:pointer; }
     .lp-nav-btn:hover { background:#3C3489; }
     .lp-wrap { max-width:1060px; margin:0 auto; padding:0 2rem; }
-    /* Hero */
-    .lp-hero { padding:110px 2rem 0; text-align:center; position:relative; overflow:hidden; }
-    .lp-hero::before { content:''; position:absolute; top:-40%; left:-30%; right:-30%; bottom:-30%; pointer-events:none; z-index:0; background:radial-gradient(circle at 18% 22%, rgba(139,92,246,0.28) 0%, transparent 32%), radial-gradient(circle at 82% 18%, rgba(236,72,153,0.20) 0%, transparent 35%), radial-gradient(circle at 70% 75%, rgba(83,74,183,0.30) 0%, transparent 40%), radial-gradient(circle at 25% 90%, rgba(14,165,233,0.18) 0%, transparent 38%); filter:blur(40px); animation: lpHeroFlow 28s ease-in-out infinite alternate; }
-    .lp-hero::after { content:''; position:absolute; inset:0; pointer-events:none; z-index:0; background:linear-gradient(180deg, transparent 0%, transparent 70%, #fff 100%); }
-    .lp-hero-inner, .lp-mockup-outer { position:relative; z-index:1; }
+    /* Aurora — fixed background that stays visible while scrolling */
+    .lp { position:relative; }
+    .lp-aurora { position:fixed; top:0; left:0; right:0; bottom:0; pointer-events:none; z-index:0; overflow:hidden; }
+    .lp-aurora::before { content:''; position:absolute; top:-30%; left:-30%; right:-30%; bottom:-30%; background:radial-gradient(circle at 18% 18%, rgba(139,92,246,0.22) 0%, transparent 32%), radial-gradient(circle at 82% 22%, rgba(236,72,153,0.16) 0%, transparent 35%), radial-gradient(circle at 70% 78%, rgba(83,74,183,0.24) 0%, transparent 40%), radial-gradient(circle at 25% 88%, rgba(14,165,233,0.14) 0%, transparent 38%); filter:blur(50px); animation: lpHeroFlow 32s ease-in-out infinite alternate; }
     @keyframes lpHeroFlow {
       0% { transform: translate(0, 0) rotate(0deg) scale(1); }
       33% { transform: translate(-4%, -3%) rotate(3deg) scale(1.08); }
       66% { transform: translate(3%, 2%) rotate(-2deg) scale(0.95); }
       100% { transform: translate(-2%, 4%) rotate(1deg) scale(1.05); }
     }
-    @media (prefers-reduced-motion: reduce) { .lp-hero::before { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .lp-aurora::before { animation: none; } }
+    /* Hero */
+    .lp-hero { padding:110px 2rem 0; text-align:center; position:relative; }
+    .lp-hero-inner, .lp-mockup-outer { position:relative; z-index:1; }
     .lp-hero-inner { max-width:700px; margin:0 auto; }
     .lp-eyebrow { display:inline-flex; align-items:center; gap:6px; background:#EEEDFE; color:#534AB7; font-size:12px; font-weight:700; padding:5px 14px; border-radius:20px; margin-bottom:1.5rem; letter-spacing:0.05em; text-transform:uppercase; }
     .lp-h1 { font-size:60px; font-weight:800; color:#1a1a1a; line-height:1.07; letter-spacing:-2px; margin-bottom:1.25rem; }
@@ -313,7 +316,7 @@
     .lp-mock-pill.a { background:#FAEEDA; color:#854F0B; }
     .lp-mock-pill.p { background:#EEEDFE; color:#534AB7; }
     /* Proof bar */
-    .lp-proof { background:#f9f9f8; border-top:1px solid #e8e8e5; border-bottom:1px solid #e8e8e5; padding:1.5rem 2rem; }
+    .lp-proof { background:rgba(249,249,248,0.72); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-top:1px solid rgba(232,232,229,0.6); border-bottom:1px solid rgba(232,232,229,0.6); padding:1.5rem 2rem; position:relative; z-index:1; }
     .lp-proof-inner { max-width:900px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1.25rem; }
     .lp-proof-txt { font-size:14px; color:#999; font-style:italic; }
     .lp-proof-stats { display:flex; gap:3rem; }
@@ -408,7 +411,7 @@
     .lp-trust-item { display:flex; align-items:center; gap:7px; font-size:12.5px; color:#888; }
     .lp-trust-item svg { flex-shrink:0; }
     /* FAQ */
-    .lp-faq-section { padding:80px 2rem; background:#fafaf9; border-top:1px solid #ececea; border-bottom:1px solid #ececea; }
+    .lp-faq-section { padding:80px 2rem; background:rgba(250,250,249,0.72); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-top:1px solid rgba(236,236,234,0.6); border-bottom:1px solid rgba(236,236,234,0.6); position:relative; z-index:1; }
     .lp-faq-list { max-width:740px; margin:2.5rem auto 0; }
     .lp-faq details { background:#fff; border:1px solid #ececea; border-radius:12px; margin-bottom:0.75rem; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s; }
     .lp-faq details[open] { border-color:#c5c2ed; box-shadow:0 4px 18px rgba(83,74,183,0.08); }
@@ -460,6 +463,7 @@
 
   <!-- ===== Landing Page ===== -->
   <div id="screen-landing" class="lp">
+    <div class="lp-aurora"></div>
     <nav class="lp-nav">
       <div class="lp-nav-brand">
         <div class="lp-nav-brand-icon"><svg width="24" height="24" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
