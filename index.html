@@ -51,7 +51,7 @@
       "Email Template Generator",
       "Bio Writer",
       "Job Posting Generator",
-      "FAQ Generator",
+      "Scheduling & Appointments",
       "Complaint Handler"
     ],
     "creator": {
@@ -197,6 +197,42 @@
     .auth-hero-feat-icon { width: 28px; height: 28px; background: rgba(255,255,255,0.14); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
     .auth-form-panel { width: 460px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; padding: 2.5rem; background: #f9f9f8; }
     @media (max-width: 900px) { .auth-split { flex-direction: column; } .auth-hero { padding: 2.5rem 2rem; } .auth-hero-headline { font-size: 28px; } .auth-form-panel { width: 100%; } .auth-scene { display: none; } }
+
+    /* ===== Scheduling ===== */
+    .sched-cal-head { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
+    .sched-cal-head > div { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.06em; text-align: center; padding: 6px 0; }
+    .sched-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .sched-cal-cell { aspect-ratio: 1.15 / 1; background: #fafaf9; border: 1px solid #ececea; border-radius: 8px; padding: 6px 7px; cursor: pointer; transition: background 0.12s, border-color 0.12s; display: flex; flex-direction: column; gap: 3px; min-height: 70px; }
+    .sched-cal-cell:hover { background: #f3f3f1; border-color: #c5c2ed; }
+    .sched-cal-cell.other-month { opacity: 0.35; }
+    .sched-cal-cell.today { background: #EEEDFE; border-color: #534AB7; }
+    .sched-cal-cell.today .sched-cal-cell-num { color: #534AB7; font-weight: 800; }
+    .sched-cal-cell-num { font-size: 13px; font-weight: 600; color: #333; }
+    .sched-cal-item { font-size: 10.5px; padding: 2px 5px; border-radius: 4px; background: #534AB7; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.35; }
+    .sched-cal-item.appt { background: #0EA5E9; }
+    .sched-cal-item.more { background: #999; }
+    .sched-item { display: flex; gap: 14px; align-items: center; padding: 12px 14px; border: 1px solid #ececea; border-radius: 10px; margin-bottom: 8px; background: #fff; transition: border-color 0.12s, box-shadow 0.12s; }
+    .sched-item:hover { border-color: #c5c2ed; box-shadow: 0 4px 14px rgba(83,74,183,0.06); }
+    .sched-item.past { opacity: 0.6; }
+    .sched-item-date { flex-shrink: 0; width: 64px; text-align: center; padding: 6px 0; background: #f3f3f1; border-radius: 8px; }
+    .sched-item-date .sched-item-month { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
+    .sched-item-date .sched-item-day { font-size: 22px; font-weight: 800; color: #1a1a1a; line-height: 1; margin: 2px 0; }
+    .sched-item-date .sched-item-time { font-size: 11px; color: #666; font-weight: 500; }
+    .sched-item.job .sched-item-date { background: #EEEDFE; }
+    .sched-item.appt .sched-item-date { background: #E0F2FE; }
+    .sched-item-info { flex: 1; min-width: 0; }
+    .sched-item-title { font-size: 14.5px; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; }
+    .sched-item-meta { font-size: 12.5px; color: #666; }
+    .sched-item-meta span { margin-right: 12px; }
+    .sched-item-type { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 8px; }
+    .sched-item-type.job { background: #EEEDFE; color: #534AB7; }
+    .sched-item-type.appt { background: #E0F2FE; color: #0369A1; }
+    .sched-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .sched-item-actions button { font-size: 11.5px; padding: 5px 9px; border-radius: 6px; border: 1px solid #e8e8e5; background: #fff; cursor: pointer; color: #555; transition: background 0.12s, color 0.12s; font-family: inherit; }
+    .sched-item-actions button:hover { background: #f3f3f1; color: #1a1a1a; }
+    .sched-item-actions button.primary { background: #534AB7; color: #fff; border-color: #534AB7; }
+    .sched-item-actions button.primary:hover { background: #3C3489; }
+    @media (max-width: 700px) { .sched-cal-cell { min-height: 56px; padding: 4px; } .sched-cal-item { font-size: 9.5px; padding: 1px 3px; } .sched-item { flex-wrap: wrap; } .sched-item-actions { width: 100%; } }
 
     /* ===== Landing Page ===== */
     .lp { background:#fff; }
@@ -504,7 +540,7 @@
           <div class="lp-feat-card" onclick="lpFeatClick(this,'more')">
             <div class="lp-feat-icon">✨</div>
             <div class="lp-feat-title">5 More Tools</div>
-            <div class="lp-feat-desc">Bio writer, FAQ generator, email templates, job postings, and complaint handler — all included.</div>
+            <div class="lp-feat-desc">Scheduling, bio writer, email templates, job postings, and complaint handler — all included.</div>
           </div>
         </div>
         <div class="lp-feat-preview" id="lp-feat-preview">
@@ -891,6 +927,10 @@
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M2 12V4a1 1 0 011-1h10a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1z" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h2M5 9h2M9 6h2M9 9h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         Accounting
       </button>
+      <button class="nav-item" id="nav-scheduling">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 6.5h12" stroke="currentColor" stroke-width="1.3"/><path d="M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Scheduling
+      </button>
       <button class="nav-item" id="nav-social">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="13" cy="3" r="1.8" stroke="currentColor" stroke-width="1.3"/><circle cx="3" cy="8" r="1.8" stroke="currentColor" stroke-width="1.3"/><circle cx="13" cy="13" r="1.8" stroke="currentColor" stroke-width="1.3"/><path d="M4.7 7.2l6.6-3.4M4.7 8.8l6.6 3.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         Social Media
@@ -910,10 +950,6 @@
       <button class="nav-item" id="nav-complaint">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C4.4 1.5 1.5 4 1.5 7c0 1.5.6 2.8 1.7 3.8L2.5 14l3.5-1.5c.6.2 1.3.3 2 .3 3.6 0 6.5-2.5 6.5-5.8S11.6 1.5 8 1.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 7v.5M8 5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         Complaint Handler
-      </button>
-      <button class="nav-item" id="nav-faq">
-        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 6.5a1.5 1.5 0 012.8.5c0 1-1.3 1.5-1.3 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11.5" r=".6" fill="currentColor"/></svg>
-        FAQ Generator
       </button>
       <div class="nav-bottom">
         <div class="user-email" id="user-email-display"></div>
@@ -970,7 +1006,7 @@
             3. Use <b>Email Templates</b> to draft promotions, follow-ups, and announcements.<br>
             4. Use <b>Marketing Audit</b> to score and improve your online presence.<br>
             5. Use <b>Invoicing</b> &amp; <b>Proposals</b> to win and bill clients faster.<br>
-            6. Use <b>Bio Writer</b>, <b>Job Postings</b>, <b>Complaint Handler</b>, and <b>FAQ Generator</b> to run your business on autopilot.
+            6. Use <b>Scheduling</b>, <b>Bio Writer</b>, <b>Job Postings</b>, and <b>Complaint Handler</b> to run your business on autopilot.
           </div>
         </div>
       </div>
@@ -1190,6 +1226,102 @@
             </div>
           </div>
           <div id="acct-list"><div style="color:#aaa;font-size:13.5px;text-align:center;padding:20px 0;">No entries yet. Add your first income or expense above.</div></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-scheduling">
+        <div class="page-hero" style="background:linear-gradient(135deg,#10B981 0%,#047857 100%);">
+          <div class="page-hero-icon">📅</div>
+          <div class="page-hero-text">
+            <div class="page-hero-title">Scheduling</div>
+            <div class="page-hero-sub">Book jobs and appointments, send branded confirmations</div>
+          </div>
+          <div class="page-hero-right">
+            <span class="page-hero-pill">Calendar view</span>
+            <span class="page-hero-pill">Branded emails</span>
+            <span class="page-hero-pill">One place for everything</span>
+          </div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><div class="metric-label">This week</div><div class="metric-value" id="sched-this-week">0</div></div>
+          <div class="metric"><div class="metric-label">Upcoming</div><div class="metric-value" id="sched-upcoming">0</div></div>
+          <div class="metric"><div class="metric-label">Total scheduled</div><div class="metric-value" id="sched-total">0</div></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div class="card-title" style="margin-bottom:0;">Schedule a new item</div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn sm" id="sched-type-job" style="background:#534AB7;color:#fff;border-color:#534AB7;">+ Job</button>
+              <button class="btn sm" id="sched-type-appt" style="background:#0EA5E9;color:#fff;border-color:#0EA5E9;">+ Appointment</button>
+            </div>
+          </div>
+          <div id="sched-form" style="display:none;">
+            <input type="hidden" id="sched-id">
+            <input type="hidden" id="sched-type">
+            <div class="two-col">
+              <div>
+                <label style="margin-top:0;">Date</label>
+                <input type="date" id="sched-date">
+              </div>
+              <div>
+                <label style="margin-top:0;">Time</label>
+                <input type="time" id="sched-time">
+              </div>
+            </div>
+            <label>Title / what's happening</label>
+            <input type="text" id="sched-title" placeholder="e.g. Plumbing repair, Initial consultation">
+            <div class="two-col">
+              <div>
+                <label>Customer / contractor name</label>
+                <input type="text" id="sched-name" placeholder="e.g. John Smith">
+              </div>
+              <div>
+                <label>Their email (for confirmation)</label>
+                <input type="email" id="sched-email" placeholder="name@example.com">
+              </div>
+            </div>
+            <div class="two-col">
+              <div>
+                <label>Phone (optional)</label>
+                <input type="tel" id="sched-phone" placeholder="(555) 123-4567">
+              </div>
+              <div>
+                <label>Location / address</label>
+                <input type="text" id="sched-location" placeholder="123 Main St, City, State">
+              </div>
+            </div>
+            <label>Notes (optional)</label>
+            <textarea id="sched-notes" placeholder="Any additional details — supplies needed, parking instructions, etc."></textarea>
+            <div style="display:flex;gap:10px;margin-top:14px;">
+              <button class="btn primary" id="sched-save-btn">Save &amp; schedule</button>
+              <button class="btn" id="sched-cancel-btn">Cancel</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <button class="btn sm" id="sched-cal-prev" style="padding:4px 10px;font-size:16px;line-height:1;">‹</button>
+              <div class="card-title" id="sched-cal-month" style="margin-bottom:0;min-width:160px;text-align:center;">—</div>
+              <button class="btn sm" id="sched-cal-next" style="padding:4px 10px;font-size:16px;line-height:1;">›</button>
+            </div>
+            <button class="btn sm" id="sched-cal-today">Today</button>
+          </div>
+          <div class="sched-cal-head">
+            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+          </div>
+          <div class="sched-cal-grid" id="sched-calendar"></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div class="card-title" style="margin-bottom:0;">Upcoming &amp; recent</div>
+            <select id="sched-filter" style="width:auto;margin-top:0;font-size:13px;">
+              <option value="upcoming">Upcoming only</option>
+              <option value="all">All items</option>
+              <option value="past">Past only</option>
+            </select>
+          </div>
+          <div id="sched-list"><div style="color:#aaa;font-size:13.5px;text-align:center;padding:20px 0;">No items scheduled yet. Add your first job or appointment above.</div></div>
         </div>
       </div>
 
@@ -1511,31 +1643,7 @@
         </div>
       </div>
 
-      <div class="page" id="page-faq">
-        <div class="page-hero" style="background:linear-gradient(135deg,#0EA5E9 0%,#0369A1 100%);">
-          <div class="page-hero-icon">❓</div>
-          <div class="page-hero-text">
-            <div class="page-hero-title">FAQ generator</div>
-            <div class="page-hero-sub">Generate a complete FAQ page for your business or website</div>
-          </div>
-          <div class="page-hero-right">
-            <span class="page-hero-pill">10+ questions generated</span>
-            <span class="page-hero-pill">Ready to publish</span>
-            <span class="page-hero-pill">Reduce support load</span>
-          </div>
-        </div>
-        <div class="card">
-          <label style="margin-top:0;">Business name</label>
-          <input type="text" id="faq-biz" placeholder="e.g. Coastal HVAC">
-          <label>Business type & services</label>
-          <input type="text" id="faq-type" placeholder="e.g. HVAC repair and installation for residential homes">
-          <label>Anything specific customers always ask about?</label>
-          <textarea id="faq-details" placeholder="e.g. pricing, hours, service area, warranties, emergency calls (optional)"></textarea>
-          <button class="btn primary" id="gen-faq-btn">Generate FAQ</button>
-          <div class="output-box" id="faq-output"></div>
-        </div>
-      </div>
-    <div id="app-side-panel" class="app-side-panel"></div>
+    <div id="app-side-panel" class="app-side-panel">
     </div>
   </div>
 
@@ -1555,7 +1663,7 @@
     marketing: '<div><div class="lp-prev-label">Your presence score</div><div class="lp-prev-output"><em>Overall rating</em><div style="font-size:32px;font-weight:800;color:#534AB7;margin:0.3rem 0;">72 / 100</div><div class="lp-prev-stat"><span>Google Business Profile</span><span style="color:#10B981">✔ Good</span></div><div class="lp-prev-stat"><span>Website SEO</span><span style="color:#F59E0B">⚠ Needs work</span></div><div class="lp-prev-stat"><span>Social Media</span><span style="color:#EF4444">✘ Weak</span></div></div></div><div><div class="lp-prev-label">Top improvements</div><div class="lp-prev-output"><em>Prioritized action list</em>1. Add 15+ photos to your Google Business Profile<br><br>2. Write meta descriptions for your top 5 pages<br><br>3. Post consistently — aim for 3x per week on Instagram</div></div>',
     accounting: '<div><div class="lp-prev-label">Monthly snapshot</div><div class="lp-prev-output"><div class="lp-prev-stat"><span>Total Revenue</span><span style="color:#10B981">$12,400</span></div><div class="lp-prev-stat"><span>Total Expenses</span><span style="color:#EF4444">$3,200</span></div><div class="lp-prev-stat" style="font-size:15px"><span><strong>Net Profit</strong></span><span style="color:#534AB7"><strong>$9,200</strong></span></div><div class="lp-prev-stat"><span>Invoices Paid</span><span>11</span></div><div class="lp-prev-stat"><span>Invoices Pending</span><span style="color:#F59E0B">3</span></div></div></div><div><div class="lp-prev-label">What you track</div><div class="lp-prev-output"><em>No spreadsheets needed</em>Log income and expenses in seconds. See revenue, profit, and outstanding invoices at a glance — updated every time you add a transaction.</div></div>',
     social: '<div><div class="lp-prev-label">Choose a platform</div><div style="margin-bottom:1rem"><span class="lp-prev-pill p" style="font-size:13px;padding:6px 14px;cursor:pointer">Instagram</span><span class="lp-prev-pill g" style="font-size:13px;padding:6px 14px;cursor:pointer">LinkedIn</span><span class="lp-prev-pill a" style="font-size:13px;padding:6px 14px;cursor:pointer">Facebook</span></div><div class="lp-prev-output" style="font-size:12px;color:#888">Topic: "New service launch — residential cleaning"</div><div class="lp-prev-btn" style="margin-top:0.75rem">✨ Generate Post</div></div><div><div class="lp-prev-label">Generated caption</div><div class="lp-prev-output"><em>Instagram — ready to copy</em>Big news — we\'re now offering residential cleaning! 🏠✨ Whether it\'s a deep clean or regular maintenance, we\'ve got you covered. Book your first session and see the difference.<br><br>#SmallBusiness #CleaningService #HomeClean #BookNow</div></div>',
-    more: '<div><div class="lp-prev-label">Also included</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem"><div class="lp-prev-output" style="padding:0.8rem"><em>✉️ Email Templates</em>Professional emails for follow-ups, quotes, and onboarding — ready in one click.</div><div class="lp-prev-output" style="padding:0.8rem"><em>👤 Bio Writer</em>A sharp, professional bio for your website, LinkedIn, or press kit.</div><div class="lp-prev-output" style="padding:0.8rem"><em>📋 FAQ Generator</em>Turn your services into a full FAQ page customers will actually read.</div><div class="lp-prev-output" style="padding:0.8rem"><em>💼 Job Postings</em>Write clear, compelling job listings that attract the right candidates.</div><div class="lp-prev-output" style="padding:0.8rem;grid-column:1/-1"><em>😤 Complaint Handler</em>Paste a difficult message — get a calm, professional response that defuses it.</div></div></div><div><div class="lp-prev-label">All powered by AI</div><div class="lp-prev-output"><em>Every tool works the same way</em>Fill in a few details about your business, hit generate, and get polished, professional output in seconds. Everything auto-fills from your Business Profile so you\'re never starting from scratch.</div></div>'
+    more: '<div><div class="lp-prev-label">Also included</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem"><div class="lp-prev-output" style="padding:0.8rem"><em>✉️ Email Templates</em>Professional emails for follow-ups, quotes, and onboarding — ready in one click.</div><div class="lp-prev-output" style="padding:0.8rem"><em>👤 Bio Writer</em>A sharp, professional bio for your website, LinkedIn, or press kit.</div><div class="lp-prev-output" style="padding:0.8rem"><em>📅 Scheduling</em>Book jobs and appointments, send branded confirmation emails, and see everything on a calendar.</div><div class="lp-prev-output" style="padding:0.8rem"><em>💼 Job Postings</em>Write clear, compelling job listings that attract the right candidates.</div><div class="lp-prev-output" style="padding:0.8rem;grid-column:1/-1"><em>😤 Complaint Handler</em>Paste a difficult message — get a calm, professional response that defuses it.</div></div></div><div><div class="lp-prev-label">All powered by AI</div><div class="lp-prev-output"><em>Every tool works the same way</em>Fill in a few details about your business, hit generate, and get polished, professional output in seconds. Everything auto-fills from your Business Profile so you\'re never starting from scratch.</div></div>'
   };
 
   window.lpFeatClick = function lpFeatClick(card, id) {
@@ -1615,7 +1723,7 @@
     bio:       { grad:'linear-gradient(135deg,#14B8A6,#0F766E)',  title:'Bio tips',      sub:'Make a strong first impression',     tips:[['✂️','Keep your bio under 150 words — concise bios get read more often.'],['🎯','Lead with what you do and who you help, not your founding story.'],['📍','Always include your location and service area for local SEO.'],['🔄','Update your bio every 6–12 months to keep it fresh and current.']] },
     jobs:      { grad:'linear-gradient(135deg,#F97316,#C2410C)',  title:'Hiring tips',   sub:'Attract the right candidates',       tips:[['🎯','Be specific about responsibilities — vague posts attract vague applicants.'],['💰','Job listings with a salary range get up to 30% more applications.'],['📋','Separate must-haves from nice-to-haves to widen your candidate pool.'],['📢','Post on Indeed, ZipRecruiter, and your Google Business profile.']] },
     complaint: { grad:'linear-gradient(135deg,#EF4444,#991B1B)',  title:'Complaint tips',sub:'Turn critics into loyal fans',       tips:[['⚡','Respond quickly — 60% of customers judge businesses by response time.'],['🤝','Acknowledge the issue before offering a solution — it defuses tension.'],['📵','Move heated conversations offline (phone or email) when possible.'],['🌟','A well-handled complaint can turn a critic into your biggest advocate.']] },
-    faq:       { grad:'linear-gradient(135deg,#0EA5E9,#0369A1)',  title:'FAQ tips',      sub:'Reduce repetitive questions',         tips:[['📥','Include your most-asked questions — check DMs and voicemails for ideas.'],['✂️','Keep each answer under 100 words — short and scannable always wins.'],['🔄','Update your FAQ page every 6 months as your business evolves.'],['📉','A good FAQ page can reduce customer service inquiries by up to 40%.']] }
+    scheduling:{ grad:'linear-gradient(135deg,#10B981,#047857)',  title:'Scheduling tips',sub:'Stay organized & on time',           tips:[['📅','Send a confirmation email the moment you schedule — customers appreciate it and forget less.'],['⏰','Block buffer time between jobs so a runover doesn\'t cascade into the next one.'],['📍','Always include the address in the confirmation — saves a flurry of last-minute questions.'],['🔁','Send a reminder the day before — drastically cuts no-shows.']] }
   };
 
   function updateSidePanel(pageId) {
@@ -2019,7 +2127,7 @@
     }
   });
 
-  ['dashboard', 'profile', 'reviews', 'audit', 'invoice', 'accounting', 'social', 'email', 'bio', 'jobs', 'proposal', 'complaint', 'faq'].forEach(function(id) {
+  ['dashboard', 'profile', 'reviews', 'audit', 'invoice', 'accounting', 'social', 'email', 'bio', 'jobs', 'proposal', 'complaint', 'scheduling'].forEach(function(id) {
     var nav = document.getElementById('nav-' + id);
     if (nav) nav.addEventListener('click', function() { showPage(id); });
   });
@@ -2378,18 +2486,357 @@
     out.textContent = await callAI(prompt);
   });
 
-  // FAQ generator
-  document.getElementById('gen-faq-btn').addEventListener('click', async function() {
-    var biz = document.getElementById('faq-biz').value.trim() || 'our business';
-    var type = document.getElementById('faq-type').value.trim();
-    var details = document.getElementById('faq-details').value.trim();
-    if (!type) { alert('Please describe your business type and services.'); return; }
-    var out = document.getElementById('faq-output');
-    out.className = 'output-box visible';
-    out.innerHTML = '<span class="loading">Generating your FAQ...</span>';
-    var prompt = 'Generate a complete FAQ page for "' + biz + '", a ' + type + '. ' + (details ? 'Focus areas: ' + details + '.' : '') + ' Write 8-10 realistic questions customers actually ask, with clear and helpful answers. Format as Q: / A: pairs.';
-    out.textContent = await callAI(prompt);
+  // ===== Scheduling =====
+  var schedState = {
+    items: JSON.parse(localStorage.getItem('operaite_schedule') || '[]'),
+    calDate: new Date(),
+    filter: 'upcoming',
+    bannerUrl: '/confirmation-banner.png'
+  };
+
+  function schedEsc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function schedSave() {
+    localStorage.setItem('operaite_schedule', JSON.stringify(schedState.items));
+  }
+
+  function schedFmtDate(d) {
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
+
+  function schedParseDateTime(item) {
+    var parts = item.date.split('-');
+    var time = (item.time || '00:00').split(':');
+    return new Date(+parts[0], +parts[1] - 1, +parts[2], +time[0], +time[1]);
+  }
+
+  function schedFmtDisplayDate(d) {
+    return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
+  function schedFmtDisplayTime(t) {
+    if (!t) return '';
+    var parts = t.split(':');
+    var h = +parts[0]; var m = parts[1];
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12; if (h === 0) h = 12;
+    return h + ':' + m + ' ' + ampm;
+  }
+
+  function schedShortMonth(d) {
+    return d.toLocaleDateString('en-US', { month: 'short' });
+  }
+
+  function schedRenderCalendar() {
+    var grid = document.getElementById('sched-calendar');
+    if (!grid) return;
+    var monthLabel = document.getElementById('sched-cal-month');
+    var d = new Date(schedState.calDate.getFullYear(), schedState.calDate.getMonth(), 1);
+    monthLabel.textContent = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+    var firstDay = d.getDay();
+    var daysInMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    var prevMonthDays = new Date(d.getFullYear(), d.getMonth(), 0).getDate();
+    var todayStr = schedFmtDate(new Date());
+
+    var html = '';
+    function cell(year, month, day, otherMonth) {
+      var cd = new Date(year, month, day);
+      var dateStr = schedFmtDate(cd);
+      var items = schedState.items.filter(function(it) { return it.date === dateStr; });
+      items.sort(function(a, b) { return (a.time || '').localeCompare(b.time || ''); });
+      var classes = ['sched-cal-cell'];
+      if (otherMonth) classes.push('other-month');
+      if (dateStr === todayStr) classes.push('today');
+      var inner = '<div class="sched-cal-cell-num">' + day + '</div>';
+      var visible = items.slice(0, 2);
+      visible.forEach(function(it) {
+        var typeCls = it.type === 'appt' ? 'appt' : '';
+        inner += '<div class="sched-cal-item ' + typeCls + '" title="' + schedEsc(it.title + ' — ' + schedFmtDisplayTime(it.time)) + '">' + schedFmtDisplayTime(it.time) + ' ' + schedEsc(it.title) + '</div>';
+      });
+      if (items.length > 2) {
+        inner += '<div class="sched-cal-item more">+' + (items.length - 2) + ' more</div>';
+      }
+      return '<div class="' + classes.join(' ') + '" data-date="' + dateStr + '">' + inner + '</div>';
+    }
+
+    for (var i = 0; i < firstDay; i++) {
+      var day = prevMonthDays - firstDay + i + 1;
+      html += cell(d.getFullYear(), d.getMonth() - 1, day, true);
+    }
+    for (var i = 1; i <= daysInMonth; i++) {
+      html += cell(d.getFullYear(), d.getMonth(), i, false);
+    }
+    var totalSoFar = firstDay + daysInMonth;
+    var trailing = (7 - (totalSoFar % 7)) % 7;
+    for (var i = 1; i <= trailing; i++) {
+      html += cell(d.getFullYear(), d.getMonth() + 1, i, true);
+    }
+    grid.innerHTML = html;
+  }
+
+  function schedRenderList() {
+    var list = document.getElementById('sched-list');
+    if (!list) return;
+    var now = new Date();
+    var items = schedState.items.slice().sort(function(a, b) {
+      return schedParseDateTime(a) - schedParseDateTime(b);
+    });
+    if (schedState.filter === 'upcoming') {
+      items = items.filter(function(it) { return schedParseDateTime(it) >= new Date(now.getFullYear(), now.getMonth(), now.getDate()); });
+    } else if (schedState.filter === 'past') {
+      items = items.filter(function(it) { return schedParseDateTime(it) < new Date(now.getFullYear(), now.getMonth(), now.getDate()); });
+      items.reverse();
+    }
+    if (items.length === 0) {
+      list.innerHTML = '<div style="color:#aaa;font-size:13.5px;text-align:center;padding:20px 0;">No items in this view.</div>';
+      return;
+    }
+    var html = items.map(function(it) {
+      var dt = schedParseDateTime(it);
+      var isPast = dt < now;
+      var typeCls = it.type === 'appt' ? 'appt' : 'job';
+      var typeLabel = it.type === 'appt' ? 'Appointment' : 'Job';
+      var meta = [];
+      if (it.name) meta.push('<span>👤 ' + schedEsc(it.name) + '</span>');
+      if (it.location) meta.push('<span>📍 ' + schedEsc(it.location) + '</span>');
+      if (it.email) meta.push('<span>✉️ ' + schedEsc(it.email) + '</span>');
+      return '<div class="sched-item ' + typeCls + (isPast ? ' past' : '') + '">' +
+        '<div class="sched-item-date">' +
+          '<div class="sched-item-month">' + schedShortMonth(dt) + '</div>' +
+          '<div class="sched-item-day">' + dt.getDate() + '</div>' +
+          '<div class="sched-item-time">' + schedFmtDisplayTime(it.time) + '</div>' +
+        '</div>' +
+        '<div class="sched-item-info">' +
+          '<div class="sched-item-title"><span class="sched-item-type ' + typeCls + '">' + typeLabel + '</span>' + schedEsc(it.title) + '</div>' +
+          '<div class="sched-item-meta">' + meta.join('') + '</div>' +
+        '</div>' +
+        '<div class="sched-item-actions">' +
+          (it.email ? '<button class="primary" data-act="confirm" data-id="' + it.id + '">View / Send</button>' : '') +
+          '<button data-act="edit" data-id="' + it.id + '">Edit</button>' +
+          '<button data-act="delete" data-id="' + it.id + '">Delete</button>' +
+        '</div>' +
+        '</div>';
+    }).join('');
+    list.innerHTML = html;
+  }
+
+  function schedRenderStats() {
+    var now = new Date();
+    var startOfWeek = new Date(now); startOfWeek.setDate(now.getDate() - now.getDay()); startOfWeek.setHours(0,0,0,0);
+    var endOfWeek = new Date(startOfWeek); endOfWeek.setDate(startOfWeek.getDate() + 7);
+    var thisWeek = 0, upcoming = 0;
+    schedState.items.forEach(function(it) {
+      var d = schedParseDateTime(it);
+      if (d >= startOfWeek && d < endOfWeek) thisWeek++;
+      if (d >= now) upcoming++;
+    });
+    document.getElementById('sched-this-week').textContent = thisWeek;
+    document.getElementById('sched-upcoming').textContent = upcoming;
+    document.getElementById('sched-total').textContent = schedState.items.length;
+  }
+
+  function schedRenderAll() { schedRenderCalendar(); schedRenderList(); schedRenderStats(); }
+
+  function schedShowForm(type, item) {
+    document.getElementById('sched-form').style.display = 'block';
+    document.getElementById('sched-id').value = item ? item.id : '';
+    document.getElementById('sched-type').value = type;
+    document.getElementById('sched-date').value = item ? item.date : schedFmtDate(new Date());
+    document.getElementById('sched-time').value = item ? item.time : '09:00';
+    document.getElementById('sched-title').value = item ? item.title : '';
+    document.getElementById('sched-name').value = item ? (item.name || '') : '';
+    document.getElementById('sched-email').value = item ? (item.email || '') : '';
+    document.getElementById('sched-phone').value = item ? (item.phone || '') : '';
+    document.getElementById('sched-location').value = item ? (item.location || '') : '';
+    document.getElementById('sched-notes').value = item ? (item.notes || '') : '';
+    document.getElementById('sched-save-btn').textContent = item ? 'Update' : 'Save & schedule';
+    document.getElementById('sched-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function schedHideForm() {
+    document.getElementById('sched-form').style.display = 'none';
+    ['sched-id','sched-type','sched-date','sched-time','sched-title','sched-name','sched-email','sched-phone','sched-location','sched-notes'].forEach(function(id){
+      var el = document.getElementById(id); if (el) el.value = '';
+    });
+  }
+
+  function schedConfirmationHTML(item) {
+    var dt = schedParseDateTime(item);
+    var dateLine = schedFmtDisplayDate(dt);
+    var timeLine = schedFmtDisplayTime(item.time);
+    var profile = JSON.parse(localStorage.getItem('operaite_profile') || '{}');
+    var bizName = profile.name || 'Operaite';
+    var bizPhone = profile.phone || '';
+    var bizEmail = profile.email || '';
+    var typeLabel = item.type === 'appt' ? 'Appointment' : 'Job';
+    var bannerHtml = schedState.bannerUrl
+      ? '<div style="background:#fff;padding:30px 30px 10px;border-bottom:1px solid #f0f0ec;"><img src="' + schedEsc(schedState.bannerUrl) + '" alt="' + typeLabel + ' Confirmed" style="width:100%;max-width:540px;display:block;margin:0 auto;"></div>'
+      : '<div style="background:linear-gradient(135deg,#534AB7 0%,#3C3489 100%);padding:48px 40px;border-radius:14px 14px 0 0;text-align:center;color:#fff;">' +
+          '<div style="font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;opacity:0.7;margin-bottom:10px;">' + typeLabel + ' Confirmed</div>' +
+          '<div style="font-size:36px;font-weight:800;letter-spacing:-0.5px;line-height:1.2;">You\'re all set</div>' +
+        '</div>';
+    var notesBlock = item.notes ? '<div style="background:#fafaf9;border-radius:10px;padding:16px 18px;margin-top:14px;font-size:14px;color:#555;line-height:1.6;"><div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Notes</div>' + schedEsc(item.notes) + '</div>' : '';
+    var contactLine = [bizName, bizPhone, bizEmail].filter(Boolean).join(' · ');
+    return '<div style="max-width:640px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.06);overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,sans-serif;">' +
+      bannerHtml +
+      '<div style="padding:32px 36px;">' +
+        '<div style="font-size:13px;color:#888;margin-bottom:6px;">Hi ' + schedEsc(item.name || 'there') + ',</div>' +
+        '<div style="font-size:15px;color:#444;line-height:1.65;margin-bottom:24px;">Your <strong>' + typeLabel.toLowerCase() + '</strong> with ' + schedEsc(bizName) + ' is confirmed for the date and time below.</div>' +
+        '<div style="border:1px solid #ececea;border-radius:12px;padding:20px 22px;margin-bottom:14px;">' +
+          '<div style="font-size:11px;font-weight:700;color:#534AB7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">' + schedEsc(item.title) + '</div>' +
+          '<div style="font-size:24px;font-weight:800;color:#1a1a1a;letter-spacing:-0.5px;line-height:1.2;margin-bottom:4px;">' + dateLine + '</div>' +
+          '<div style="font-size:18px;font-weight:600;color:#534AB7;">' + timeLine + '</div>' +
+          (item.location ? '<div style="margin-top:14px;padding-top:14px;border-top:1px dashed #ececea;font-size:14px;color:#444;"><span style="color:#888;">📍</span> ' + schedEsc(item.location) + '</div>' : '') +
+        '</div>' +
+        notesBlock +
+        '<div style="margin-top:30px;padding-top:20px;border-top:1px solid #ececea;font-size:12.5px;color:#888;text-align:center;line-height:1.6;">' +
+          'Need to reschedule or cancel? Reply to this email or call us.<br>' +
+          (contactLine ? '<strong style="color:#555;">' + schedEsc(contactLine) + '</strong>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function schedPlainText(item) {
+    var dt = schedParseDateTime(item);
+    var profile = JSON.parse(localStorage.getItem('operaite_profile') || '{}');
+    var bizName = profile.name || 'Operaite';
+    var typeLabel = item.type === 'appt' ? 'appointment' : 'job';
+    var lines = [];
+    lines.push('Hi ' + (item.name || 'there') + ',');
+    lines.push('');
+    lines.push('Your ' + typeLabel + ' with ' + bizName + ' is confirmed:');
+    lines.push('');
+    lines.push('  ' + item.title);
+    lines.push('  ' + schedFmtDisplayDate(dt) + ' at ' + schedFmtDisplayTime(item.time));
+    if (item.location) lines.push('  Location: ' + item.location);
+    if (item.notes) { lines.push(''); lines.push('Notes: ' + item.notes); }
+    lines.push('');
+    lines.push('Need to reschedule or cancel? Just reply to this email.');
+    lines.push('');
+    lines.push('Thanks,');
+    lines.push(bizName);
+    return lines.join('\n');
+  }
+
+  function schedOpenConfirmation(item) {
+    var dt = schedParseDateTime(item);
+    var subject = (item.type === 'appt' ? 'Appointment' : 'Job') + ' Confirmation: ' + item.title + ' — ' + schedFmtDisplayDate(dt);
+    var body = schedPlainText(item);
+    var s = encodeURIComponent(subject);
+    var b = encodeURIComponent(body);
+    var to = item.email ? encodeURIComponent(item.email) : '';
+    var gmail = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + to + '&su=' + s + '&body=' + b;
+    var outlook = 'https://outlook.live.com/mail/0/deeplink/compose?to=' + (item.email || '') + '&subject=' + s + '&body=' + b;
+    var mailto = 'mailto:' + (item.email || '') + '?subject=' + s + '&body=' + b;
+    var html = '<!DOCTYPE html><html><head><title>Confirmation — ' + schedEsc(item.title) + '</title>' +
+      '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<style>body{margin:0;padding:30px 20px;background:#f5f5f3;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#333;}' +
+      '.send-bar{max-width:640px;margin:0 auto 20px;background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 2px 12px rgba(0,0,0,0.04);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}' +
+      '.send-bar-label{font-size:13px;color:#666;font-weight:600;}' +
+      '.send-bar a{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;border:1px solid #e8e8e5;color:#333;background:#fff;}' +
+      '.send-bar a:hover{background:#f3f3f1;}' +
+      '.send-bar a.primary{background:#534AB7;color:#fff;border-color:#534AB7;}' +
+      '.send-bar a.primary:hover{background:#3C3489;}' +
+      '@media print{.send-bar{display:none;}body{background:#fff;padding:0;}}' +
+      '</style></head><body>' +
+      '<div class="send-bar">' +
+        '<span class="send-bar-label">Send via:</span>' +
+        '<a class="primary" href="' + gmail + '" target="_blank">Gmail</a>' +
+        '<a href="' + outlook + '" target="_blank">Outlook</a>' +
+        '<a href="' + mailto + '">Default mail</a>' +
+        '<a href="javascript:window.print()" style="margin-left:auto;">Print / save PDF</a>' +
+      '</div>' +
+      schedConfirmationHTML(item) +
+      '</body></html>';
+    var win = window.open('', '_blank');
+    win.document.write(html);
+    win.document.close();
+  }
+
+  document.getElementById('sched-type-job').addEventListener('click', function() { schedShowForm('job'); });
+  document.getElementById('sched-type-appt').addEventListener('click', function() { schedShowForm('appt'); });
+  document.getElementById('sched-cancel-btn').addEventListener('click', schedHideForm);
+  document.getElementById('sched-save-btn').addEventListener('click', function() {
+    var date = document.getElementById('sched-date').value;
+    var time = document.getElementById('sched-time').value;
+    var title = document.getElementById('sched-title').value.trim();
+    var type = document.getElementById('sched-type').value || 'job';
+    if (!date || !time || !title) { alert('Date, time, and title are required.'); return; }
+    var id = document.getElementById('sched-id').value || ('s_' + Date.now());
+    var item = {
+      id: id,
+      type: type,
+      date: date,
+      time: time,
+      title: title,
+      name: document.getElementById('sched-name').value.trim(),
+      email: document.getElementById('sched-email').value.trim(),
+      phone: document.getElementById('sched-phone').value.trim(),
+      location: document.getElementById('sched-location').value.trim(),
+      notes: document.getElementById('sched-notes').value.trim(),
+      created: Date.now()
+    };
+    var idx = schedState.items.findIndex(function(it) { return it.id === id; });
+    if (idx >= 0) schedState.items[idx] = item; else schedState.items.push(item);
+    schedSave();
+    schedHideForm();
+    schedRenderAll();
   });
+
+  document.getElementById('sched-cal-prev').addEventListener('click', function() {
+    schedState.calDate = new Date(schedState.calDate.getFullYear(), schedState.calDate.getMonth() - 1, 1);
+    schedRenderCalendar();
+  });
+  document.getElementById('sched-cal-next').addEventListener('click', function() {
+    schedState.calDate = new Date(schedState.calDate.getFullYear(), schedState.calDate.getMonth() + 1, 1);
+    schedRenderCalendar();
+  });
+  document.getElementById('sched-cal-today').addEventListener('click', function() {
+    schedState.calDate = new Date();
+    schedRenderCalendar();
+  });
+  document.getElementById('sched-calendar').addEventListener('click', function(e) {
+    var cell = e.target.closest('.sched-cal-cell');
+    if (!cell) return;
+    var date = cell.getAttribute('data-date');
+    schedShowForm('job');
+    document.getElementById('sched-date').value = date;
+  });
+
+  document.getElementById('sched-filter').addEventListener('change', function(e) {
+    schedState.filter = e.target.value;
+    schedRenderList();
+  });
+  document.getElementById('sched-list').addEventListener('click', function(e) {
+    var btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    var id = btn.getAttribute('data-id');
+    var act = btn.getAttribute('data-act');
+    var item = schedState.items.find(function(it) { return it.id === id; });
+    if (!item) return;
+    if (act === 'edit') {
+      schedShowForm(item.type, item);
+    } else if (act === 'delete') {
+      if (confirm('Delete this scheduled item?')) {
+        schedState.items = schedState.items.filter(function(it) { return it.id !== id; });
+        schedSave();
+        schedRenderAll();
+      }
+    } else if (act === 'confirm') {
+      schedOpenConfirmation(item);
+    }
+  });
+
+  schedRenderAll();
 
   // Init — check Supabase session (works across any browser/device)
   (async function() {
