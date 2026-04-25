@@ -2688,10 +2688,6 @@
     var timeLine = schedFmtDisplayTime(item.time);
     var p = schedGetProfile();
     var typeLabel = item.type === 'appt' ? 'Appointment' : 'Job';
-    var brandHeader = '<div style="background:#534AB7;padding:18px 30px;text-align:center;color:#fff;">' +
-      '<div style="font-size:19px;font-weight:800;letter-spacing:-0.2px;line-height:1.2;">' + schedEsc(p.name) + '</div>' +
-      (p.address ? '<div style="font-size:11.5px;color:rgba(255,255,255,0.75);margin-top:3px;">' + schedEsc(p.address) + '</div>' : '') +
-    '</div>';
     var bannerHtml = schedState.bannerUrl
       ? '<div style="background:#fff;padding:30px 30px 10px;border-bottom:1px solid #f0f0ec;"><img src="' + schedEsc(schedState.bannerUrl) + '" alt="' + typeLabel + ' Confirmed" style="width:100%;max-width:540px;display:block;margin:0 auto;"></div>'
       : '<div style="background:linear-gradient(135deg,#3C3489 0%,#2d2580 100%);padding:48px 40px;text-align:center;color:#fff;">' +
@@ -2704,7 +2700,6 @@
     if (p.email) contactRows.push('<span style="white-space:nowrap;">✉️ ' + schedEsc(p.email) + '</span>');
     if (p.website) contactRows.push('<span style="white-space:nowrap;">🌐 ' + schedEsc(p.website) + '</span>');
     return '<div style="max-width:640px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.06);overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,sans-serif;">' +
-      brandHeader +
       bannerHtml +
       '<div style="padding:32px 36px;">' +
         '<div style="font-size:13px;color:#888;margin-bottom:6px;">Hi ' + schedEsc(item.name || 'there') + ',</div>' +
