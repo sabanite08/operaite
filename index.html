@@ -375,17 +375,13 @@
     .lp-step-desc { font-size:13.5px; color:#777; line-height:1.65; }
     /* Pricing */
     .lp-pricing-section { text-align:center; }
-    .lp-pricing-card { max-width:440px; margin:2.5rem auto 0; background:#fff; border-radius:20px; padding:2.5rem 2rem; text-align:left; box-shadow: 0 0 0 2px #534AB7, 0 30px 60px -15px rgba(83,74,183,0.4), 0 50px 100px -20px rgba(139,92,246,0.25); position:relative; }
-    .lp-pricing-card::before { content:''; position:absolute; inset:-3px; border-radius:22px; padding:3px; background:conic-gradient(from 0deg, #534AB7, #8B5CF6, #EC4899, #534AB7, #8B5CF6, #534AB7); -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite:exclude; animation: lpPriceSpin 8s linear infinite; opacity:0.65; pointer-events:none; }
-    .lp-pricing-card::after { content:''; position:absolute; inset:-15px; border-radius:35px; background:radial-gradient(closest-side, rgba(139,92,246,0.20), transparent 75%); z-index:-1; animation: lpPriceHalo 4s ease-in-out infinite alternate; pointer-events:none; }
-    @keyframes lpPriceSpin {
-      to { transform: rotate(1turn); }
-    }
+    .lp-pricing-card { max-width:440px; margin:2.5rem auto 0; background:#fff; border:2px solid #534AB7; border-radius:20px; padding:2.5rem 2rem; text-align:left; box-shadow: 0 30px 60px -15px rgba(83,74,183,0.35), 0 50px 100px -20px rgba(139,92,246,0.20); position:relative; }
+    .lp-pricing-card::after { content:''; position:absolute; inset:-15px; border-radius:35px; background:radial-gradient(closest-side, rgba(139,92,246,0.18), transparent 75%); z-index:-1; animation: lpPriceHalo 4s ease-in-out infinite alternate; pointer-events:none; }
     @keyframes lpPriceHalo {
       from { opacity: 0.6; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1.05); }
     }
-    @media (prefers-reduced-motion: reduce) { .lp-pricing-card::before, .lp-pricing-card::after { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .lp-pricing-card::after { animation: none; } }
     .lp-price-amt { font-size:54px; font-weight:800; background:linear-gradient(135deg,#534AB7 0%,#8B5CF6 60%,#EC4899 100%); -webkit-background-clip:text; background-clip:text; color:transparent; letter-spacing:-2px; line-height:1; }
     .lp-price-per { font-size:15px; color:#999; margin-bottom:1.75rem; }
     .lp-price-feats { margin-bottom:2rem; }
