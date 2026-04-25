@@ -917,6 +917,10 @@
       </button>
       <div class="nav-bottom">
         <div class="user-email" id="user-email-display"></div>
+        <button class="nav-item" id="nav-billing">
+          <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="1.3" stroke="currentColor" stroke-width="1.3"/><path d="M2 7h12" stroke="currentColor" stroke-width="1.3"/><path d="M5 10h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Manage subscription
+        </button>
         <button class="nav-item" id="nav-logout">
           <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Sign out
@@ -1983,6 +1987,36 @@
     await supabase.auth.signOut();
     currentUser = null;
     showScreen('landing');
+  });
+
+  document.getElementById('nav-billing').addEventListener('click', async function() {
+    if (!currentUser || !currentUser.customerId) {
+      alert('No subscription found on this account.');
+      return;
+    }
+    var btn = this;
+    var original = btn.innerHTML;
+    btn.innerHTML = '<span style="font-size:13px;padding:0 4px;">Loading…</span>';
+    btn.disabled = true;
+    try {
+      var res = await fetch('/api/portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customerId: currentUser.customerId })
+      });
+      var data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Could not open billing portal. Please try again.');
+        btn.innerHTML = original;
+        btn.disabled = false;
+      }
+    } catch(e) {
+      alert('Could not open billing portal. Please try again.');
+      btn.innerHTML = original;
+      btn.disabled = false;
+    }
   });
 
   ['dashboard', 'profile', 'reviews', 'audit', 'invoice', 'accounting', 'social', 'email', 'bio', 'jobs', 'proposal', 'complaint', 'faq'].forEach(function(id) {
