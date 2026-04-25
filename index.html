@@ -2668,28 +2668,47 @@
     });
   }
 
+  function schedGetProfile() {
+    var p = {};
+    try { p = JSON.parse(localStorage.getItem('operaite_profile') || '{}'); } catch(e) {}
+    var addrParts = [p.address, [p.city, p.state, p.zip].filter(Boolean).join(', ')].filter(Boolean);
+    return {
+      name: p.name || 'Operaite',
+      phone: p.phone || '',
+      email: p.email || '',
+      website: p.website || '',
+      address: addrParts.join(' · '),
+      addressBlock: [p.address, [p.city, p.state, p.zip].filter(Boolean).join(', ')].filter(Boolean).join('\n')
+    };
+  }
+
   function schedConfirmationHTML(item) {
     var dt = schedParseDateTime(item);
     var dateLine = schedFmtDisplayDate(dt);
     var timeLine = schedFmtDisplayTime(item.time);
-    var profile = JSON.parse(localStorage.getItem('operaite_profile') || '{}');
-    var bizName = profile.name || 'Operaite';
-    var bizPhone = profile.phone || '';
-    var bizEmail = profile.email || '';
+    var p = schedGetProfile();
     var typeLabel = item.type === 'appt' ? 'Appointment' : 'Job';
+    var brandHeader = '<div style="background:#534AB7;padding:18px 30px;text-align:center;color:#fff;">' +
+      '<div style="font-size:19px;font-weight:800;letter-spacing:-0.2px;line-height:1.2;">' + schedEsc(p.name) + '</div>' +
+      (p.address ? '<div style="font-size:11.5px;color:rgba(255,255,255,0.75);margin-top:3px;">' + schedEsc(p.address) + '</div>' : '') +
+    '</div>';
     var bannerHtml = schedState.bannerUrl
       ? '<div style="background:#fff;padding:30px 30px 10px;border-bottom:1px solid #f0f0ec;"><img src="' + schedEsc(schedState.bannerUrl) + '" alt="' + typeLabel + ' Confirmed" style="width:100%;max-width:540px;display:block;margin:0 auto;"></div>'
-      : '<div style="background:linear-gradient(135deg,#534AB7 0%,#3C3489 100%);padding:48px 40px;border-radius:14px 14px 0 0;text-align:center;color:#fff;">' +
+      : '<div style="background:linear-gradient(135deg,#3C3489 0%,#2d2580 100%);padding:48px 40px;text-align:center;color:#fff;">' +
           '<div style="font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;opacity:0.7;margin-bottom:10px;">' + typeLabel + ' Confirmed</div>' +
           '<div style="font-size:36px;font-weight:800;letter-spacing:-0.5px;line-height:1.2;">You\'re all set</div>' +
         '</div>';
     var notesBlock = item.notes ? '<div style="background:#fafaf9;border-radius:10px;padding:16px 18px;margin-top:14px;font-size:14px;color:#555;line-height:1.6;"><div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Notes</div>' + schedEsc(item.notes) + '</div>' : '';
-    var contactLine = [bizName, bizPhone, bizEmail].filter(Boolean).join(' · ');
+    var contactRows = [];
+    if (p.phone) contactRows.push('<span style="white-space:nowrap;">📞 ' + schedEsc(p.phone) + '</span>');
+    if (p.email) contactRows.push('<span style="white-space:nowrap;">✉️ ' + schedEsc(p.email) + '</span>');
+    if (p.website) contactRows.push('<span style="white-space:nowrap;">🌐 ' + schedEsc(p.website) + '</span>');
     return '<div style="max-width:640px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.06);overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,sans-serif;">' +
+      brandHeader +
       bannerHtml +
       '<div style="padding:32px 36px;">' +
         '<div style="font-size:13px;color:#888;margin-bottom:6px;">Hi ' + schedEsc(item.name || 'there') + ',</div>' +
-        '<div style="font-size:15px;color:#444;line-height:1.65;margin-bottom:24px;">Your <strong>' + typeLabel.toLowerCase() + '</strong> with ' + schedEsc(bizName) + ' is confirmed for the date and time below.</div>' +
+        '<div style="font-size:15px;color:#444;line-height:1.65;margin-bottom:24px;">Your <strong>' + typeLabel.toLowerCase() + '</strong> with <strong style="color:#1a1a1a;">' + schedEsc(p.name) + '</strong> is confirmed for the date and time below.</div>' +
         '<div style="border:1px solid #ececea;border-radius:12px;padding:20px 22px;margin-bottom:14px;">' +
           '<div style="font-size:11px;font-weight:700;color:#534AB7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">' + schedEsc(item.title) + '</div>' +
           '<div style="font-size:24px;font-weight:800;color:#1a1a1a;letter-spacing:-0.5px;line-height:1.2;margin-bottom:4px;">' + dateLine + '</div>' +
@@ -2697,9 +2716,10 @@
           (item.location ? '<div style="margin-top:14px;padding-top:14px;border-top:1px dashed #ececea;font-size:14px;color:#444;"><span style="color:#888;">📍</span> ' + schedEsc(item.location) + '</div>' : '') +
         '</div>' +
         notesBlock +
-        '<div style="margin-top:30px;padding-top:20px;border-top:1px solid #ececea;font-size:12.5px;color:#888;text-align:center;line-height:1.6;">' +
-          'Need to reschedule or cancel? Reply to this email or call us.<br>' +
-          (contactLine ? '<strong style="color:#555;">' + schedEsc(contactLine) + '</strong>' : '') +
+        '<div style="margin-top:30px;padding-top:20px;border-top:1px solid #ececea;text-align:center;">' +
+          '<div style="font-size:12.5px;color:#666;line-height:1.65;margin-bottom:10px;">Need to reschedule or cancel? Reply to this email or contact us:</div>' +
+          '<div style="font-size:12.5px;color:#444;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;">' + contactRows.join('') + '</div>' +
+          '<div style="margin-top:16px;font-size:11px;color:#aaa;">Sent by ' + schedEsc(p.name) + '</div>' +
         '</div>' +
       '</div>' +
     '</div>';
@@ -2707,29 +2727,36 @@
 
   function schedPlainText(item) {
     var dt = schedParseDateTime(item);
-    var profile = JSON.parse(localStorage.getItem('operaite_profile') || '{}');
-    var bizName = profile.name || 'Operaite';
+    var p = schedGetProfile();
     var typeLabel = item.type === 'appt' ? 'appointment' : 'job';
     var lines = [];
     lines.push('Hi ' + (item.name || 'there') + ',');
     lines.push('');
-    lines.push('Your ' + typeLabel + ' with ' + bizName + ' is confirmed:');
+    lines.push('Your ' + typeLabel + ' with ' + p.name + ' is confirmed:');
     lines.push('');
     lines.push('  ' + item.title);
     lines.push('  ' + schedFmtDisplayDate(dt) + ' at ' + schedFmtDisplayTime(item.time));
     if (item.location) lines.push('  Location: ' + item.location);
     if (item.notes) { lines.push(''); lines.push('Notes: ' + item.notes); }
     lines.push('');
-    lines.push('Need to reschedule or cancel? Just reply to this email.');
+    lines.push('Need to reschedule or cancel? Just reply to this email or contact us:');
+    if (p.phone) lines.push('  Phone: ' + p.phone);
+    if (p.email) lines.push('  Email: ' + p.email);
+    if (p.website) lines.push('  Web: ' + p.website);
     lines.push('');
     lines.push('Thanks,');
-    lines.push(bizName);
+    lines.push(p.name);
+    if (p.addressBlock) {
+      var addrLines = p.addressBlock.split('\n');
+      addrLines.forEach(function(l) { lines.push(l); });
+    }
     return lines.join('\n');
   }
 
   function schedOpenConfirmation(item) {
     var dt = schedParseDateTime(item);
-    var subject = (item.type === 'appt' ? 'Appointment' : 'Job') + ' Confirmation: ' + item.title + ' — ' + schedFmtDisplayDate(dt);
+    var p = schedGetProfile();
+    var subject = p.name + ' — ' + (item.type === 'appt' ? 'Appointment' : 'Job') + ' Confirmation: ' + item.title + ' · ' + schedFmtDisplayDate(dt);
     var body = schedPlainText(item);
     var s = encodeURIComponent(subject);
     var b = encodeURIComponent(body);
