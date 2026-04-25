@@ -17,10 +17,11 @@ export default async function handler(req, res) {
       invoice_settings: { default_payment_method: paymentMethodId }
     });
 
-    // Create subscription — replace PRICE_ID with your Stripe price ID
+    // Create subscription with 7-day free trial
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
       items: [{ price: process.env.STRIPE_PRICE_ID }],
+      trial_period_days: 7,
       expand: ['latest_invoice.payment_intent']
     });
 

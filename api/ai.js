@@ -11,8 +11,9 @@ export default async function handler(req, res) {
 
   if (customerId !== 'admin') {
     try {
-      const subscriptions = await stripe.subscriptions.list({ customer: customerId, status: 'active', limit: 1 });
-      if (subscriptions.data.length === 0) {
+      const subscriptions = await stripe.subscriptions.list({ customer: customerId, status: 'all', limit: 5 });
+      const valid = subscriptions.data.find(s => s.status === 'active' || s.status === 'trialing');
+      if (!valid) {
         return res.status(403).json({ error: 'No active subscription found.' });
       }
     } catch (e) {
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1000,
         messages: [{ role: 'user', content: prompt }]
       })

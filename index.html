@@ -319,6 +319,32 @@
     .lp-price-btn { width:100%; padding:14px; background:#534AB7; color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit; }
     .lp-price-btn:hover { background:#3C3489; }
     .lp-price-note { font-size:12px; color:#bbb; text-align:center; margin-top:0.75rem; }
+    .lp-trial-ribbon { display:inline-block; background:#fff; color:#534AB7; border:1.5px solid #534AB7; border-radius:999px; padding:6px 14px; font-size:12px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; margin-bottom:1.25rem; }
+    /* Pricing comparison */
+    .lp-compare { max-width:540px; margin:0 auto 1.75rem; background:#fafaf9; border:1px solid #ececea; border-radius:16px; padding:1.25rem 1.5rem; text-align:left; }
+    .lp-compare-headline { font-size:13px; font-weight:700; color:#1a1a1a; margin-bottom:0.85rem; text-align:center; }
+    .lp-compare-headline strong { color:#534AB7; }
+    .lp-compare-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:13px; color:#666; border-bottom:1px dashed #ececea; }
+    .lp-compare-row:last-of-type { border-bottom:none; }
+    .lp-compare-row .lp-compare-name { color:#666; }
+    .lp-compare-row .lp-compare-price { color:#aaa; text-decoration:line-through; font-variant-numeric:tabular-nums; }
+    .lp-compare-total { display:flex; justify-content:space-between; align-items:center; padding-top:10px; margin-top:6px; border-top:1.5px solid #ececea; font-size:13px; font-weight:700; color:#1a1a1a; }
+    .lp-compare-total .lp-compare-total-amt { color:#aaa; text-decoration:line-through; font-variant-numeric:tabular-nums; }
+    .lp-compare-savings { margin-top:0.85rem; padding:8px 12px; background:#EEEDFE; border-radius:8px; text-align:center; font-size:12.5px; font-weight:700; color:#534AB7; }
+    /* Trust badges */
+    .lp-trust { max-width:760px; margin:1.5rem auto 0; display:flex; flex-wrap:wrap; justify-content:center; gap:1rem 2rem; }
+    .lp-trust-item { display:flex; align-items:center; gap:7px; font-size:12.5px; color:#888; }
+    .lp-trust-item svg { flex-shrink:0; }
+    /* FAQ */
+    .lp-faq-section { padding:80px 2rem; background:#fafaf9; border-top:1px solid #ececea; border-bottom:1px solid #ececea; }
+    .lp-faq-list { max-width:740px; margin:2.5rem auto 0; }
+    .lp-faq details { background:#fff; border:1px solid #ececea; border-radius:12px; margin-bottom:0.75rem; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s; }
+    .lp-faq details[open] { border-color:#c5c2ed; box-shadow:0 4px 18px rgba(83,74,183,0.08); }
+    .lp-faq summary { padding:1.1rem 1.4rem; cursor:pointer; font-size:15px; font-weight:600; color:#1a1a1a; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:1rem; user-select:none; }
+    .lp-faq summary::-webkit-details-marker { display:none; }
+    .lp-faq summary::after { content:'+'; font-size:22px; font-weight:400; color:#534AB7; line-height:1; transition:transform 0.2s; flex-shrink:0; }
+    .lp-faq details[open] summary::after { content:'−'; transform:rotate(0deg); }
+    .lp-faq-answer { padding:0 1.4rem 1.25rem; font-size:14px; color:#666; line-height:1.65; }
     /* CTA Banner */
     .lp-cta-banner { background:linear-gradient(135deg,#534AB7 0%,#2d2580 100%); padding:80px 2rem; text-align:center; }
     .lp-cta-banner h2 { font-size:40px; font-weight:800; color:#fff; letter-spacing:-1px; margin-bottom:0.75rem; }
@@ -351,6 +377,8 @@
       .lp-steps::before { display:none; }
       .lp-mock-sidebar { display:none; }
       .lp-cta-banner h2 { font-size:28px; }
+      .lp-trust { gap:0.65rem 1.25rem; }
+      .lp-faq-section { padding:60px 1.25rem; }
     }
   </style>
 </head>
@@ -365,21 +393,21 @@
       </div>
       <div class="lp-nav-links">
         <button class="lp-nav-link" id="lp-nav-signin">Sign in</button>
-        <button class="lp-nav-btn" id="lp-nav-cta">Get started</button>
+        <button class="lp-nav-btn" id="lp-nav-cta">Start free trial</button>
       </div>
     </nav>
 
     <!-- Hero -->
     <section class="lp-hero">
       <div class="lp-hero-inner">
-        <div class="lp-eyebrow">✦ AI-powered for small business</div>
+        <div class="lp-eyebrow">✦ 7 days free · then $29/mo</div>
         <h1 class="lp-h1">Run your whole business<br>from <em>one place.</em></h1>
         <p class="lp-hero-sub">Invoices, review responses, marketing audits, social content — all powered by AI. Built for the owner who wears every hat.</p>
         <div class="lp-hero-actions">
-          <button class="lp-btn-lg primary" id="lp-hero-cta">Get started — $29/mo</button>
+          <button class="lp-btn-lg primary" id="lp-hero-cta">Start 7-day free trial</button>
           <button class="lp-btn-lg ghost" id="lp-hero-signin">Sign in</button>
         </div>
-        <div class="lp-hero-note">No contracts. Cancel anytime.</div>
+        <div class="lp-hero-note">Free for 7 days, then $29/mo. Cancel anytime — no charge.</div>
       </div>
       <!-- App Mockup -->
       <div class="lp-mockup-outer">
@@ -495,7 +523,7 @@
           <div class="lp-step">
             <div class="lp-step-num">1</div>
             <div class="lp-step-title">Create your account</div>
-            <div class="lp-step-desc">Sign up with your email and subscribe for $29/mo. Takes about 30 seconds.</div>
+            <div class="lp-step-desc">Sign up with your email and start a free 7-day trial. Takes about 30 seconds.</div>
           </div>
           <div class="lp-step">
             <div class="lp-step-num">2</div>
@@ -515,11 +543,24 @@
     <section class="lp-section lp-pricing-section" id="lp-pricing">
       <div class="lp-section-inner" style="text-align:center;">
         <div class="lp-section-tag">Pricing</div>
-        <h2 class="lp-section-h2">Simple, honest pricing</h2>
-        <p class="lp-section-p c">One plan. Every tool. No surprises.</p>
+        <h2 class="lp-section-h2">One plan. Every tool. <em style="font-style:normal;color:#534AB7;">7 days free.</em></h2>
+        <p class="lp-section-p c">Replaces a stack of separate subscriptions — for less than the price of one of them.</p>
+
+        <div class="lp-compare">
+          <div class="lp-compare-headline">What you'd pay for these tools <strong>separately</strong>:</div>
+          <div class="lp-compare-row"><span class="lp-compare-name">Accounting software (e.g. QuickBooks)</span><span class="lp-compare-price">~$30/mo</span></div>
+          <div class="lp-compare-row"><span class="lp-compare-name">AI writing tool (e.g. Jasper)</span><span class="lp-compare-price">~$49/mo</span></div>
+          <div class="lp-compare-row"><span class="lp-compare-name">Social media scheduler</span><span class="lp-compare-price">~$15/mo</span></div>
+          <div class="lp-compare-row"><span class="lp-compare-name">Review management tool</span><span class="lp-compare-price">~$40/mo</span></div>
+          <div class="lp-compare-row"><span class="lp-compare-name">Invoicing software</span><span class="lp-compare-price">~$15/mo</span></div>
+          <div class="lp-compare-total"><span>Total separately</span><span class="lp-compare-total-amt">~$149/mo</span></div>
+          <div class="lp-compare-savings">Operaite gives you all of it for $29/mo — save ~$120/mo</div>
+        </div>
+
         <div class="lp-pricing-card">
+          <div class="lp-trial-ribbon">7 days free · then $29/mo</div>
           <div class="lp-price-amt">$29</div>
-          <div class="lp-price-per">per month — cancel anytime</div>
+          <div class="lp-price-per">per month after trial — cancel anytime</div>
           <div class="lp-price-feats">
             <div class="lp-price-feat">AI Review Manager — reply to every review</div>
             <div class="lp-price-feat">Invoice &amp; Proposal Generator</div>
@@ -530,8 +571,70 @@
             <div class="lp-price-feat">Unlimited AI requests</div>
             <div class="lp-price-feat">Business Profile auto-fill across all tools</div>
           </div>
-          <button class="lp-price-btn" id="lp-pricing-cta">Get started for $29/mo</button>
-          <div class="lp-price-note">No setup fees. No contracts. Cancel from your account anytime.</div>
+          <button class="lp-price-btn" id="lp-pricing-cta">Start 7-day free trial</button>
+          <div class="lp-price-note">Card required to start your trial. Cancel anytime before day 7 to avoid being charged.</div>
+        </div>
+
+        <div class="lp-trust">
+          <div class="lp-trust-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Powered by Anthropic Claude
+          </div>
+          <div class="lp-trust-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            Payments secured by Stripe
+          </div>
+          <div class="lp-trust-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            SSL encrypted
+          </div>
+          <div class="lp-trust-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Cancel anytime
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="lp-faq-section">
+      <div class="lp-section-inner" style="text-align:center;">
+        <div class="lp-section-tag">Questions</div>
+        <h2 class="lp-section-h2">Frequently asked</h2>
+        <p class="lp-section-p c">Everything you need to know before starting your trial.</p>
+        <div class="lp-faq-list lp-faq">
+          <details>
+            <summary>Do I need a credit card to start the free trial?</summary>
+            <div class="lp-faq-answer">Yes — we ask for your card upfront so your trial converts seamlessly into a paid subscription. You won't be charged anything for 7 days, and you can cancel from your account at any time before then to avoid the $29 charge.</div>
+          </details>
+          <details>
+            <summary>What happens after my 7-day trial ends?</summary>
+            <div class="lp-faq-answer">If you don't cancel before day 7, your card is charged $29 and your subscription continues month-to-month. We don't lock you in — you can cancel anytime, even after the trial, and you'll keep access until the end of the current billing period.</div>
+          </details>
+          <details>
+            <summary>Which AI does Operaite use?</summary>
+            <div class="lp-faq-answer">We use Anthropic's Claude — the same models used by leading AI products. You get access to high-quality, business-aware AI for invoices, review responses, marketing audits, social posts, and more, all included in the $29/mo plan with no per-request charges.</div>
+          </details>
+          <details>
+            <summary>Is my business data safe?</summary>
+            <div class="lp-faq-answer">Yes. All data is transmitted over SSL, stored securely via Supabase, and payments are handled by Stripe — meaning we never see or store your card details. We don't sell your data, and your business information is only used to power your tools.</div>
+          </details>
+          <details>
+            <summary>Can I use Operaite for more than one business?</summary>
+            <div class="lp-faq-answer">Currently, each subscription is tied to one business profile. If you operate multiple businesses, you can update your profile when switching contexts, or contact us about multi-business support — it's on the roadmap.</div>
+          </details>
+          <details>
+            <summary>Who owns the content I generate?</summary>
+            <div class="lp-faq-answer">You do. Every invoice, post, reply, and proposal you generate belongs to you and your business. Operaite is just the tool — the output is yours to use however you'd like, with no licensing strings attached.</div>
+          </details>
+          <details>
+            <summary>Do I need to be technical to use it?</summary>
+            <div class="lp-faq-answer">Not at all. Operaite is built for owner-operators, not engineers. If you can fill in a form and click a button, you can run a marketing audit, generate an invoice, or reply to every review in a few seconds.</div>
+          </details>
+          <details>
+            <summary>How do I cancel?</summary>
+            <div class="lp-faq-answer">From your account inside the app — one click, no questions asked, no email loops. You can cancel during the trial to avoid being charged, or anytime after.</div>
+          </details>
         </div>
       </div>
     </section>
@@ -541,7 +644,7 @@
       <div class="lp-wrap">
         <h2>Ready to simplify your business?</h2>
         <p>Join small business owners who stopped juggling tools and started getting things done.</p>
-        <button class="lp-btn-white" id="lp-bottom-cta">Start for $29/mo — no contracts</button>
+        <button class="lp-btn-white" id="lp-bottom-cta">Start your 7-day free trial</button>
       </div>
     </div>
 
@@ -674,7 +777,7 @@
         <input class="auth-input" type="text" id="signup-name" placeholder="Your name">
         <input class="auth-input" type="email" id="signup-email" placeholder="Email address">
         <input class="auth-input" type="password" id="signup-password" placeholder="Password (min 6 characters)">
-        <button class="auth-btn" id="signup-btn">Create account &amp; subscribe — $29/mo</button>
+        <button class="auth-btn" id="signup-btn">Create account &amp; start free trial</button>
         <div class="auth-link">Already have an account? <a id="goto-login">Sign in</a></div>
       </div>
     </div>
@@ -735,20 +838,21 @@
         <span class="auth-logo-text">Opera<span>ite</span></span>
       </div>
       <div class="pricing-card">
-        <div class="pricing-amount">$29</div>
-        <div class="pricing-period">per month — cancel anytime</div>
+        <div style="text-align:center;font-size:11px;font-weight:700;color:#534AB7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">7 days free</div>
+        <div class="pricing-amount">$0</div>
+        <div class="pricing-period">for 7 days — then $29/mo</div>
         <div class="pricing-features">
           <div class="pricing-feature">AI Review Manager</div>
           <div class="pricing-feature">Marketing Audit Tool</div>
           <div class="pricing-feature">Invoice Generator</div>
           <div class="pricing-feature">Unlimited AI requests</div>
-          <div class="pricing-feature">No setup required</div>
+          <div class="pricing-feature">Cancel before day 7 — no charge</div>
         </div>
       </div>
       <div class="auth-error" id="payment-error"></div>
       <div id="card-element" style="padding:10px 14px;border:1px solid #e0e0db;border-radius:8px;margin-bottom:14px;min-height:44px;"></div>
-      <button class="auth-btn" id="pay-btn">Subscribe — $29/month</button>
-      <div style="text-align:center;font-size:12px;color:#aaa;margin-top:0.75rem;">Secured by Stripe. Cancel anytime.</div>
+      <button class="auth-btn" id="pay-btn">Start 7-day free trial</button>
+      <div style="text-align:center;font-size:12px;color:#aaa;margin-top:0.75rem;">Card required to start your trial. Secured by Stripe. Cancel anytime.</div>
     </div>
   </div>
 
@@ -1848,7 +1952,7 @@
       var result = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
       if (result.error) {
         showError('payment-error', result.error.message);
-        btn.textContent = 'Subscribe — $29/month';
+        btn.textContent = 'Start 7-day free trial';
         btn.disabled = false;
         return;
       }
@@ -1860,7 +1964,7 @@
       var data = await res.json();
       if (data.error) {
         showError('payment-error', data.error);
-        btn.textContent = 'Subscribe — $29/month';
+        btn.textContent = 'Start 7-day free trial';
         btn.disabled = false;
         return;
       }
