@@ -1,0 +1,19 @@
+{
+  "name": "Operaite — AI Tools for Small Business Owners",
+  "short_name": "Operaite",
+  "description": "AI-powered command center for small business owners. Invoices, reviews, marketing, social, accounting — all in one place.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e1b3a",
+  "theme_color": "#534AB7",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo_option1.png",
+      "sizes": "400x400",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "finance"]
+}
