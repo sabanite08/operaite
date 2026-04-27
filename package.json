@@ -4,6 +4,7 @@
   "description": "Operaite - Small Business Command Center",
   "type": "module",
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "stripe": "^14.0.0"
   }
 }
