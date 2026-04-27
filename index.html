@@ -368,6 +368,14 @@
     .lp-feat-preview { overflow:hidden; max-height:0; opacity:0; transition:max-height 0.4s ease, opacity 0.3s ease; margin-top:1.5rem; }
     .lp-feat-preview.open { max-height:500px; opacity:1; }
     .lp-feat-preview-inner { background:#fff; border:1px solid #e0ddf5; border-radius:16px; padding:2rem; display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; }
+    /* Mobile: stack the demo columns and bump max-height since stacked content is taller */
+    @media (max-width:700px) {
+      .lp-feat-preview.open { max-height:1800px; }
+      .lp-feat-preview-inner { grid-template-columns:1fr; gap:1rem; padding:1.25rem; }
+      .lp-feat-preview-inner [style*="font-size:32px"] { font-size:26px !important; }
+      .lp-feat-preview-inner [style*="grid-template-columns:1fr 1fr"] { grid-template-columns:1fr !important; }
+      .lp-prev-output { padding:0.85rem 1rem; }
+    }
     .lp-prev-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#534AB7; margin-bottom:0.6rem; }
     .lp-prev-input { width:100%; box-sizing:border-box; border:1px solid #e0ddf5; border-radius:8px; padding:0.6rem 0.8rem; font-size:13px; color:#333; background:#f9f9fc; resize:none; font-family:inherit; }
     .lp-prev-btn { display:inline-block; background:#534AB7; color:#fff; border-radius:8px; padding:0.5rem 1.1rem; font-size:13px; font-weight:600; margin-top:0.75rem; }
