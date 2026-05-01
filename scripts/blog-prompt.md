@@ -25,14 +25,29 @@ STEP 3 — POST REQUIREMENTS
 STEP 4 — SITEMAP
 Add the new URL to sitemap.xml with today's date as <lastmod> in YYYY-MM-DD format.
 
-STEP 5 — SHIP
+STEP 5 — BLOG INDEX
+Update blog/index.html to surface the new post on the listing page.
+- Open blog/index.html and locate the markers `<!-- POST_LIST_START -->` and `<!-- POST_LIST_END -->`.
+- Insert a new entry IMMEDIATELY AFTER `<!-- POST_LIST_START -->` (newest at top) using this exact format, matching the canonical /blog/<slug>/ URL pattern (NOT a flat .html file):
+
+  <a class="blog-post" href="/blog/<slug>/">
+    <div class="blog-post-date">Month D, YYYY</div>
+    <div class="blog-post-title">Post title (matches the article h1)</div>
+    <div class="blog-post-excerpt">One-sentence excerpt — reuse the meta description verbatim.</div>
+  </a>
+
+- Date format: full month name, no leading zero on day, four-digit year (e.g., "April 30, 2026"). Use today's date.
+- If `<div class="blog-empty">No posts yet. Check back soon.</div>` is still inside the markers, remove it now (this run ships the first listed post).
+- Do NOT touch the surrounding nav/hero/footer or the CSS in blog/index.html — only edit the content between the two markers.
+
+STEP 6 — SHIP
 - Commit message: "blog: <topic>"
-- Run `git status` before commit — only the new blog/<slug>/ directory and sitemap.xml should be staged.
-- Push to main with `git push origin main`. Wait ~60s and verify deploy: GET https://operaite.net/blog/<slug>/ and confirm 200 + post title in the HTML.
+- Run `git status` before commit — only the new blog/<slug>/ directory, sitemap.xml, and blog/index.html should be staged.
+- Push to main with `git push origin main`. Wait ~60s and verify deploy: GET https://operaite.net/blog/<slug>/ and confirm 200 + post title in the HTML. Also GET https://operaite.net/blog/ and confirm the new entry appears at the top of the list.
 - If a pre-commit hook fails, fix the cause — never bypass with --no-verify.
 - Never amend or force-push — always create a new commit.
 
-STEP 6 — SUMMARY
+STEP 7 — SUMMARY
 End with: post title, live URL, word count, topic chosen, and which Operaite feature it points to.
 
 GUARDRAIL
