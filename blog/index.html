@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blog â€” Operaite | Tactical advice for small business owners</title>
+<meta name="description" content="Practical, tactical advice for small business owners â€” operations, hiring, pricing, marketing, and automation. From the Operaite team." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://operaite.net/blog/" />
+<link rel="manifest" href="/manifest.json" />
+<link rel="icon" type="image/png" href="/logo_option1.png" />
+<link rel="apple-touch-icon" href="/logo_option1.png" />
+<meta name="theme-color" content="#534AB7" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://operaite.net/blog/" />
+<meta property="og:site_name" content="Operaite" />
+<meta property="og:title" content="Blog â€” Operaite" />
+<meta property="og:description" content="Practical, tactical advice for small business owners." />
+<meta property="og:image" content="https://operaite.net/og-image.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Blog â€” Operaite" />
+<meta name="twitter:description" content="Practical, tactical advice for small business owners." />
+<meta name="twitter:image" content="https://operaite.net/og-image.png" />
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f8; color: #1a1a1a; min-height: 100vh; display: flex; flex-direction: column; }
+
+  .blog-nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(232,232,229,0.7); height: 62px; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; }
+  .blog-nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: inherit; }
+  .blog-nav-brand-icon { width: 40px; height: 40px; background: #534AB7; border-radius: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .blog-nav-brand-name { font-size: 22px; font-weight: 700; color: #1a1a1a; }
+  .blog-nav-brand-name span { color: #534AB7; }
+  .blog-nav-links { display: flex; align-items: center; gap: 8px; }
+  .blog-nav-link { font-family: inherit; font-size: 14px; color: #555; padding: 8px 14px; border-radius: 8px; text-decoration: none; }
+  .blog-nav-link:hover { background: #f3f3f1; color: #1a1a1a; }
+  .blog-nav-link.active { color: #534AB7; font-weight: 600; }
+  .blog-nav-btn { background: #534AB7; font-family: inherit; font-size: 14px; font-weight: 600; color: #fff; padding: 9px 20px; border-radius: 9px; text-decoration: none; }
+  .blog-nav-btn:hover { background: #3C3489; }
+
+  .blog-hero { padding: 4rem 2rem 2rem; text-align: center; max-width: 900px; margin: 0 auto; }
+  .blog-hero-eyebrow { display: inline-block; font-size: 12px; font-weight: 700; color: #534AB7; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 1rem; }
+  .blog-hero h1 { font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 1rem; }
+  .blog-hero p { font-size: 17px; color: #666; line-height: 1.6; max-width: 560px; margin: 0 auto; }
+
+  .blog-list { max-width: 900px; margin: 3rem auto 6rem; padding: 0 2rem; flex: 1; width: 100%; }
+  .blog-post { display: block; padding: 1.75rem 0; border-bottom: 1px solid #e8e8e5; text-decoration: none; color: inherit; transition: padding-left 0.15s; }
+  .blog-post:hover { padding-left: 8px; }
+  .blog-post:last-child { border-bottom: none; }
+  .blog-post-date { font-size: 12.5px; color: #888; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+  .blog-post-title { font-size: 24px; font-weight: 700; color: #1a1a1a; margin-bottom: 0.6rem; line-height: 1.25; letter-spacing: -0.4px; }
+  .blog-post-excerpt { font-size: 15px; color: #666; line-height: 1.6; }
+
+  .blog-empty { text-align: center; padding: 4rem 2rem; color: #888; font-size: 15px; }
+
+  .blog-footer { background: #1a1a1a; padding: 2.25rem 2rem; margin-top: auto; }
+  .blog-footer-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; }
+  .blog-footer-brand { display: flex; align-items: center; gap: 8px; }
+  .blog-footer-brand-icon { width: 26px; height: 26px; background: #534AB7; border-radius: 7px; }
+  .blog-footer-brand-name { font-size: 16px; font-weight: 700; color: #fff; }
+  .blog-footer-brand-name span { color: #7b74d4; }
+  .blog-footer-links { display: flex; gap: 1.75rem; }
+  .blog-footer-links a { font-size: 13px; color: #666; text-decoration: none; }
+  .blog-footer-links a:hover { color: #fff; }
+  .blog-footer-copy { font-size: 12px; color: #555; }
+
+  @media (max-width: 700px) {
+    .blog-nav { padding: 0 1.25rem; }
+    .blog-hero { padding: 2.5rem 1.5rem 1.5rem; }
+    .blog-hero h1 { font-size: 32px; letter-spacing: -0.5px; }
+    .blog-list { padding: 0 1.5rem; margin-bottom: 4rem; }
+    .blog-post-title { font-size: 20px; }
+    .blog-footer-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="blog-nav">
+  <a class="blog-nav-brand" href="/">
+    <div class="blog-nav-brand-icon">
+      <svg width="22" height="22" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <span class="blog-nav-brand-name">Opera<span>ite</span></span>
+  </a>
+  <div class="blog-nav-links">
+    <a class="blog-nav-link active" href="/blog/">Blog</a>
+    <a class="blog-nav-link" href="/">Home</a>
+    <a class="blog-nav-btn" href="/#lp-pricing">Start free trial</a>
+  </div>
+</nav>
+
+<section class="blog-hero">
+  <div class="blog-hero-eyebrow">From Operaite</div>
+  <h1>Tactical advice for small business owners</h1>
+  <p>Operations, hiring, pricing, marketing, and automation â€” practical playbooks you can put to work today. New posts every weekday.</p>
+</section>
+
+<!--
+  POST FORMAT (insert new posts at the top of the list, just below POST_LIST_START):
+
+  <a class="blog-post" href="/blog/YYYY-MM-DD-slug.html">
+    <div class="blog-post-date">Month D, YYYY</div>
+    <div class="blog-post-title">Post title here</div>
+    <div class="blog-post-excerpt">One-sentence summary, matching the post meta description.</div>
+  </a>
+
+  When you add the first real post, remove the .blog-empty div below.
+-->
+<section class="blog-list" id="blog-posts">
+  <!-- POST_LIST_START -->
+  <div class="blog-empty">No posts yet. Check back soon.</div>
+  <!-- POST_LIST_END -->
+</section>
+
+<footer class="blog-footer">
+  <div class="blog-footer-inner">
+    <div class="blog-footer-brand">
+      <div class="blog-footer-brand-icon"></div>
+      <span class="blog-footer-brand-name">Opera<span>ite</span></span>
+    </div>
+    <div class="blog-footer-links">
+      <a href="/">Home</a>
+      <a href="/blog/">Blog</a>
+      <a href="/#lp-pricing">Pricing</a>
+    </div>
+    <div class="blog-footer-copy">(c) 2026 Operaite. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
