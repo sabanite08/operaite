@@ -685,6 +685,108 @@ body {
   .tool-footer-inner { flex-direction: column; align-items: flex-start; }
 }
 
+/* ===== AI assist UI ===== */
+.tool-section-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 0.75rem; }
+.tool-section-row .tool-form-h3 { margin-bottom: 0; }
+.tool-ai-mini-btn {
+  background: #f4f3fb; color: #534AB7; border: 1px solid #d4d0f5;
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  padding: 5px 11px; border-radius: 6px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 5px;
+  white-space: nowrap;
+}
+.tool-ai-mini-btn:hover { background: #ede9fc; border-color: #534AB7; }
+.tool-ai-mini-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.tool-ai-mini-btn .ai-spark { font-size: 13px; line-height: 1; }
+.tool-ai-mini-btn.loading .ai-spark { animation: aiSpin 1s linear infinite; display: inline-block; }
+@keyframes aiSpin { to { transform: rotate(360deg); } }
+
+.tool-item-desc-wrap { position: relative; min-width: 0; }
+.tool-item-desc-wrap .tool-input { padding-right: 32px; }
+.tool-item-polish-btn {
+  position: absolute; right: 5px; top: 50%; transform: translateY(-50%);
+  width: 24px; height: 24px;
+  background: none; border: none; cursor: pointer;
+  border-radius: 5px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: #534AB7;
+  opacity: 0.55; transition: opacity 0.12s, background 0.12s;
+}
+.tool-item-polish-btn:hover { opacity: 1; background: #f0effd; }
+.tool-item-polish-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+.tool-item-polish-btn.loading { opacity: 1; }
+.tool-item-polish-btn.loading .ai-spark { display: inline-block; animation: aiSpin 1s linear infinite; }
+
+.tool-btn-secondary {
+  background: #fff; color: #534AB7;
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  border: 1px solid #d4d0f5; border-radius: 9px;
+  padding: 11px 16px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.tool-btn-secondary:hover { background: #f4f3fb; border-color: #534AB7; }
+.tool-btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ===== Modal (reminder email) ===== */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(15, 15, 25, 0.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.25rem;
+  z-index: 1000;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.modal-backdrop.show { opacity: 1; pointer-events: auto; }
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  max-width: 560px; width: 100%;
+  max-height: 90vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 30px 60px -10px rgba(15, 15, 25, 0.4);
+  transform: translateY(8px) scale(0.99);
+  transition: transform 0.2s;
+}
+.modal-backdrop.show .modal { transform: translateY(0) scale(1); }
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid #ececea;
+}
+.modal-title { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+.modal-close {
+  background: none; border: none; cursor: pointer;
+  font-size: 24px; line-height: 1; color: #888;
+  padding: 4px 8px; border-radius: 6px;
+}
+.modal-close:hover { background: #f3f3f1; color: #1a1a1a; }
+.modal-body {
+  padding: 1.25rem 1.4rem 1.4rem;
+  overflow-y: auto;
+}
+.modal-body p { font-size: 13.5px; color: #666; line-height: 1.55; margin-bottom: 1rem; }
+.modal-body .tool-label { margin-top: 0; }
+.modal-output { display: none; margin-top: 1rem; }
+.modal-output.show { display: block; }
+.modal-output-text {
+  width: 100%; min-height: 160px;
+  font-family: inherit; font-size: 13.5px; line-height: 1.6;
+  padding: 12px 14px;
+  border: 1px solid #e0e0db; border-radius: 8px;
+  background: #fafaf9; color: #1a1a1a;
+  resize: vertical;
+}
+.modal-actions { display: flex; gap: 8px; margin-top: 0.75rem; flex-wrap: wrap; }
+.modal-actions .tool-btn-primary, .modal-actions .tool-btn-ghost { flex: 1; min-width: 120px; }
+
+/* AI status footnote */
+.ai-status-note {
+  font-size: 11.5px; color: #999; line-height: 1.5;
+  margin-top: 0.6rem;
+}
+.ai-status-note strong { color: #534AB7; }
+
 /* Toast */
 .toast {
   position: fixed; bottom: 24px; left: 50%;
@@ -889,10 +991,18 @@ body {
 
       <!-- Notes -->
       <div class="tool-form-section">
-        <h2 class="tool-form-h3">7. Notes &amp; payment terms</h2>
+        <div class="tool-section-row">
+          <h2 class="tool-form-h3">7. Notes &amp; payment terms</h2>
+          <button type="button" class="tool-ai-mini-btn" id="ai-terms-btn" data-ai-btn>
+            <span class="ai-spark">✨</span> Generate payment terms
+          </button>
+        </div>
         <div class="tool-field">
           <label class="tool-label" for="inv-notes">Notes (optional)</label>
           <textarea class="tool-textarea" id="inv-notes" rows="3" placeholder="Thanks for your business! Payment due within 30 days. Late payments are subject to a 1.5% monthly fee."></textarea>
+        </div>
+        <div class="ai-status-note">
+          AI assists are <strong>free, 10 per day per visitor</strong>. <a href="/#signup" style="color:#534AB7;">Sign up free</a> for unlimited.
         </div>
       </div>
 
@@ -906,6 +1016,9 @@ body {
           <button type="button" class="tool-btn-primary" id="download-btn">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Download PDF
+          </button>
+          <button type="button" class="tool-btn-secondary" id="reminder-btn" data-ai-btn>
+            <span class="ai-spark">✉️</span> Draft reminder
           </button>
           <button type="button" class="tool-btn-ghost" id="reset-btn">Reset</button>
         </div>
@@ -1158,6 +1271,34 @@ body {
 
 <div class="toast" id="toast"></div>
 
+<!-- Reminder email modal -->
+<div class="modal-backdrop" id="reminder-modal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-labelledby="reminder-modal-title" aria-modal="true">
+    <div class="modal-header">
+      <div class="modal-title" id="reminder-modal-title">Draft a payment reminder</div>
+      <button class="modal-close" id="reminder-close" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <p>Generate a friendly, professional payment reminder you can copy into an email. Uses the client name, invoice number, and total from your form.</p>
+      <div class="tool-field">
+        <label class="tool-label" for="reminder-days">How many days overdue?</label>
+        <input type="number" class="tool-input" id="reminder-days" min="0" max="365" value="14" />
+      </div>
+      <button type="button" class="tool-btn-primary" id="reminder-generate" style="width:100%;" data-ai-btn>
+        <span class="ai-spark">✨</span> Generate reminder
+      </button>
+      <div class="modal-output" id="reminder-output">
+        <label class="tool-label" style="margin-top:1rem;">Reminder draft</label>
+        <textarea class="modal-output-text" id="reminder-text" readonly></textarea>
+        <div class="modal-actions">
+          <button type="button" class="tool-btn-primary" id="reminder-copy">Copy to clipboard</button>
+          <button type="button" class="tool-btn-ghost" id="reminder-regenerate">Regenerate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- pdfmake from CDN for vector PDF generation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.js"></script>
@@ -1173,6 +1314,7 @@ body {
 
   // ===== State =====
   var STORAGE_KEY = 'operaite_invoice_v1';
+  var aiState = { remaining: -1, blocked: false };
   var state = {
     template: 'modern',
     business: { name: '', email: '', phone: '', address: '', logo: null },
@@ -1310,13 +1452,17 @@ body {
       var row = document.createElement('div');
       row.className = 'tool-item-row';
       row.innerHTML =
-        '<input type="text" class="tool-input" placeholder="Description (e.g. Web design — homepage)" data-i="' + idx + '" data-k="desc" value="' + escapeHtml(it.desc) + '" />' +
+        '<div class="tool-item-desc-wrap">' +
+          '<input type="text" class="tool-input" placeholder="Description (e.g. Web design — homepage)" data-i="' + idx + '" data-k="desc" value="' + escapeHtml(it.desc) + '" />' +
+          '<button type="button" class="tool-item-polish-btn" data-polish="' + idx + '" data-ai-btn aria-label="Polish description with AI" title="Polish with AI"><span class="ai-spark">✨</span></button>' +
+        '</div>' +
         '<input type="number" class="tool-input" min="0" step="0.01" data-i="' + idx + '" data-k="qty" value="' + escapeHtml(it.qty) + '" />' +
         '<input type="number" class="tool-input" min="0" step="0.01" data-i="' + idx + '" data-k="rate" value="' + escapeHtml(it.rate) + '" />' +
         '<div class="tool-amount">' + fmt(amt) + '</div>' +
         '<button type="button" class="tool-item-remove" data-remove="' + idx + '" aria-label="Remove line item">×</button>';
       container.appendChild(row);
     });
+    if (aiState.blocked) disableAIButtons();
   }
 
   // ===== Render: preview =====
@@ -1694,6 +1840,183 @@ body {
     }
   }
 
+  // ===== AI assists =====
+  async function aiCall(task, payload) {
+    var res, data;
+    try {
+      res = await fetch('/api/ai-public', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task: task, payload: payload })
+      });
+    } catch (e) {
+      throw new Error('Network error. Check your connection and try again.');
+    }
+    try { data = await res.json(); } catch (e) { data = {}; }
+    if (!res.ok) {
+      if (data && data.error === 'rate_limited') {
+        aiState.remaining = 0;
+        aiState.blocked = true;
+        disableAIButtons();
+        throw new Error(data.message || "Daily AI assist limit reached. Sign up free for unlimited.");
+      }
+      throw new Error((data && data.message) || 'AI assist failed. Please try again.');
+    }
+    if (typeof data.remaining === 'number') {
+      aiState.remaining = data.remaining;
+      if (data.remaining === 0) {
+        aiState.blocked = true;
+        disableAIButtons();
+      }
+    }
+    return data;
+  }
+
+  function remainingText() {
+    if (aiState.remaining < 0) return '';
+    if (aiState.remaining === 0) return ' — daily limit reached';
+    return ' — ' + aiState.remaining + ' left today';
+  }
+
+  function disableAIButtons() {
+    document.querySelectorAll('[data-ai-btn]').forEach(function(b) { b.disabled = true; });
+  }
+
+  function setBtnLoading(btn, loading) {
+    if (!btn) return;
+    btn.classList.toggle('loading', loading);
+    btn.disabled = loading || aiState.blocked;
+  }
+
+  async function polishDescription(idx, btn) {
+    var item = state.items[idx];
+    if (!item) return;
+    var desc = String(item.desc || '').trim();
+    if (!desc) {
+      toast('Type a description first, then I can polish it.');
+      return;
+    }
+    setBtnLoading(btn, true);
+    try {
+      var data = await aiCall('polish_description', { description: desc });
+      var polished = String(data.result || '').trim();
+      if (polished) {
+        state.items[idx].desc = polished;
+        var input = document.querySelector('input[data-i="' + idx + '"][data-k="desc"]');
+        if (input) input.value = polished;
+        renderPreview();
+        save();
+        toast('Polished' + remainingText());
+      } else {
+        toast('No suggestion came back — try again.');
+      }
+    } catch (e) {
+      toast(e.message);
+    } finally {
+      setBtnLoading(btn, false);
+    }
+  }
+
+  async function generatePaymentTerms() {
+    var btn = document.getElementById('ai-terms-btn');
+    setBtnLoading(btn, true);
+    try {
+      var dueLabel = state.invoice.due ? 'by ' + formatDate(state.invoice.due) : 'within 30 days of issue';
+      var data = await aiCall('generate_payment_terms', {
+        due_label: dueLabel,
+        late_fee_pct: 1.5,
+        business_name: state.business.name
+      });
+      var text = String(data.result || '').trim();
+      if (text) {
+        state.notes = text;
+        document.getElementById('inv-notes').value = text;
+        renderPreview();
+        save();
+        toast('Payment terms drafted' + remainingText());
+      } else {
+        toast('No terms generated — try again.');
+      }
+    } catch (e) {
+      toast(e.message);
+    } finally {
+      setBtnLoading(btn, false);
+    }
+  }
+
+  function openReminderModal() {
+    if (!state.client.name && !state.invoice.number) {
+      toast('Add a client name and invoice number first.');
+      return;
+    }
+    var modal = document.getElementById('reminder-modal');
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+    document.getElementById('reminder-output').classList.remove('show');
+    document.getElementById('reminder-text').value = '';
+  }
+
+  function closeReminderModal() {
+    var modal = document.getElementById('reminder-modal');
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  async function generateReminder() {
+    var btn = document.getElementById('reminder-generate');
+    var daysInput = document.getElementById('reminder-days');
+    var days = parseInt(daysInput.value, 10);
+    if (isNaN(days) || days < 0) days = 0;
+    if (days > 365) days = 365;
+
+    var t = calc();
+    var sym = CURRENCY_SYMBOLS[state.invoice.currency] || '$';
+    var totalStr = sym + t.total.toFixed(2);
+
+    setBtnLoading(btn, true);
+    try {
+      var data = await aiCall('draft_reminder_email', {
+        client_name: state.client.name,
+        invoice_number: state.invoice.number,
+        total: totalStr,
+        days_overdue: days,
+        business_name: state.business.name
+      });
+      var text = String(data.result || '').trim();
+      if (text) {
+        document.getElementById('reminder-text').value = text;
+        document.getElementById('reminder-output').classList.add('show');
+        toast('Reminder drafted' + remainingText());
+      } else {
+        toast('No draft returned — try again.');
+      }
+    } catch (e) {
+      toast(e.message);
+    } finally {
+      setBtnLoading(btn, false);
+    }
+  }
+
+  async function copyReminder() {
+    var ta = document.getElementById('reminder-text');
+    var text = ta.value;
+    if (!text) return;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        ta.removeAttribute('readonly');
+        ta.select();
+        document.execCommand('copy');
+        ta.setAttribute('readonly', '');
+        window.getSelection().removeAllRanges();
+      }
+      toast('Copied to clipboard.');
+    } catch (e) {
+      toast('Could not copy. Select the text and copy manually.');
+    }
+  }
+
   // ===== Toast =====
   var toastTimeout;
   function toast(msg) {
@@ -1785,14 +2108,21 @@ body {
       save();
     });
     itemsContainer.addEventListener('click', function(e) {
-      var btn = e.target.closest('[data-remove]');
-      if (!btn) return;
-      var idx = parseInt(btn.getAttribute('data-remove'), 10);
-      state.items.splice(idx, 1);
-      if (state.items.length === 0) state.items.push({ desc: '', qty: 1, rate: 0 });
-      renderItems();
-      renderPreview();
-      save();
+      var removeBtn = e.target.closest('[data-remove]');
+      if (removeBtn) {
+        var idx = parseInt(removeBtn.getAttribute('data-remove'), 10);
+        state.items.splice(idx, 1);
+        if (state.items.length === 0) state.items.push({ desc: '', qty: 1, rate: 0 });
+        renderItems();
+        renderPreview();
+        save();
+        return;
+      }
+      var polishBtn = e.target.closest('[data-polish]');
+      if (polishBtn) {
+        var pIdx = parseInt(polishBtn.getAttribute('data-polish'), 10);
+        polishDescription(pIdx, polishBtn);
+      }
     });
 
     document.getElementById('add-item').addEventListener('click', function() {
@@ -1800,6 +2130,23 @@ body {
       renderItems();
       renderPreview();
       save();
+    });
+
+    // AI assist buttons
+    document.getElementById('ai-terms-btn').addEventListener('click', generatePaymentTerms);
+    document.getElementById('reminder-btn').addEventListener('click', openReminderModal);
+    document.getElementById('reminder-close').addEventListener('click', closeReminderModal);
+    document.getElementById('reminder-generate').addEventListener('click', generateReminder);
+    document.getElementById('reminder-regenerate').addEventListener('click', generateReminder);
+    document.getElementById('reminder-copy').addEventListener('click', copyReminder);
+    document.getElementById('reminder-modal').addEventListener('click', function(e) {
+      if (e.target.id === 'reminder-modal') closeReminderModal();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        var modal = document.getElementById('reminder-modal');
+        if (modal.classList.contains('show')) closeReminderModal();
+      }
     });
 
     // Action buttons
