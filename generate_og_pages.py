@@ -141,6 +141,12 @@ def make_og(out_path, badge, title, subtitle, fonts):
 
 # ---------- Page list ----------
 PAGES = [
+    # Homepage
+    ('og-image.png',
+        'AI COMMAND CENTER',
+        'AI tools for small business owners',
+        '13 connected tools — invoices, reviews, marketing, social, accounting, scheduling, and more.'),
+
     # Tools
     ('tools/og.png',
         'FREE TOOLS',
