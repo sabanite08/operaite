@@ -10,7 +10,7 @@
 // (logs a warning) — fine for local dev, BAD for production. Fix by adding
 // the env vars before launching publicly.
 
-const DAILY_LIMIT = 10;            // AI calls per IP per day
+const DAILY_LIMIT = 5;             // AI calls per IP per day
 const MAX_TOKENS  = 250;           // hard cap on output tokens
 const MODEL       = 'claude-haiku-4-5-20251001';
 
