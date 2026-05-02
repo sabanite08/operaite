@@ -1312,6 +1312,12 @@ body {
     USD: '$', CAD: 'C$', GBP: '£', EUR: '€', AUD: 'A$', NZD: 'NZ$'
   };
 
+  // ===== Feature flags =====
+  // AI assists rely on /api/ai-public.js which needs Upstash env vars in Vercel
+  // for rate limiting. Until those are set, AI buttons are hidden so the
+  // Anthropic budget can't be drained. Flip to true after Upstash is configured.
+  var AI_ASSISTS_ENABLED = false;
+
   // ===== State =====
   var STORAGE_KEY = 'operaite_invoice_v1';
   var aiState = { remaining: -1, blocked: false };
@@ -1451,10 +1457,13 @@ body {
       var amt = qty * rate;
       var row = document.createElement('div');
       row.className = 'tool-item-row';
+      var polishBtnHTML = AI_ASSISTS_ENABLED
+        ? '<button type="button" class="tool-item-polish-btn" data-polish="' + idx + '" data-ai-btn aria-label="Polish description with AI" title="Polish with AI"><span class="ai-spark">✨</span></button>'
+        : '';
       row.innerHTML =
         '<div class="tool-item-desc-wrap">' +
           '<input type="text" class="tool-input" placeholder="Description (e.g. Web design — homepage)" data-i="' + idx + '" data-k="desc" value="' + escapeHtml(it.desc) + '" />' +
-          '<button type="button" class="tool-item-polish-btn" data-polish="' + idx + '" data-ai-btn aria-label="Polish description with AI" title="Polish with AI"><span class="ai-spark">✨</span></button>' +
+          polishBtnHTML +
         '</div>' +
         '<input type="number" class="tool-input" min="0" step="0.01" data-i="' + idx + '" data-k="qty" value="' + escapeHtml(it.qty) + '" />' +
         '<input type="number" class="tool-input" min="0" step="0.01" data-i="' + idx + '" data-k="rate" value="' + escapeHtml(it.rate) + '" />' +
@@ -2205,6 +2214,18 @@ body {
   renderForm();
   renderPreview();
   bind();
+
+  // Hide AI controls until the rate limiter (Upstash) is configured.
+  // Re-enable by setting AI_ASSISTS_ENABLED = true at the top of this IIFE.
+  if (!AI_ASSISTS_ENABLED) {
+    var hideIds = ['ai-terms-btn', 'reminder-btn'];
+    hideIds.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    var note = document.querySelector('.ai-status-note');
+    if (note) note.style.display = 'none';
+  }
 })();
 </script>
 
