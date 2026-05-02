@@ -1,6 +1,6 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/((?!api/|blog/|.*\\.[a-z0-9]+$).*)", "destination": "/index.html" }
+    { "source": "/((?!api/|blog/|tools/|.*\\.[a-z0-9]+$).*)", "destination": "/index.html" }
   ]
 }
