@@ -1665,6 +1665,18 @@
           <div class="metric"><div class="metric-label">Upcoming</div><div class="metric-value" id="sched-upcoming">0</div></div>
           <div class="metric"><div class="metric-label">Total scheduled</div><div class="metric-value" id="sched-total">0</div></div>
         </div>
+
+        <div class="card" id="booking-inbox-card" style="display:none;border:2px solid #534AB7;background:linear-gradient(135deg,#f6f5ff 0%,#fff 70%);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div class="card-title" style="margin-bottom:0;display:flex;align-items:center;gap:10px;">
+              📬 Pending booking requests
+              <span id="booking-inbox-count" style="background:#534AB7;color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:11px;">0</span>
+            </div>
+            <a href="/book-admin" style="font-size:13px;color:#534AB7;text-decoration:none;font-weight:600;">View all / setup →</a>
+          </div>
+          <div id="booking-inbox-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+
         <div class="card">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
             <div class="card-title" style="margin-bottom:0;">Schedule a new item</div>
@@ -2347,6 +2359,10 @@
     // Phase 1 migration: if logged in, sync scheduler with Supabase (best-effort)
     if (typeof schedSupa !== 'undefined' && schedSupa.enabled()) {
       schedSupa.syncOnLogin();
+    }
+    // Booking inbox: load pending booking requests for the in-scheduler view
+    if (typeof bookingInbox !== 'undefined') {
+      bookingInbox.init();
     }
   }
 
@@ -4008,6 +4024,184 @@
   });
 
   schedRenderAll();
+
+  // ===== Booking inbox (in-scheduler view of pending requests) =====
+  var bookingInbox = {
+    profile: null,
+    pending: [],
+
+    init: async function() {
+      if (!currentUser || !currentUser.id) return;
+      try {
+        var resp = await supabase
+          .from('business_profiles')
+          .select('id, business_name, contact_email, contact_phone')
+          .eq('user_id', currentUser.id)
+          .maybeSingle();
+        if (resp.error || !resp.data) { this.render(); return; } // no profile yet
+        this.profile = resp.data;
+        await this.load();
+      } catch (e) { console.warn('bookingInbox.init error:', e); }
+    },
+
+    load: async function() {
+      if (!this.profile) return;
+      try {
+        var resp = await supabase
+          .from('booking_requests')
+          .select('*')
+          .eq('business_id', this.profile.id)
+          .eq('status', 'pending')
+          .order('created_at', { ascending: false });
+        if (resp.error) { console.warn('bookingInbox.load failed:', resp.error); return; }
+        this.pending = resp.data || [];
+        this.render();
+      } catch (e) { console.warn('bookingInbox.load error:', e); }
+    },
+
+    fmtDate: function(iso) {
+      if (!iso) return '';
+      var d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    },
+    fmtTime: function(t) {
+      if (!t) return '';
+      var p = String(t).split(':');
+      var h = +p[0]; var ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      return h + ':' + p[1] + ' ' + ampm;
+    },
+    fmtRel: function(iso) {
+      var d = new Date(iso); var now = new Date();
+      var s = (now - d) / 1000;
+      if (s < 60) return 'just now';
+      if (s < 3600) return Math.floor(s / 60) + ' min ago';
+      if (s < 86400) return Math.floor(s / 3600) + ' hr ago';
+      return Math.floor(s / 86400) + ' day ago';
+    },
+
+    render: function() {
+      var card = document.getElementById('booking-inbox-card');
+      var list = document.getElementById('booking-inbox-list');
+      var count = document.getElementById('booking-inbox-count');
+      if (!card || !list || !count) return;
+      if (!this.pending || this.pending.length === 0) {
+        card.style.display = 'none';
+        return;
+      }
+      card.style.display = 'block';
+      count.textContent = this.pending.length;
+      var self = this;
+      list.innerHTML = this.pending.map(function(r) {
+        var notes = r.notes ? '<div style="background:#fafaf9;border-left:2px solid #d8d8d4;padding:7px 10px;font-size:12.5px;color:#555;line-height:1.45;margin-top:8px;white-space:pre-wrap;">' + schedEsc(r.notes) + '</div>' : '';
+        var contact = schedEsc(r.customer_email) + (r.customer_phone ? ' &middot; ' + schedEsc(r.customer_phone) : '');
+        return '<div style="border:1px solid #ececea;border-radius:9px;padding:13px 15px;background:#fff;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:6px;">' +
+            '<div style="font-size:14.5px;font-weight:700;color:#1a1a1a;">' + self.fmtDate(r.requested_date) + ' &middot; ' + self.fmtTime(r.requested_time) + '</div>' +
+            '<div style="font-size:11px;color:#999;">' + self.fmtRel(r.created_at) + '</div>' +
+          '</div>' +
+          '<div style="font-size:13px;color:#444;margin-bottom:3px;"><strong>' + schedEsc(r.customer_name) + '</strong> &middot; <span style="color:#666;">' + contact + '</span></div>' +
+          (r.service_type ? '<div style="font-size:12.5px;color:#555;margin-bottom:4px;">Service: <strong>' + schedEsc(r.service_type) + '</strong></div>' : '') +
+          notes +
+          '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">' +
+            '<button class="btn sm" data-bk-act="approve" data-bk-id="' + r.id + '" style="background:#10B981;color:#fff;border-color:#10B981;">Approve</button>' +
+            '<button class="btn sm" data-bk-act="decline" data-bk-id="' + r.id + '" style="background:#fff;color:#c44;border:1px solid #f5c2c2;">Decline</button>' +
+            '<a class="btn sm" href="mailto:' + schedEsc(r.customer_email) + '?subject=' + encodeURIComponent('Re: your appointment with ' + (self.profile.business_name || '')) + '" style="text-decoration:none;">Email customer</a>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    },
+
+    approve: async function(id) {
+      var req = this.pending.find(function(r) { return r.id === id; });
+      if (!req || !this.profile) return;
+      var resp = await supabase
+        .from('booking_requests')
+        .update({ status: 'approved', responded_at: new Date().toISOString() })
+        .eq('id', id);
+      if (resp.error) { alert('Could not approve: ' + resp.error.message); return; }
+
+      // Add to scheduler (dual-write to localStorage + appointments table)
+      var localId = 's_' + Date.now();
+      var title = (req.service_type || 'Appointment') + (req.customer_name ? ' — ' + req.customer_name : '');
+      var item = {
+        id: localId,
+        bookingRequestId: req.id,
+        type: 'appt',
+        date: req.requested_date,
+        time: req.requested_time,
+        title: title,
+        name: req.customer_name || '',
+        email: req.customer_email || '',
+        phone: req.customer_phone || '',
+        location: '',
+        notes: req.notes || '',
+        created: Date.now()
+      };
+      schedState.items.push(item);
+      schedSave(item); // dual-write
+      schedRenderAll();
+
+      // Send confirmation email
+      var p = this.profile;
+      fetch('/api/booking-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: 'request_approved',
+          customer_name: req.customer_name,
+          customer_email: req.customer_email,
+          service_type: req.service_type,
+          requested_date: req.requested_date,
+          requested_time: req.requested_time,
+          business_name: p.business_name,
+          owner_email: p.contact_email,
+          owner_phone: p.contact_phone
+        })
+      }).catch(function (e) { console.warn('email failed:', e); });
+
+      await this.load(); // refresh
+    },
+
+    decline: async function(id) {
+      var req = this.pending.find(function(r) { return r.id === id; });
+      if (!req || !this.profile) return;
+      if (!confirm('Decline this booking? The customer will get an apology email.')) return;
+      var resp = await supabase
+        .from('booking_requests')
+        .update({ status: 'declined', responded_at: new Date().toISOString() })
+        .eq('id', id);
+      if (resp.error) { alert('Could not decline: ' + resp.error.message); return; }
+
+      var p = this.profile;
+      fetch('/api/booking-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: 'request_declined',
+          customer_name: req.customer_name,
+          customer_email: req.customer_email,
+          business_name: p.business_name,
+          owner_email: p.contact_email,
+          owner_phone: p.contact_phone
+        })
+      }).catch(function (e) { console.warn('email failed:', e); });
+
+      await this.load();
+    }
+  };
+
+  // Wire up the inbox click handler
+  document.getElementById('booking-inbox-list').addEventListener('click', function(e) {
+    var btn = e.target.closest('button[data-bk-act]');
+    if (!btn) return;
+    var act = btn.getAttribute('data-bk-act');
+    var id = btn.getAttribute('data-bk-id');
+    btn.disabled = true;
+    btn.textContent = act === 'approve' ? 'Approving…' : 'Declining…';
+    if (act === 'approve') bookingInbox.approve(id);
+    else if (act === 'decline') bookingInbox.decline(id);
+  });
 
   // Init — check Supabase session (works across any browser/device)
   (async function() {
