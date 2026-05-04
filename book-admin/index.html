@@ -400,6 +400,39 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     });
   });
 
+  // Bridge: add an approved booking to the localStorage scheduler used by the main Operaite app.
+  // Same browser only — appears in the main /scheduler view next time the user navigates there + refreshes.
+  function addToLocalScheduler(req) {
+    try {
+      var raw = localStorage.getItem('operaite_schedule') || '[]';
+      var items = JSON.parse(raw);
+      // Avoid double-add if user clicks Approve twice on the same request
+      var alreadyAdded = items.some(function (x) { return x.bookingRequestId === req.id; });
+      if (alreadyAdded) return false;
+      var title = (req.service_type || 'Appointment') + (req.customer_name ? ' — ' + req.customer_name : '');
+      var item = {
+        id: 's_' + Date.now(),
+        bookingRequestId: req.id,
+        type: 'appt',
+        date: req.requested_date,
+        time: req.requested_time,
+        title: title,
+        name: req.customer_name || '',
+        email: req.customer_email || '',
+        phone: req.customer_phone || '',
+        location: '',
+        notes: req.notes || '',
+        created: Date.now()
+      };
+      items.push(item);
+      localStorage.setItem('operaite_schedule', JSON.stringify(items));
+      return true;
+    } catch (e) {
+      console.warn('Could not add to local scheduler:', e);
+      return false;
+    }
+  }
+
   $('req-list').addEventListener('click', async function (e) {
     var btn = e.target.closest('button[data-action]');
     if (!btn) return;
@@ -416,6 +449,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       alert('Could not update: ' + resp.error.message);
       btn.disabled = false; btn.textContent = action === 'approve' ? 'Approve' : 'Decline';
       return;
+    }
+
+    // On approve: add to local scheduler so it shows on the main app's calendar
+    var addedToCalendar = false;
+    if (action === 'approve' && req) {
+      addedToCalendar = addToLocalScheduler(req);
     }
 
     // Fire customer email (best-effort, don't block on failure)
@@ -439,9 +478,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
     var msg = $('req-msg');
     msg.className = 'adm-success';
-    msg.textContent = 'Request ' + newStatus + '. ' + (req && req.customer_email ? 'Customer is being notified by email.' : 'Email the customer manually.');
+    var parts = ['Request ' + newStatus + '.'];
+    if (req && req.customer_email) parts.push('Customer notified by email.');
+    if (action === 'approve' && addedToCalendar) parts.push('Added to your scheduler — refresh the main app to see it.');
+    msg.textContent = parts.join(' ');
     msg.style.display = 'block';
-    setTimeout(function () { msg.style.display = 'none'; }, 4500);
+    setTimeout(function () { msg.style.display = 'none'; }, 6000);
     loadRequests();
   });
 
