@@ -6,7 +6,7 @@
     { "source": "/alternatives/dubsado", "destination": "/alternatives/", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/book/(.+)", "destination": "/book/index.html" },
+    { "source": "/book/:slug+", "destination": "/book" },
     { "source": "/((?!api/|blog/|tools/|features/|for/|alternatives/|book/|book-admin/|.*\\.[a-z0-9]+$).*)", "destination": "/index.html" }
   ]
 }
