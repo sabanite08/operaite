@@ -2337,6 +2337,19 @@
     localStorage.setItem('operaite_profile', JSON.stringify(p));
     applyProfileToForms();
     profileSupa.upsert(p); // Phase 3 migration: dual-write to user_metadata
+    // Phase 6 (b): sync overlap fields to business_profiles (booking page)
+    if (currentUser && currentUser.id) {
+      var bizPatch = {};
+      if (p.name) bizPatch.business_name = p.name;
+      if (p.email) bizPatch.contact_email = p.email;
+      if (p.phone) bizPatch.contact_phone = p.phone;
+      if (Object.keys(bizPatch).length > 0) {
+        supabase.from('business_profiles').update(bizPatch).eq('user_id', currentUser.id)
+          .then(function(resp) {
+            if (resp.error) console.warn('profile→business sync failed:', resp.error);
+          });
+      }
+    }
     var msg = document.getElementById('prof-saved-msg');
     msg.style.display = 'block';
     setTimeout(function() { msg.style.display = 'none'; }, 3000);

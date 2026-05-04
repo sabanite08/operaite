@@ -306,6 +306,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     }
 
     profile = resp.data;
+
+    // Phase 6 (b): sync overlap fields back to user_metadata.profile
+    // (so SPA Profile tab reflects the latest name/email/phone)
+    try {
+      var existing = (session && session.user && session.user.user_metadata && session.user.user_metadata.profile) || {};
+      var merged = Object.assign({}, existing);
+      if (payload.business_name) merged.name = payload.business_name;
+      if (payload.contact_email) merged.email = payload.contact_email;
+      if (payload.contact_phone) merged.phone = payload.contact_phone;
+      // Only call updateUser if something changed
+      if (merged.name || merged.email || merged.phone) {
+        supabase.auth.updateUser({ data: { profile: merged } }).catch(function(e) {
+          console.warn('business→profile sync failed:', e);
+        });
+      }
+    } catch (e) { console.warn('business→profile sync error:', e); }
+
     showDashboard();
   });
 
