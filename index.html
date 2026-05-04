@@ -4085,11 +4085,18 @@
       var list = document.getElementById('booking-inbox-list');
       var count = document.getElementById('booking-inbox-count');
       if (!card || !list || !count) return;
-      if (!this.pending || this.pending.length === 0) {
+      // No profile yet — leave hidden; dashboard prompt handles "set up booking"
+      if (!this.profile) {
         card.style.display = 'none';
         return;
       }
+      // Profile exists — always show card so the user sees it's wired up
       card.style.display = 'block';
+      if (!this.pending || this.pending.length === 0) {
+        count.textContent = '0';
+        list.innerHTML = '<div style="text-align:center;padding:18px 14px;color:#888;font-size:13.5px;line-height:1.55;">No pending booking requests right now.<br><span style="font-size:12.5px;color:#999;">New customer requests will appear here automatically.</span></div>';
+        return;
+      }
       count.textContent = this.pending.length;
       var self = this;
       list.innerHTML = this.pending.map(function(r) {
