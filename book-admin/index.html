@@ -175,6 +175,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <a class="btn tiny secondary" id="open-url-btn" target="_blank">Open</a>
       </div>
       <div style="margin-top: 0.75rem;"><a href="#" id="edit-profile-link" style="font-size: 13px; color: #534AB7; text-decoration: none;">Edit business details →</a></div>
+
+      <details style="margin-top:1.25rem;">
+        <summary style="cursor:pointer;font-size:13.5px;font-weight:600;color:#1a1a1a;">Embed the booking form on your own website →</summary>
+        <div style="margin-top:0.75rem;font-size:13px;color:#555;line-height:1.55;">
+          Paste this snippet anywhere on your website. Clicking the button opens the booking form in a clean modal — no redirect.
+        </div>
+        <div style="margin-top:0.6rem;background:#1a1a1a;color:#e5e5e5;font-family:'SF Mono',Consolas,monospace;font-size:12.5px;padding:12px 14px;border-radius:8px;overflow-x:auto;white-space:pre-wrap;word-break:break-all;" id="embed-snippet">—</div>
+        <div style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <button class="btn tiny" id="copy-embed-btn">Copy snippet</button>
+          <span style="font-size:12px;color:#888;align-self:center;">Customize the button text/styling — only the <code>data-operaite-book</code> attribute matters.</span>
+        </div>
+      </details>
     </div>
 
     <div class="tabs">
@@ -348,11 +360,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     setTimeout(function () { btn.textContent = orig; }, 1500);
   });
 
+  $('copy-embed-btn').addEventListener('click', function () {
+    var snippet = $('embed-snippet').textContent;
+    navigator.clipboard.writeText(snippet);
+    var btn = $('copy-embed-btn');
+    var orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(function () { btn.textContent = orig; }, 1500);
+  });
+
   // ===== Dashboard / requests =====
   function showDashboard() {
     var url = location.origin + '/book/' + profile.slug;
     $('public-url').textContent = url;
     $('open-url-btn').href = url;
+    var snippet = '<script async src="' + location.origin + '/widget/booking.js"></scr' + 'ipt>\n<button data-operaite-book="' + profile.slug + '">Book a service</button>';
+    $('embed-snippet').textContent = snippet;
     setState('state-dashboard');
     loadRequests();
   }

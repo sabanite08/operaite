@@ -77,6 +77,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 .book-footer { padding: 1.25rem 1rem; text-align: center; font-size: 11px; color: #888; }
 .book-footer a { color: #534AB7; text-decoration: none; }
+
+/* Embedded mode (when loaded inside an iframe via /widget/booking.js) */
+body.embed .book-nav,
+body.embed .book-footer { display: none; }
+body.embed { background: #fff; }
+body.embed .book-container { padding-top: 1.5rem; padding-bottom: 1.5rem; }
 </style>
 </head>
 <body>
@@ -181,6 +187,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   var SUPABASE_ANON = 'sb_publishable_Y0Khe3Sz0BxOYDb72Dg02w_FTMuoAOh';
   var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+  // Embedded mode (rendered inside the booking widget iframe)
+  var IS_EMBED = /[?&]embed=1\b/.test(location.search);
+  if (IS_EMBED) {
+    document.body.classList.add('embed');
+  }
+
   var $ = function (id) { return document.getElementById(id); };
   var setState = function (id) {
     document.querySelectorAll('.book-state').forEach(function (el) { el.classList.remove('active'); });
@@ -282,6 +294,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
     $('success-biz-name').textContent = window._bizName;
     setState('state-success');
+
+    // If embedded in the widget iframe, the modal can show a Close button now.
+    // Post message to parent so it can auto-close after a short delay if desired.
+    if (IS_EMBED && window.parent !== window) {
+      try {
+        window.parent.postMessage({ type: 'operaite-booking-success' }, '*');
+      } catch (e) { /* parent may not be reachable; that's fine */ }
+    }
 
     // Fire notification emails (best-effort, don't block on failure)
     fetch('/api/booking-notify', {
