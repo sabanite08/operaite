@@ -3197,10 +3197,67 @@
     updateStatus: async function(id, status) {
       if (!this.enabled()) return false;
       try {
+        var prev = this.history.find(function(r) { return r.id === id; });
+        var prevStatus = prev ? prev.status : null;
         var patch = { status: status };
         if (status === 'paid') patch.paid_at = new Date().toISOString();
+        else if (prevStatus === 'paid') patch.paid_at = null;
         var resp = await supabase.from('invoices').update(patch).eq('id', id);
         if (resp.error) { alert('Could not update: ' + resp.error.message); return false; }
+
+        // Phase 6 (h): mirror the change into accounting_entries
+        if (status === 'paid' && prev) {
+          // Create an income entry linked to this invoice (idempotent — unique index on source_invoice_id)
+          var entry = {
+            id: 'inv_' + id, // local_id format distinct from manual entries; can't collide
+            type: 'income',
+            date: new Date().toISOString().slice(0, 10),
+            amount: parseFloat(prev.total) || 0,
+            desc: 'Invoice ' + (prev.invoice_number || '') + (prev.client_name ? ' — ' + prev.client_name : ''),
+            category: 'Services',
+            sourceInvoiceId: id
+          };
+          // Try insert via Supabase; on duplicate, update instead (idempotent for re-clicks)
+          var insertResp = await supabase.from('accounting_entries').insert({
+            user_id: currentUser.id,
+            local_id: entry.id,
+            type: entry.type,
+            entry_date: entry.date,
+            amount: entry.amount,
+            description: entry.desc,
+            category: entry.category,
+            source_invoice_id: id
+          });
+          if (insertResp.error && (insertResp.error.code === '23505' || /duplicate/i.test(insertResp.error.message || ''))) {
+            // Already exists (probably a re-click after previous unmark); leave the existing entry alone
+          } else if (insertResp.error) {
+            console.warn('auto-acct insert failed:', insertResp.error);
+          }
+          // Refresh local accounting cache + UI
+          if (typeof acctSupa !== 'undefined') {
+            var fresh = await acctSupa.loadAll();
+            if (fresh) {
+              acctEntries = fresh;
+              try { localStorage.setItem('operaite_accounting', JSON.stringify(acctEntries)); } catch (e) {}
+              if (typeof renderAcct === 'function') renderAcct();
+              if (typeof populateMonthFilter === 'function') populateMonthFilter();
+              if (typeof updateDashboard === 'function') updateDashboard();
+            }
+          }
+        } else if (prevStatus === 'paid' && status !== 'paid') {
+          // Status changed AWAY from paid — remove the linked accounting entry
+          var delResp = await supabase.from('accounting_entries').delete().eq('source_invoice_id', id);
+          if (delResp.error) console.warn('auto-acct delete failed:', delResp.error);
+          // Refresh local cache
+          if (typeof acctSupa !== 'undefined') {
+            acctEntries = acctEntries.filter(function(e) { return e.sourceInvoiceId !== id; });
+            try { localStorage.setItem('operaite_accounting', JSON.stringify(acctEntries)); } catch (e) {}
+            if (typeof renderAcct === 'function') renderAcct();
+            if (typeof populateMonthFilter === 'function') populateMonthFilter();
+            if (typeof updateDashboard === 'function') updateDashboard();
+          }
+        }
+
         return true;
       } catch (e) { console.warn('updateStatus error:', e); return false; }
     },
@@ -3210,6 +3267,15 @@
       try {
         var resp = await supabase.from('invoices').delete().eq('id', id);
         if (resp.error) { alert('Could not delete: ' + resp.error.message); return false; }
+        // FK cascade in Supabase removes any linked accounting_entries.
+        // Sync the local accounting cache too.
+        if (typeof acctEntries !== 'undefined') {
+          acctEntries = acctEntries.filter(function(e) { return e.sourceInvoiceId !== id; });
+          try { localStorage.setItem('operaite_accounting', JSON.stringify(acctEntries)); } catch (e) {}
+          if (typeof renderAcct === 'function') renderAcct();
+          if (typeof populateMonthFilter === 'function') populateMonthFilter();
+          if (typeof updateDashboard === 'function') updateDashboard();
+        }
         return true;
       } catch (e) { console.warn('remove error:', e); return false; }
     },
@@ -4141,7 +4207,8 @@
         entry_date: e.date,
         amount: parseFloat(e.amount) || 0,
         description: (e.desc || '').slice(0, 1000) || 'Untitled',
-        category: e.category || null
+        category: e.category || null,
+        source_invoice_id: e.sourceInvoiceId || null
       };
     },
     rowToItem: function(row) {
@@ -4151,7 +4218,8 @@
         date: row.entry_date,
         amount: parseFloat(row.amount),
         desc: row.description,
-        category: row.category || ''
+        category: row.category || '',
+        sourceInvoiceId: row.source_invoice_id || null
       };
     },
     upsert: async function(entry) {
@@ -4228,10 +4296,13 @@
     list.innerHTML = sorted.map(function(e) {
       var color = e.type === 'income' ? '#22c55e' : '#ef4444';
       var sign = e.type === 'income' ? '+' : '-';
+      var autoTag = e.sourceInvoiceId
+        ? '<span title="Auto-generated when this invoice was marked paid" style="font-size:10.5px;background:#eef0ff;color:#534AB7;padding:2px 6px;border-radius:5px;font-weight:600;">FROM INVOICE</span>'
+        : '';
       return '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0ec;flex-wrap:wrap;">' +
         '<span style="font-size:12px;color:#aaa;min-width:80px;">' + e.date + '</span>' +
         '<span style="font-size:12px;background:' + color + '22;color:' + color + ';padding:2px 8px;border-radius:10px;font-weight:600;">' + e.type + '</span>' +
-        '<span style="flex:1;font-size:13.5px;">' + e.desc + '</span>' +
+        '<span style="flex:1;font-size:13.5px;">' + e.desc + ' ' + autoTag + '</span>' +
         '<span style="font-size:12px;color:#aaa;">' + e.category + '</span>' +
         '<span style="font-weight:700;color:' + color + ';min-width:70px;text-align:right;">' + sign + fmt(e.amount) + '</span>' +
         '<button class="btn sm" style="padding:2px 8px;font-size:12px;" onclick="deleteAcctEntry(\'' + e.id + '\')">x</button>' +
