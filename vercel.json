@@ -1,5 +1,10 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    { "source": "/alternatives/honeybook", "destination": "/alternatives/", "permanent": true },
+    { "source": "/alternatives/bonsai", "destination": "/alternatives/", "permanent": true },
+    { "source": "/alternatives/dubsado", "destination": "/alternatives/", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/((?!api/|blog/|tools/|features/|for/|alternatives/|.*\\.[a-z0-9]+$).*)", "destination": "/index.html" }
   ]
