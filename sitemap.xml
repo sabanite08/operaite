@@ -10,6 +10,7 @@
   <!-- Free tools -->
   <url><loc>https://operaite.net/tools/</loc><lastmod>2026-05-01</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://operaite.net/tools/free-invoice-generator</loc><lastmod>2026-05-01</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://operaite.net/tools/free-hourly-rate-calculator</loc><lastmod>2026-05-03</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
 
   <!-- Paid feature pages -->
   <url><loc>https://operaite.net/features/ai-review-manager</loc><lastmod>2026-05-01</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
@@ -54,4 +55,6 @@
   <url><loc>https://operaite.net/blog/customer-thank-you-templates</loc><lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://operaite.net/blog/cancellation-policy-for-trades</loc><lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://operaite.net/blog/post-service-follow-up-email</loc><lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://operaite.net/blog/markup-vs-margin-for-trades</loc><lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://operaite.net/blog/how-much-to-charge-as-a-contractor</loc><lastmod>2026-05-03</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>

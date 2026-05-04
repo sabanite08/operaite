@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Free Hourly Rate Calculator for Freelancers & Trades | Operaite</title>
+<meta name="description" content="Free hourly rate calculator. Enter your target income, business expenses, and billable hours — get the rate you actually need to charge to hit your number after taxes." />
+<meta name="keywords" content="hourly rate calculator, freelance hourly rate, contractor hourly rate, billable hours calculator, what should I charge per hour" />
+<meta name="robots" content="index, follow" />
+<meta name="google-site-verification" content="-oHzSM7njuBW-4QSh84w7wYMt5g093PkdQxGWN0nqgI" />
+<link rel="canonical" href="https://operaite.net/tools/free-hourly-rate-calculator" />
+
+<link rel="manifest" href="/manifest.json" />
+<link rel="apple-touch-icon" href="/logo_option1.png" />
+<link rel="icon" type="image/png" href="/logo_option1.png" />
+<meta name="theme-color" content="#534AB7" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://operaite.net/tools/free-hourly-rate-calculator" />
+<meta property="og:site_name" content="Operaite" />
+<meta property="og:title" content="Free Hourly Rate Calculator — What to Charge per Hour" />
+<meta property="og:description" content="Enter target income, expenses, and billable hours — get the hourly rate you need to charge to hit your number after taxes. Free, instant, no signup." />
+<meta property="og:image" content="https://operaite.net/og-image.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Free Hourly Rate Calculator for Freelancers & Trades" />
+<meta name="twitter:description" content="Calculate the hourly rate you need to hit your income target after taxes and expenses." />
+<meta name="twitter:image" content="https://operaite.net/og-image.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Operaite Free Hourly Rate Calculator",
+  "url": "https://operaite.net/tools/free-hourly-rate-calculator",
+  "description": "Free hourly rate calculator for freelancers, contractors, and service trades. Enter income target, expenses, and billable hours to find the rate you need to charge.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0.00", "priceCurrency": "USD" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Operaite",
+    "url": "https://operaite.net",
+    "logo": "https://operaite.net/logo_option1.png"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Operaite", "item": "https://operaite.net" },
+    { "@type": "ListItem", "position": 2, "name": "Free Tools", "item": "https://operaite.net/tools/" },
+    { "@type": "ListItem", "position": 3, "name": "Free Hourly Rate Calculator", "item": "https://operaite.net/tools/free-hourly-rate-calculator" }
+  ]
+}
+</script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f8; color: #1a1a1a; line-height: 1.5; }
+
+.tool-nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(232,232,229,0.7); height: 62px; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; }
+.tool-nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: inherit; }
+.tool-nav-brand-icon { width: 40px; height: 40px; background: #534AB7; border-radius: 11px; display: flex; align-items: center; justify-content: center; }
+.tool-nav-brand-name { font-size: 22px; font-weight: 700; }
+.tool-nav-brand-name span { color: #534AB7; }
+.tool-nav-links { display: flex; align-items: center; gap: 8px; }
+.tool-nav-link { font-family: inherit; font-size: 14px; color: #555; padding: 8px 14px; border-radius: 8px; text-decoration: none; }
+.tool-nav-link:hover { background: #f3f3f1; color: #1a1a1a; }
+.tool-nav-btn { background: #534AB7; font-family: inherit; font-size: 14px; font-weight: 600; color: #fff; padding: 9px 20px; border-radius: 9px; text-decoration: none; }
+.tool-nav-btn:hover { background: #3C3489; }
+@media (max-width: 700px) { .tool-nav { padding: 0 1.25rem; } }
+
+.hero { padding: 60px 2rem 30px; text-align: center; max-width: 760px; margin: 0 auto; }
+.hero-eyebrow { display: inline-flex; background: #EEEDFE; color: #534AB7; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 1.25rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.hero h1 { font-size: 42px; font-weight: 800; line-height: 1.1; letter-spacing: -1.2px; margin-bottom: 1rem; }
+.hero h1 em { background: linear-gradient(135deg,#534AB7 0%,#8B5CF6 40%,#EC4899 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font-style: normal; }
+.hero p { font-size: 17px; color: #666; line-height: 1.6; max-width: 580px; margin: 0 auto; }
+@media (max-width: 700px) { .hero { padding: 40px 1.25rem 20px; } .hero h1 { font-size: 28px; letter-spacing: -0.5px; } .hero p { font-size: 15px; } }
+
+.calc { max-width: 1000px; margin: 30px auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+@media (max-width: 800px) { .calc { grid-template-columns: 1fr; padding: 0 1.25rem; gap: 1.5rem; } }
+
+.form-card, .result-card { background: #fff; border: 1px solid #ececea; border-radius: 14px; padding: 1.75rem; }
+.form-card h2 { font-size: 18px; font-weight: 700; margin-bottom: 1.25rem; }
+
+.field { margin-bottom: 1.25rem; }
+.field label { display: block; font-size: 13.5px; font-weight: 600; color: #333; margin-bottom: 0.4rem; }
+.field .hint { display: block; font-size: 12px; color: #888; margin-top: 0.25rem; line-height: 1.4; }
+.input-wrap { position: relative; }
+.input-wrap .prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888; font-weight: 500; pointer-events: none; }
+.input-wrap .suffix { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #888; font-weight: 500; pointer-events: none; }
+.field input[type="number"] { width: 100%; padding: 11px 32px 11px 28px; font-family: inherit; font-size: 15px; border: 1px solid #d8d8d4; border-radius: 8px; background: #fff; }
+.field input[type="number"].right-suffix { padding: 11px 36px 11px 12px; }
+.field input[type="number"]:focus { outline: 2px solid #534AB7; outline-offset: -1px; border-color: #534AB7; }
+
+.result-card { background: linear-gradient(135deg,#534AB7 0%,#3C3489 100%); color: #fff; border: none; }
+.result-card .result-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+.result-card .result-main { font-size: 56px; font-weight: 800; line-height: 1; letter-spacing: -1.5px; margin-bottom: 0.25rem; }
+.result-card .result-unit { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
+.result-card .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); }
+.result-card .result-cell { padding: 0; }
+.result-card .result-cell .cell-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+.result-card .result-cell .cell-val { font-size: 19px; font-weight: 700; color: #fff; }
+.breakdown { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); }
+.breakdown h3 { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.75rem; }
+.breakdown-row { display: flex; justify-content: space-between; font-size: 13px; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.breakdown-row:last-child { border-bottom: none; font-weight: 700; padding-top: 0.6rem; }
+.breakdown-row .key { color: rgba(255,255,255,0.7); }
+.breakdown-row .val { color: #fff; font-variant-numeric: tabular-nums; }
+
+.explainer { max-width: 760px; margin: 50px auto; padding: 0 2rem; }
+.explainer h2 { font-size: 24px; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.4px; }
+.explainer p { font-size: 15px; color: #444; line-height: 1.7; margin-bottom: 1rem; }
+.explainer ul { font-size: 15px; color: #444; line-height: 1.75; margin: 0 0 1rem 1.25rem; }
+.explainer h3 { font-size: 17px; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+.explainer .formula { background: #f3f3f1; padding: 14px 16px; border-left: 3px solid #534AB7; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 13px; line-height: 1.7; margin: 1rem 0; }
+@media (max-width: 700px) { .explainer { padding: 0 1.25rem; } .explainer h2 { font-size: 20px; } }
+
+.cta-banner { background: linear-gradient(135deg,#534AB7 0%,#2d2580 100%); padding: 60px 2rem; text-align: center; }
+.cta-banner h2 { font-size: 30px; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 0.65rem; }
+.cta-banner p { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+.cta-banner-btn { background: #fff; color: #534AB7; font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 30px; border-radius: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block; }
+.cta-banner-btn:hover { background: #f0effd; }
+.cta-banner-note { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+
+.tool-footer { background: #1a1a1a; padding: 2rem; }
+.tool-footer-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; }
+.tool-footer-brand { display: flex; align-items: center; gap: 8px; }
+.tool-footer-brand-icon { width: 26px; height: 26px; background: #534AB7; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.tool-footer-brand-name { font-size: 16px; font-weight: 700; color: #fff; }
+.tool-footer-brand-name span { color: #7b74d4; }
+.tool-footer-links { display: flex; gap: 1.5rem; }
+.tool-footer-links a { font-size: 13px; color: #888; text-decoration: none; }
+.tool-footer-links a:hover { color: #fff; }
+.tool-footer-copy { font-size: 12px; color: #555; }
+.tool-footer-sister { max-width: 1000px; margin: 1.25rem auto 0; padding-top: 1.25rem; border-top: 1px solid #2a2a2a; font-size: 11px; color: #555; text-align: center; }
+.tool-footer-sister a { color: #888; text-decoration: underline; }
+@media (max-width: 700px) { .tool-footer-inner { flex-direction: column; align-items: flex-start; } }
+</style>
+</head>
+<body>
+
+<nav class="tool-nav">
+  <a href="/" class="tool-nav-brand">
+    <div class="tool-nav-brand-icon">
+      <svg width="24" height="24" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <span class="tool-nav-brand-name">Opera<span>ite</span></span>
+  </a>
+  <div class="tool-nav-links">
+    <a class="tool-nav-link" href="/tools/">All tools</a>
+    <a class="tool-nav-btn" href="/#signup">Try Operaite free</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">✦ Free · No signup · Instant</div>
+  <h1>What should you <em>charge per hour</em>?</h1>
+  <p>Most freelancers and trades undercharge by 30-50% because they only think about hourly take-home, not the full math. Enter your real numbers below — get the rate you need to charge to hit your income target after self-employment tax and business expenses.</p>
+</header>
+
+<section class="calc" aria-label="Hourly rate calculator">
+
+  <div class="form-card">
+    <h2>Your numbers</h2>
+
+    <div class="field">
+      <label for="targetIncome">Target take-home income (annual)</label>
+      <div class="input-wrap">
+        <span class="prefix">$</span>
+        <input id="targetIncome" type="number" min="0" step="1000" value="80000" />
+      </div>
+      <span class="hint">What you want to keep after taxes &mdash; the number that actually hits your bank account.</span>
+    </div>
+
+    <div class="field">
+      <label for="businessExpenses">Annual business expenses</label>
+      <div class="input-wrap">
+        <span class="prefix">$</span>
+        <input id="businessExpenses" type="number" min="0" step="500" value="12000" />
+      </div>
+      <span class="hint">Insurance, software, vehicle, fuel, tools, marketing, accountant, phone &mdash; everything you spend to run the business.</span>
+    </div>
+
+    <div class="field">
+      <label for="taxRate">Tax rate (combined federal + SE + state)</label>
+      <div class="input-wrap">
+        <input id="taxRate" type="number" min="0" max="60" step="1" value="30" class="right-suffix" />
+        <span class="suffix">%</span>
+      </div>
+      <span class="hint">For most US self-employed: 25-35%. Includes 15.3% self-employment tax + federal income + state income.</span>
+    </div>
+
+    <div class="field">
+      <label for="billableHours">Billable hours per year</label>
+      <div class="input-wrap">
+        <input id="billableHours" type="number" min="100" step="50" value="1500" class="right-suffix" />
+        <span class="suffix">hrs</span>
+      </div>
+      <span class="hint">Of 2,080 working hours/year, typical solo trades bill 1,200&ndash;1,600. The rest is admin, travel, and downtime.</span>
+    </div>
+
+    <div class="field">
+      <label for="profitMargin">Profit margin above costs (optional)</label>
+      <div class="input-wrap">
+        <input id="profitMargin" type="number" min="0" max="100" step="5" value="10" class="right-suffix" />
+        <span class="suffix">%</span>
+      </div>
+      <span class="hint">Cushion above your break-even rate &mdash; for slow seasons, equipment replacement, retirement savings.</span>
+    </div>
+
+  </div>
+
+  <div class="result-card">
+    <div class="result-label">You need to charge</div>
+    <div class="result-main"><span id="hourlyRate">$92</span><span style="font-size: 28px; opacity: 0.7;">/hr</span></div>
+    <div class="result-unit">to hit a $80,000 take-home at 1,500 billable hours.</div>
+
+    <div class="result-grid">
+      <div class="result-cell">
+        <div class="cell-label">Daily (8 hr)</div>
+        <div class="cell-val" id="dailyRate">$733</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Weekly (40 hr)</div>
+        <div class="cell-val" id="weeklyRate">$3,667</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Annual revenue</div>
+        <div class="cell-val" id="annualRevenue">$137,500</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">After tax + expenses</div>
+        <div class="cell-val" id="netCheck">$80,000</div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <h3>How it adds up</h3>
+      <div class="breakdown-row"><span class="key">Take-home target</span><span class="val" id="bdTarget">$80,000</span></div>
+      <div class="breakdown-row"><span class="key">+ Tax buffer (30%)</span><span class="val" id="bdTax">$34,286</span></div>
+      <div class="breakdown-row"><span class="key">+ Business expenses</span><span class="val" id="bdExpenses">$12,000</span></div>
+      <div class="breakdown-row"><span class="key">+ Profit cushion (10%)</span><span class="val" id="bdProfit">$12,629</span></div>
+      <div class="breakdown-row"><span class="key">Annual revenue needed</span><span class="val" id="bdRevenue">$138,915</span></div>
+    </div>
+  </div>
+
+</section>
+
+<section class="explainer">
+  <h2>The math behind your rate</h2>
+  <p>Most hourly rate guides oversimplify by dividing target income by hours worked. That ignores the two things that actually crush self-employed earnings:</p>
+  <ul>
+    <li><strong>Self-employment tax</strong> &mdash; 15.3% on top of normal income tax. A salaried employee pays 7.65%; their employer covers the other half. You pay the full 15.3% yourself.</li>
+    <li><strong>Non-billable hours</strong> &mdash; admin, sales, travel, estimating, equipment maintenance. Solo trades typically bill 1,200&ndash;1,600 of 2,080 working hours per year.</li>
+  </ul>
+
+  <h3>The full formula</h3>
+  <div class="formula">
+    needed_revenue = (target_income &divide; (1 - tax_rate)) + business_expenses<br>
+    with_profit = needed_revenue &times; (1 + profit_margin)<br>
+    hourly_rate = with_profit &divide; billable_hours
+  </div>
+
+  <h3>Why default values look conservative (they aren&rsquo;t)</h3>
+  <p><strong>1,500 billable hours/year</strong> is realistic, not pessimistic. A 40-hour week &times; 50 weeks = 2,000 working hours, but admin, sales calls, estimates that don&rsquo;t convert, equipment maintenance, and quarterly tax prep eat 25-30% of that. If you&rsquo;re a solo electrician or HVAC tech tracking utilization, 1,500 is a good year.</p>
+
+  <p><strong>30% combined tax rate</strong> covers federal income tax (most self-employed land in the 22-24% bracket), self-employment tax (15.3% on the first $168,600 in 2026), and a buffer for state income tax. It&rsquo;s the rule-of-thumb most accountants tell you to set aside.</p>
+
+  <p><strong>10% profit margin</strong> is the cushion between &ldquo;break-even on a perfect year&rdquo; and &ldquo;survive a slow quarter.&rdquo; Without it, one bad month puts you in the red. Most healthy trades target 15-25%.</p>
+
+  <h3>What this calculator doesn&rsquo;t cover</h3>
+  <ul>
+    <li><strong>Health insurance</strong> &mdash; if you&rsquo;re on COBRA or marketplace insurance, add $7,000-15,000/year to expenses</li>
+    <li><strong>Retirement contributions</strong> &mdash; SEP-IRA or Solo 401k contributions come out of revenue too. Add to expenses if you&rsquo;re saving toward retirement.</li>
+    <li><strong>Travel time billing</strong> &mdash; some trades bill portal-to-portal (door-to-door including drive time), others only on-site time. If you don&rsquo;t bill drive time, your &ldquo;billable hours&rdquo; should be only on-site hours.</li>
+    <li><strong>Materials markup</strong> &mdash; this is hourly labor only. If you&rsquo;re marking up materials too, that&rsquo;s separate revenue. See our <a href="/blog/markup-vs-margin-for-trades" style="color: #534AB7;">markup vs margin guide</a>.</li>
+  </ul>
+</section>
+
+<section class="cta-banner">
+  <h2>Quote jobs at the right rate, automatically.</h2>
+  <p>Operaite&rsquo;s invoicing and proposal modules apply your hourly rate (and material markup) to every quote you send &mdash; and tracks how many billable hours you actually log per month so you can recalibrate quarterly.</p>
+  <a class="cta-banner-btn" href="/#signup">Start your 7-day free trial</a>
+  <div class="cta-banner-note">$29/mo after trial. Cancel anytime.</div>
+</section>
+
+<footer class="tool-footer">
+  <div class="tool-footer-inner">
+    <div class="tool-footer-brand">
+      <div class="tool-footer-brand-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="tool-footer-brand-name">Opera<span>ite</span></span>
+    </div>
+    <div class="tool-footer-links">
+      <a href="/">Home</a>
+      <a href="/tools/">All tools</a>
+      <a href="/blog/">Blog</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
+    <div class="tool-footer-copy">&copy; 2026 Operaite. All rights reserved.</div>
+  </div>
+  <div class="tool-footer-sister">
+    Sister project: <a href="https://projectcalc.app">ProjectCalc</a> &mdash; free calculators for any project
+  </div>
+</footer>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const inputs = ['targetIncome', 'businessExpenses', 'taxRate', 'billableHours', 'profitMargin'].map($);
+  const fmt = (n) => '$' + Math.round(n).toLocaleString();
+
+  function calc() {
+    const target = +$('targetIncome').value || 0;
+    const expenses = +$('businessExpenses').value || 0;
+    const taxPct = (+$('taxRate').value || 0) / 100;
+    const hours = +$('billableHours').value || 1;
+    const profitPct = (+$('profitMargin').value || 0) / 100;
+
+    // Gross-up target income for taxes (if you want $80k after tax at 30%, you need to earn $80k / 0.7 = $114,286 pre-tax personal income)
+    const preTaxIncome = taxPct >= 1 ? target : target / (1 - taxPct);
+    const taxBuffer = preTaxIncome - target;
+    const baseRevenue = preTaxIncome + expenses;
+    const profitCushion = baseRevenue * profitPct;
+    const totalRevenue = baseRevenue + profitCushion;
+    const hourlyRate = totalRevenue / hours;
+
+    $('hourlyRate').textContent = fmt(hourlyRate);
+    $('dailyRate').textContent = fmt(hourlyRate * 8);
+    $('weeklyRate').textContent = fmt(hourlyRate * 40);
+    $('annualRevenue').textContent = fmt(totalRevenue);
+    $('netCheck').textContent = fmt(target);
+
+    $('bdTarget').textContent = fmt(target);
+    $('bdTax').textContent = fmt(taxBuffer);
+    $('bdExpenses').textContent = fmt(expenses);
+    $('bdProfit').textContent = fmt(profitCushion);
+    $('bdRevenue').textContent = fmt(totalRevenue);
+
+    document.querySelector('.result-unit').textContent =
+      'to hit a ' + fmt(target) + ' take-home at ' + (+$('billableHours').value).toLocaleString() + ' billable hours.';
+  }
+
+  inputs.forEach(el => el.addEventListener('input', calc));
+  calc();
+})();
+</script>
+
+</body>
+</html>
