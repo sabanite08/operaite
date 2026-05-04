@@ -199,7 +199,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
     var resp = await supabase
       .from('business_profiles')
-      .select('id, business_name, service_types, intro')
+      .select('id, business_name, service_types, intro, contact_email, contact_phone')
       .eq('slug', slug)
       .single();
 
@@ -228,6 +228,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
     window._bizId = biz.id;
     window._bizName = biz.business_name;
+    window._ownerEmail = biz.contact_email || null;
+    window._ownerPhone = biz.contact_phone || null;
     setState('state-form');
   }
 
@@ -280,6 +282,25 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
     $('success-biz-name').textContent = window._bizName;
     setState('state-success');
+
+    // Fire notification emails (best-effort, don't block on failure)
+    fetch('/api/booking-notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'request_received',
+        customer_name: payload.customer_name,
+        customer_email: payload.customer_email,
+        customer_phone: payload.customer_phone,
+        service_type: payload.service_type,
+        requested_date: payload.requested_date,
+        requested_time: payload.requested_time,
+        notes: payload.notes,
+        business_name: window._bizName,
+        owner_email: window._ownerEmail,
+        owner_phone: window._ownerPhone
+      })
+    }).catch(function (e) { console.warn('booking-notify failed:', e); });
   });
 
   loadBusiness();
