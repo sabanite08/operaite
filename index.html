@@ -2244,6 +2244,46 @@
     return p;
   }
 
+  // Phase 3 migration: Profile dual-write to Supabase user_metadata.
+  // user_metadata is owner-only by definition (no RLS needed) and syncs
+  // across any device the user logs into.
+  var profileSupa = {
+    enabled: function() { return !!(currentUser && currentUser.id); },
+    upsert: async function(p) {
+      if (!this.enabled()) return;
+      try {
+        var resp = await supabase.auth.updateUser({ data: { profile: p } });
+        if (resp.error) console.warn('profileSupa.upsert failed:', resp.error);
+      } catch (e) { console.warn('profileSupa.upsert error:', e); }
+    },
+    syncOnLogin: async function() {
+      if (!this.enabled()) return;
+      try {
+        var { data } = await supabase.auth.getSession();
+        if (!data.session) return;
+        var meta = data.session.user.user_metadata || {};
+        var remoteProfile = meta.profile;
+        var localRaw = localStorage.getItem('operaite_profile');
+        var localProfile = {};
+        try { localProfile = localRaw ? JSON.parse(localRaw) : {}; } catch(e) {}
+        var hasLocal = Object.keys(localProfile).length > 0;
+        var hasRemote = remoteProfile && Object.keys(remoteProfile).length > 0;
+        if (!hasRemote && hasLocal) {
+          // No remote profile yet; push local up
+          await this.upsert(localProfile);
+          return;
+        }
+        if (hasRemote && !hasLocal) {
+          // Local empty (new device); pull remote down
+          localStorage.setItem('operaite_profile', JSON.stringify(remoteProfile));
+          if (typeof applyProfileToForms === 'function') applyProfileToForms();
+        }
+        // If both present, prefer local (current device is the active one).
+        // Conflict resolution is a v1.1 concern.
+      } catch (e) { console.warn('profileSupa.syncOnLogin error:', e); }
+    }
+  };
+
   function applyProfileToForms() {
     var p = loadProfile();
     var addr = [p.address, p.city && p.state ? p.city + ', ' + p.state + ' ' + (p.zip || '') : (p.city || '')].filter(Boolean).join(', ');
@@ -2278,6 +2318,7 @@
     };
     localStorage.setItem('operaite_profile', JSON.stringify(p));
     applyProfileToForms();
+    profileSupa.upsert(p); // Phase 3 migration: dual-write to user_metadata
     var msg = document.getElementById('prof-saved-msg');
     msg.style.display = 'block';
     setTimeout(function() { msg.style.display = 'none'; }, 3000);
@@ -2359,6 +2400,10 @@
     // Phase 1 migration: if logged in, sync scheduler with Supabase (best-effort)
     if (typeof schedSupa !== 'undefined' && schedSupa.enabled()) {
       schedSupa.syncOnLogin();
+    }
+    // Phase 3 migration: sync profile with user_metadata
+    if (typeof profileSupa !== 'undefined' && profileSupa.enabled()) {
+      profileSupa.syncOnLogin();
     }
     // Booking inbox: load pending booking requests for the in-scheduler view
     if (typeof bookingInbox !== 'undefined') {
