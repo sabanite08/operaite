@@ -400,37 +400,60 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     });
   });
 
-  // Bridge: add an approved booking to the localStorage scheduler used by the main Operaite app.
-  // Same browser only — appears in the main /scheduler view next time the user navigates there + refreshes.
-  function addToLocalScheduler(req) {
+  // Bridge: add an approved booking to BOTH localStorage (existing scheduler)
+  // AND Supabase appointments table (Phase 1 migration). localStorage write is
+  // for the same-browser main-app calendar; Supabase write is for multi-device.
+  async function addToLocalScheduler(req) {
+    var localId = 's_' + Date.now();
+    var title = (req.service_type || 'Appointment') + (req.customer_name ? ' — ' + req.customer_name : '');
+    var item = {
+      id: localId,
+      bookingRequestId: req.id,
+      type: 'appt',
+      date: req.requested_date,
+      time: req.requested_time,
+      title: title,
+      name: req.customer_name || '',
+      email: req.customer_email || '',
+      phone: req.customer_phone || '',
+      location: '',
+      notes: req.notes || '',
+      created: Date.now()
+    };
+
+    // localStorage write (same-browser scheduler)
+    var addedLocal = false;
     try {
       var raw = localStorage.getItem('operaite_schedule') || '[]';
       var items = JSON.parse(raw);
-      // Avoid double-add if user clicks Approve twice on the same request
       var alreadyAdded = items.some(function (x) { return x.bookingRequestId === req.id; });
-      if (alreadyAdded) return false;
-      var title = (req.service_type || 'Appointment') + (req.customer_name ? ' — ' + req.customer_name : '');
-      var item = {
-        id: 's_' + Date.now(),
-        bookingRequestId: req.id,
+      if (!alreadyAdded) {
+        items.push(item);
+        localStorage.setItem('operaite_schedule', JSON.stringify(items));
+        addedLocal = true;
+      }
+    } catch (e) { console.warn('Local scheduler write failed:', e); }
+
+    // Supabase write (multi-device scheduler) — best-effort, don't block UI
+    if (session && session.user && session.user.id) {
+      supabase.from('appointments').upsert({
+        user_id: session.user.id,
+        booking_request_id: req.id,
+        local_id: localId,
         type: 'appt',
-        date: req.requested_date,
-        time: req.requested_time,
-        title: title,
-        name: req.customer_name || '',
-        email: req.customer_email || '',
-        phone: req.customer_phone || '',
-        location: '',
-        notes: req.notes || '',
-        created: Date.now()
-      };
-      items.push(item);
-      localStorage.setItem('operaite_schedule', JSON.stringify(items));
-      return true;
-    } catch (e) {
-      console.warn('Could not add to local scheduler:', e);
-      return false;
+        appointment_date: req.requested_date,
+        appointment_time: req.requested_time,
+        title: title.slice(0, 300) || 'Appointment',
+        customer_name: req.customer_name || null,
+        customer_email: req.customer_email || null,
+        customer_phone: req.customer_phone || null,
+        notes: req.notes || null
+      }, { onConflict: 'user_id,local_id' }).then(function (resp) {
+        if (resp.error) console.warn('Supabase appointment upsert failed:', resp.error);
+      });
     }
+
+    return addedLocal;
   }
 
   $('req-list').addEventListener('click', async function (e) {

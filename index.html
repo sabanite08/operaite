@@ -2329,6 +2329,10 @@
     showPage('dashboard');
     updateDashboard();
     applyProfileToForms();
+    // Phase 1 migration: if logged in, sync scheduler with Supabase (best-effort)
+    if (typeof schedSupa !== 'undefined' && schedSupa.enabled()) {
+      schedSupa.syncOnLogin();
+    }
   }
 
   function initStripe() {
@@ -2422,7 +2426,7 @@
     try {
       var res = await supabase.auth.signUp({ email: email, password: password, options: { data: { name: name } } });
       if (res.error) { showError('signup-error', res.error.message); btn.textContent = 'Create Account'; btn.disabled = false; return; }
-      currentUser = { email: email, name: name, customerId: '', subscribed: false };
+      currentUser = { id: res.data.user && res.data.user.id, email: email, name: name, customerId: '', subscribed: false };
       if (email === 'sabanite08@gmail.com') {
         await supabase.auth.updateUser({ data: { name: name, customerId: 'admin', subscribed: true } });
         currentUser.subscribed = true; currentUser.customerId = 'admin';
@@ -2445,7 +2449,7 @@
       var res = await supabase.auth.signInWithPassword({ email: email, password: password });
       if (res.error) { showError('login-error', 'Invalid email or password.'); btn.textContent = 'Log In'; btn.disabled = false; return; }
       var meta = res.data.user.user_metadata || {};
-      currentUser = { email: res.data.user.email, name: meta.name || '', customerId: meta.customerId || '', subscribed: meta.subscribed || false };
+      currentUser = { id: res.data.user.id, email: res.data.user.email, name: meta.name || '', customerId: meta.customerId || '', subscribed: meta.subscribed || false };
       if (email === 'sabanite08@gmail.com' && !currentUser.subscribed) {
         await supabase.auth.updateUser({ data: { customerId: 'admin', subscribed: true } });
         currentUser.subscribed = true; currentUser.customerId = 'admin';
@@ -3530,14 +3534,102 @@
     bannerUrl: '/confirmation-banner.png'
   };
 
+  // Phase 1 Supabase migration: dual-write helper. localStorage is the source
+  // of truth in the UX; Supabase writes are best-effort and async. After ~1
+  // week of stable dual-write we'll flip primary read to Supabase.
+  var schedSupa = {
+    enabled: function() { return !!(currentUser && currentUser.id); },
+    itemToRow: function(item) {
+      return {
+        local_id: item.id,
+        booking_request_id: item.bookingRequestId || null,
+        type: item.type === 'appt' ? 'appt' : 'job',
+        appointment_date: item.date,
+        appointment_time: item.time,
+        title: (item.title || '').slice(0, 300) || 'Untitled',
+        customer_name: (item.name || null) || null,
+        customer_email: (item.email || null) || null,
+        customer_phone: (item.phone || null) || null,
+        location: (item.location || null) || null,
+        notes: (item.notes || null) || null
+      };
+    },
+    rowToItem: function(row) {
+      return {
+        id: row.local_id || row.id,
+        bookingRequestId: row.booking_request_id,
+        type: row.type,
+        date: row.appointment_date,
+        time: row.appointment_time,
+        title: row.title || '',
+        name: row.customer_name || '',
+        email: row.customer_email || '',
+        phone: row.customer_phone || '',
+        location: row.location || '',
+        notes: row.notes || '',
+        created: row.created_at ? new Date(row.created_at).getTime() : Date.now()
+      };
+    },
+    upsert: async function(item) {
+      if (!this.enabled()) return;
+      try {
+        var row = this.itemToRow(item);
+        row.user_id = currentUser.id;
+        var resp = await supabase.from('appointments').upsert(row, { onConflict: 'user_id,local_id' });
+        if (resp.error) console.warn('schedSupa.upsert failed:', resp.error);
+      } catch (e) { console.warn('schedSupa.upsert error:', e); }
+    },
+    remove: async function(localId) {
+      if (!this.enabled()) return;
+      try {
+        var resp = await supabase.from('appointments').delete().eq('local_id', localId).eq('user_id', currentUser.id);
+        if (resp.error) console.warn('schedSupa.remove failed:', resp.error);
+      } catch (e) { console.warn('schedSupa.remove error:', e); }
+    },
+    loadAll: async function() {
+      if (!this.enabled()) return null;
+      try {
+        var resp = await supabase.from('appointments').select('*').eq('user_id', currentUser.id).order('appointment_date', { ascending: true });
+        if (resp.error) { console.warn('schedSupa.loadAll failed:', resp.error); return null; }
+        return resp.data.map(this.rowToItem);
+      } catch (e) { console.warn('schedSupa.loadAll error:', e); return null; }
+    },
+    syncOnLogin: async function() {
+      if (!this.enabled()) return;
+      var supaItems = await this.loadAll();
+      if (supaItems === null) return; // network error — keep localStorage as-is
+      if (supaItems.length === 0 && schedState.items.length > 0) {
+        // First time: import existing localStorage items into Supabase
+        try {
+          var rows = schedState.items.map(function(item) {
+            var r = schedSupa.itemToRow(item);
+            r.user_id = currentUser.id;
+            return r;
+          });
+          var resp = await supabase.from('appointments').insert(rows);
+          if (resp.error) { console.warn('schedSupa import failed:', resp.error); return; }
+          console.log('schedSupa: imported ' + rows.length + ' appointments from localStorage');
+        } catch (e) { console.warn('schedSupa import error:', e); return; }
+        return; // Skip overwrite — we just imported what was already there
+      }
+      if (supaItems.length > 0) {
+        // Use Supabase as authoritative when it has data
+        schedState.items = supaItems;
+        try { localStorage.setItem('operaite_schedule', JSON.stringify(schedState.items)); } catch(e) {}
+        if (typeof schedRenderAll === 'function') schedRenderAll();
+      }
+    }
+  };
+
   function schedEsc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
 
-  function schedSave() {
+  function schedSave(changedItem) {
     localStorage.setItem('operaite_schedule', JSON.stringify(schedState.items));
+    if (changedItem) schedSupa.upsert(changedItem); // best-effort, fire and forget
   }
 
   function schedFmtDate(d) {
@@ -3850,7 +3942,7 @@
     };
     var idx = schedState.items.findIndex(function(it) { return it.id === id; });
     if (idx >= 0) schedState.items[idx] = item; else schedState.items.push(item);
-    schedSave();
+    schedSave(item);
     schedHideForm();
     schedRenderAll();
   });
@@ -3892,6 +3984,7 @@
       if (confirm('Delete this scheduled item?')) {
         schedState.items = schedState.items.filter(function(it) { return it.id !== id; });
         schedSave();
+        schedSupa.remove(id); // best-effort dual-delete
         schedRenderAll();
       }
     } else if (act === 'confirm') {
@@ -3907,6 +4000,7 @@
     if (data.session) {
       var meta = data.session.user.user_metadata || {};
       currentUser = {
+        id: data.session.user.id,
         email: data.session.user.email,
         name: meta.name || '',
         customerId: meta.customerId || '',
