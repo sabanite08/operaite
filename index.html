@@ -823,15 +823,7 @@
           <p class="lp-section-p">One subscription covers every tool — no add-ons, no upsells, no per-seat pricing.</p>
         </div>
         <div class="lp-feat-grid">
-          <div class="lp-feat-card span-2 featured" onclick="lpFeatClick(this,'reviews')">
-            <div class="lp-feat-icon">⭐</div>
-            <div class="lp-feat-title">AI Review Manager</div>
-            <div class="lp-feat-desc">Reply to every Google and Yelp review in seconds. AI crafts responses that sound just like you — empathetic, on-brand, and ready to send.</div>
-            <div class="lp-feat-card-visual">
-              <div class="lp-feat-card-visual-row"><span>⭐⭐⭐⭐⭐ "Fast, friendly, professional…"</span><strong>Reply →</strong></div>
-              <div class="lp-feat-card-visual-row"><span>⭐⭐⭐⭐ "Solid work, fair price."</span><strong>Reply →</strong></div>
-            </div>
-          </div>
+          <!-- Row 1: featured Online Booking (span-2) + Reviews (span-1) -->
           <div class="lp-feat-card span-2 featured is-new" onclick="window.location.href='/features/online-booking'">
             <div class="lp-feat-icon">📅</div>
             <div class="lp-feat-title">Online Booking via Google</div>
@@ -841,6 +833,13 @@
               <div class="lp-feat-card-visual-row"><span>operaite.net/book/your-business</span><strong>Public URL</strong></div>
             </div>
           </div>
+          <div class="lp-feat-card" onclick="lpFeatClick(this,'reviews')">
+            <div class="lp-feat-icon">⭐</div>
+            <div class="lp-feat-title">AI Review Manager</div>
+            <div class="lp-feat-desc">Reply to every Google and Yelp review in seconds. AI crafts responses that sound just like you — empathetic, on-brand, and ready to send.</div>
+          </div>
+
+          <!-- Row 2: Invoicing + Auto-Accounting + Marketing -->
           <div class="lp-feat-card is-new" onclick="lpFeatClick(this,'invoicing')">
             <div class="lp-feat-icon">📄</div>
             <div class="lp-feat-title">Invoicing &amp; Recurring</div>
@@ -856,6 +855,8 @@
             <div class="lp-feat-title">Marketing Audit</div>
             <div class="lp-feat-desc">Instantly score your online presence and get a prioritized list of improvements.</div>
           </div>
+
+          <!-- Row 3: featured Social Media (span-2) + 4 More Tools (span-1) -->
           <div class="lp-feat-card span-2 featured" onclick="lpFeatClick(this,'social')">
             <div class="lp-feat-icon">📱</div>
             <div class="lp-feat-title">Social Media AI</div>
