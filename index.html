@@ -2405,6 +2405,10 @@
     if (typeof profileSupa !== 'undefined' && profileSupa.enabled()) {
       profileSupa.syncOnLogin();
     }
+    // Phase 5 migration: sync accounting with Supabase
+    if (typeof acctSupa !== 'undefined' && acctSupa.enabled()) {
+      acctSupa.syncOnLogin();
+    }
     // Booking inbox: load pending booking requests for the in-scheduler view
     if (typeof bookingInbox !== 'undefined') {
       bookingInbox.init();
@@ -3371,7 +3375,85 @@
   var incomeCategories = ['Sales', 'Services', 'Consulting', 'Refund', 'Other income'];
   var expenseCategories = ['Supplies', 'Rent', 'Utilities', 'Marketing', 'Payroll', 'Software', 'Equipment', 'Travel', 'Taxes', 'Other expense'];
 
-  function saveAcctEntries() { localStorage.setItem('operaite_accounting', JSON.stringify(acctEntries)); }
+  // Phase 5 migration: accounting dual-write to Supabase
+  var acctSupa = {
+    enabled: function() { return !!(currentUser && currentUser.id); },
+    itemToRow: function(e) {
+      return {
+        local_id: e.id,
+        type: e.type === 'expense' ? 'expense' : 'income',
+        entry_date: e.date,
+        amount: parseFloat(e.amount) || 0,
+        description: (e.desc || '').slice(0, 1000) || 'Untitled',
+        category: e.category || null
+      };
+    },
+    rowToItem: function(row) {
+      return {
+        id: row.local_id || row.id,
+        type: row.type,
+        date: row.entry_date,
+        amount: parseFloat(row.amount),
+        desc: row.description,
+        category: row.category || ''
+      };
+    },
+    upsert: async function(entry) {
+      if (!this.enabled()) return;
+      try {
+        var row = this.itemToRow(entry);
+        row.user_id = currentUser.id;
+        var resp = await supabase.from('accounting_entries').upsert(row, { onConflict: 'user_id,local_id' });
+        if (resp.error) console.warn('acctSupa.upsert failed:', resp.error);
+      } catch (e) { console.warn('acctSupa.upsert error:', e); }
+    },
+    remove: async function(localId) {
+      if (!this.enabled()) return;
+      try {
+        var resp = await supabase.from('accounting_entries').delete().eq('local_id', localId).eq('user_id', currentUser.id);
+        if (resp.error) console.warn('acctSupa.remove failed:', resp.error);
+      } catch (e) { console.warn('acctSupa.remove error:', e); }
+    },
+    loadAll: async function() {
+      if (!this.enabled()) return null;
+      try {
+        var resp = await supabase.from('accounting_entries').select('*').eq('user_id', currentUser.id).order('entry_date', { ascending: false });
+        if (resp.error) { console.warn('acctSupa.loadAll failed:', resp.error); return null; }
+        return resp.data.map(this.rowToItem);
+      } catch (e) { console.warn('acctSupa.loadAll error:', e); return null; }
+    },
+    syncOnLogin: async function() {
+      if (!this.enabled()) return;
+      var supaItems = await this.loadAll();
+      if (supaItems === null) return;
+      if (supaItems.length === 0 && acctEntries.length > 0) {
+        // First-time: import existing localStorage entries
+        try {
+          var rows = acctEntries.map(function(e) {
+            var r = acctSupa.itemToRow(e);
+            r.user_id = currentUser.id;
+            return r;
+          });
+          var resp = await supabase.from('accounting_entries').insert(rows);
+          if (resp.error) { console.warn('acctSupa import failed:', resp.error); return; }
+          console.log('acctSupa: imported ' + rows.length + ' entries from localStorage');
+        } catch (e) { console.warn('acctSupa import error:', e); }
+        return;
+      }
+      if (supaItems.length > 0) {
+        acctEntries = supaItems;
+        try { localStorage.setItem('operaite_accounting', JSON.stringify(acctEntries)); } catch(e) {}
+        if (typeof renderAcct === 'function') renderAcct();
+        if (typeof populateMonthFilter === 'function') populateMonthFilter();
+        if (typeof updateDashboard === 'function') updateDashboard();
+      }
+    }
+  };
+
+  function saveAcctEntries(changedEntry) {
+    localStorage.setItem('operaite_accounting', JSON.stringify(acctEntries));
+    if (changedEntry) acctSupa.upsert(changedEntry); // best-effort dual-write
+  }
 
   function renderAcct() {
     var filter = document.getElementById('acct-filter-month').value;
@@ -3404,6 +3486,7 @@
   window.deleteAcctEntry = function(id) {
     acctEntries = acctEntries.filter(function(e) { return e.id !== id; });
     saveAcctEntries();
+    acctSupa.remove(id); // best-effort dual-delete
     populateMonthFilter();
     renderAcct();
   };
@@ -3445,8 +3528,9 @@
     var desc = document.getElementById('acct-desc').value.trim();
     var category = document.getElementById('acct-category').value;
     if (!date || !amount || amount <= 0 || !desc) { alert('Please fill in all fields.'); return; }
-    acctEntries.push({ id: Date.now().toString(), type: acctCurrentType, date: date, amount: amount, desc: desc, category: category });
-    saveAcctEntries();
+    var newEntry = { id: Date.now().toString(), type: acctCurrentType, date: date, amount: amount, desc: desc, category: category };
+    acctEntries.push(newEntry);
+    saveAcctEntries(newEntry);
     document.getElementById('acct-form').style.display = 'none';
     populateMonthFilter();
     renderAcct();
@@ -3472,6 +3556,10 @@
         if (acctEntries.length && !confirm('This will replace your current data (' + acctEntries.length + ' entries). Continue?')) return;
         acctEntries = data;
         saveAcctEntries();
+        // Bulk-write the restored entries to Supabase as well
+        if (acctSupa.enabled()) {
+          data.forEach(function(e) { acctSupa.upsert(e); });
+        }
         populateMonthFilter();
         renderAcct();
         alert('Backup loaded — ' + data.length + ' entries restored.');
