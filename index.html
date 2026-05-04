@@ -1423,6 +1423,17 @@
           </div>
         </div>
 
+        <div class="card" id="recurring-invoices-card" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div class="card-title" style="margin-bottom:0;display:flex;align-items:center;gap:10px;">
+              🔁 Recurring invoices
+              <span id="recurring-invoices-count" style="background:#534AB7;color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:11px;">0</span>
+            </div>
+            <div style="font-size:12.5px;color:#888;">Auto-generated invoices appear in Saved invoices below.</div>
+          </div>
+          <div id="recurring-invoices-list"></div>
+        </div>
+
         <div class="card" id="invoice-history-card" style="display:none;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
             <div class="card-title" style="margin-bottom:0;display:flex;align-items:center;gap:10px;">
@@ -1564,8 +1575,35 @@
                 Download PDF
               </button>
               <button type="button" class="inv2-btn-secondary" id="inv2-save-btn"><span class="inv2-spark">💾</span> Save invoice</button>
+              <button type="button" class="inv2-btn-secondary" id="inv2-make-recurring-btn"><span class="inv2-spark">🔁</span> Make recurring</button>
               <button type="button" class="inv2-btn-secondary" id="inv2-reminder-btn"><span class="inv2-spark">✉️</span> Draft reminder</button>
               <button type="button" class="inv2-btn-ghost" id="inv2-reset-btn">New invoice</button>
+            </div>
+            <div id="inv2-recurring-form" style="display:none;margin-top:12px;padding:12px 14px;background:#f6f5ff;border:1px dashed #534AB7;border-radius:9px;">
+              <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Set up recurring schedule</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+                <div>
+                  <label style="font-size:11.5px;color:#666;display:block;margin-bottom:3px;">Frequency</label>
+                  <select id="inv2-recur-freq" style="width:100%;padding:7px 9px;font-size:13.5px;border:1px solid #d8d8d4;border-radius:6px;">
+                    <option value="weekly">Every week</option>
+                    <option value="biweekly">Every 2 weeks</option>
+                    <option value="monthly" selected>Every month</option>
+                    <option value="quarterly">Every quarter</option>
+                    <option value="yearly">Every year</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:11.5px;color:#666;display:block;margin-bottom:3px;">First due date</label>
+                  <input type="date" id="inv2-recur-start" style="width:100%;padding:7px 9px;font-size:13.5px;border:1px solid #d8d8d4;border-radius:6px;">
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button type="button" class="inv2-btn-primary" id="inv2-recur-create-btn" style="padding:7px 14px;font-size:13px;">Create recurring template</button>
+                <button type="button" class="inv2-btn-ghost" id="inv2-recur-cancel-btn" style="padding:7px 14px;font-size:13px;">Cancel</button>
+              </div>
+              <div style="font-size:11.5px;color:#666;margin-top:6px;line-height:1.4;">
+                A new invoice will be auto-generated on each cycle when you log in. The current draft becomes the template — fill in client info, line items, tax/discount, and notes before creating.
+              </div>
             </div>
             <div id="inv-email-btns" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #ececea;">
               <div style="font-size:12px;color:#999;margin-bottom:6px;">Send via</div>
@@ -2458,6 +2496,10 @@
     if (typeof custSupa !== 'undefined' && custSupa.enabled()) {
       custSupa.refresh();
     }
+    // Phase 6 (d): run due recurring-invoice generations + load templates
+    if (typeof recurSupa !== 'undefined' && recurSupa.enabled()) {
+      recurSupa.runDueGenerations().then(function() { recurSupa.refresh(); });
+    }
     // Booking inbox: load pending booking requests for the in-scheduler view
     if (typeof bookingInbox !== 'undefined') {
       bookingInbox.init();
@@ -2768,6 +2810,241 @@
     var total = afterDiscount + tax;
     return { subtotal: subtotal, discount: discount, tax: tax, total: total };
   }
+
+  // Phase 6 (d): Recurring invoices
+  var recurSupa = {
+    list: [],
+    enabled: function() { return !!(currentUser && currentUser.id); },
+
+    advance: function(date, frequency) {
+      var d = new Date(date + 'T00:00:00');
+      if (frequency === 'weekly') d.setDate(d.getDate() + 7);
+      else if (frequency === 'biweekly') d.setDate(d.getDate() + 14);
+      else if (frequency === 'monthly') d.setMonth(d.getMonth() + 1);
+      else if (frequency === 'quarterly') d.setMonth(d.getMonth() + 3);
+      else if (frequency === 'yearly') d.setFullYear(d.getFullYear() + 1);
+      return d.toISOString().slice(0,10);
+    },
+
+    fmtDate: function(iso) {
+      if (!iso) return '';
+      var d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    },
+
+    statusPill: function(s) {
+      var colors = { active: { bg:'#d1fae5', fg:'#065f46' }, paused: { bg:'#fef3c7', fg:'#854d0e' }, ended: { bg:'#f3f4f6', fg:'#666' } };
+      var c = colors[s] || colors.active;
+      return '<span style="background:' + c.bg + ';color:' + c.fg + ';font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:0.05em;">' + s + '</span>';
+    },
+
+    fetchAll: async function() {
+      if (!this.enabled()) return [];
+      try {
+        var resp = await supabase.from('recurring_invoices').select('*').eq('user_id', currentUser.id).order('next_due_date', { ascending: true });
+        if (resp.error) { console.warn('recurSupa.fetchAll failed:', resp.error); return []; }
+        return resp.data || [];
+      } catch (e) { console.warn('recurSupa.fetchAll error:', e); return []; }
+    },
+
+    fetchItems: async function(recurringId) {
+      try {
+        var resp = await supabase.from('recurring_invoice_items').select('*').eq('recurring_invoice_id', recurringId).order('position', { ascending: true });
+        if (resp.error) { console.warn('recurSupa.fetchItems failed:', resp.error); return []; }
+        return resp.data || [];
+      } catch (e) { console.warn('recurSupa.fetchItems error:', e); return []; }
+    },
+
+    create: async function(frequency, firstDueDate) {
+      if (!this.enabled()) return null;
+      // Validate the inv2 draft has client + at least one item
+      if (!inv2.client.name || !inv2.client.name.trim()) {
+        alert('Add a client name first.');
+        return null;
+      }
+      var validItems = (inv2.items || []).filter(function(it) {
+        return (it.desc || '').trim() && (parseFloat(it.rate) || 0) > 0;
+      });
+      if (validItems.length === 0) {
+        alert('Add at least one line item with a description and rate.');
+        return null;
+      }
+      var row = {
+        user_id: currentUser.id,
+        customer_id: inv2.customerId || null,
+        label: (inv2.client.name || 'Recurring') + ' · ' + frequency,
+        business_name: inv2.business.name || null,
+        business_email: inv2.business.email || null,
+        business_phone: inv2.business.phone || null,
+        business_address: inv2.business.address || null,
+        client_name: inv2.client.name || null,
+        client_email: inv2.client.email || null,
+        client_phone: inv2.client.phone || null,
+        client_address: inv2.client.address || null,
+        template: inv2.template || 'classic',
+        currency: getCurrencySymbol(),
+        notes: inv2.notes || null,
+        tax_rate: parseFloat(inv2.tax) || 0,
+        discount_amount: parseFloat(inv2.discount) || 0,
+        frequency: frequency,
+        next_due_date: firstDueDate,
+        status: 'active'
+      };
+      try {
+        var insResp = await supabase.from('recurring_invoices').insert(row).select().single();
+        if (insResp.error) { alert('Could not create: ' + insResp.error.message); return null; }
+        var rid = insResp.data.id;
+        var items = validItems.map(function(it, i) {
+          return {
+            recurring_invoice_id: rid,
+            position: i,
+            description: (it.desc || '').slice(0,1000),
+            quantity: parseFloat(it.qty) || 0,
+            rate: parseFloat(it.rate) || 0
+          };
+        });
+        if (items.length > 0) {
+          var lineResp = await supabase.from('recurring_invoice_items').insert(items);
+          if (lineResp.error) console.warn('recurring items insert failed:', lineResp.error);
+        }
+        return insResp.data;
+      } catch (e) {
+        console.warn('recurSupa.create error:', e);
+        return null;
+      }
+    },
+
+    updateStatus: async function(id, status) {
+      try {
+        var resp = await supabase.from('recurring_invoices').update({ status: status }).eq('id', id);
+        if (resp.error) { alert('Could not update: ' + resp.error.message); return false; }
+        return true;
+      } catch (e) { return false; }
+    },
+
+    remove: async function(id) {
+      try {
+        var resp = await supabase.from('recurring_invoices').delete().eq('id', id);
+        if (resp.error) { alert('Could not delete: ' + resp.error.message); return false; }
+        return true;
+      } catch (e) { return false; }
+    },
+
+    render: function() {
+      var card = document.getElementById('recurring-invoices-card');
+      var listEl = document.getElementById('recurring-invoices-list');
+      var count = document.getElementById('recurring-invoices-count');
+      if (!card || !listEl || !count) return;
+      if (!this.list || this.list.length === 0) {
+        card.style.display = 'none';
+        return;
+      }
+      card.style.display = 'block';
+      count.textContent = this.list.length;
+      var self = this;
+      listEl.innerHTML = this.list.map(function(r) {
+        var actions = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">' +
+          (r.status === 'active'
+            ? '<button class="btn sm" data-rec-act="pause" data-rec-id="' + r.id + '" style="padding:5px 10px;font-size:12px;">Pause</button>'
+            : (r.status === 'paused'
+              ? '<button class="btn sm" data-rec-act="resume" data-rec-id="' + r.id + '" style="padding:5px 10px;font-size:12px;background:#10B981;color:#fff;border-color:#10B981;">Resume</button>'
+              : '')) +
+          (r.status !== 'ended' ? '<button class="btn sm" data-rec-act="end" data-rec-id="' + r.id + '" style="padding:5px 10px;font-size:12px;">End</button>' : '') +
+          '<button class="btn sm" data-rec-act="delete" data-rec-id="' + r.id + '" style="padding:5px 10px;font-size:12px;color:#c44;border-color:#f5c2c2;">Delete</button>' +
+        '</div>';
+        var labelText = r.label || ((r.client_name || 'Recurring') + ' · ' + r.frequency);
+        return '<div style="border-bottom:1px solid #f0f0ec;padding:10px 0;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-start;">' +
+          '<div style="min-width:200px;flex:2;">' +
+            '<div style="font-size:13.5px;font-weight:700;color:#1a1a1a;">' + inv2Esc(labelText) + '</div>' +
+            '<div style="font-size:11.5px;color:#999;">' + r.frequency + ' · next: ' + self.fmtDate(r.next_due_date) + '</div>' +
+          '</div>' +
+          '<div style="font-size:11.5px;color:#888;flex:1;min-width:120px;">' + inv2Esc(r.client_name || '—') + '</div>' +
+          '<div style="flex-shrink:0;align-self:center;">' + self.statusPill(r.status) + '</div>' +
+          '<div style="width:100%;">' + actions + '</div>' +
+        '</div>';
+      }).join('');
+    },
+
+    refresh: async function() {
+      if (!this.enabled()) { this.list = []; this.render(); return; }
+      this.list = await this.fetchAll();
+      this.render();
+    },
+
+    // Generation: find any active recurrings whose next_due_date is today or earlier
+    // and create a real invoice for each, advancing next_due_date.
+    runDueGenerations: async function() {
+      if (!this.enabled()) return;
+      var today = new Date().toISOString().slice(0,10);
+      try {
+        var dueResp = await supabase
+          .from('recurring_invoices')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .eq('status', 'active')
+          .lte('next_due_date', today);
+        if (dueResp.error) { console.warn('runDueGenerations query failed:', dueResp.error); return; }
+        var due = dueResp.data || [];
+        if (due.length === 0) return;
+        var generated = 0;
+        for (var i = 0; i < due.length; i++) {
+          var r = due[i];
+          var items = await this.fetchItems(r.id);
+          // Compute totals
+          var subtotal = items.reduce(function(a, it) { return a + ((parseFloat(it.quantity)||0) * (parseFloat(it.rate)||0)); }, 0);
+          var discount = parseFloat(r.discount_amount) || 0;
+          var afterDiscount = Math.max(0, subtotal - discount);
+          var taxRate = (parseFloat(r.tax_rate) || 0) / 100;
+          var taxAmt = afterDiscount * taxRate;
+          var total = afterDiscount + taxAmt;
+          // Build invoice number using the same sequence
+          inv2BumpSeq();
+          var d = new Date();
+          var seq = parseInt(localStorage.getItem('operaite_invoice_seq_paid') || '0', 10);
+          var invoiceNumber = 'INV-' + d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(seq).padStart(3, '0');
+          var invoiceRow = {
+            user_id: currentUser.id,
+            customer_id: r.customer_id,
+            invoice_number: invoiceNumber,
+            business_name: r.business_name, business_email: r.business_email, business_phone: r.business_phone, business_address: r.business_address,
+            client_name: r.client_name, client_email: r.client_email, client_phone: r.client_phone, client_address: r.client_address,
+            issue_date: r.next_due_date,
+            due_date: this.advance(r.next_due_date, 'monthly'), // generated invoices: due 30 days after issue
+            subtotal: subtotal.toFixed(2),
+            tax_rate: parseFloat(r.tax_rate) || 0,
+            tax_amount: taxAmt.toFixed(2),
+            discount_amount: discount.toFixed(2),
+            total: total.toFixed(2),
+            status: 'sent',
+            notes: r.notes || null,
+            template: r.template || 'classic',
+            currency: r.currency || '$'
+          };
+          var insResp = await supabase.from('invoices').insert(invoiceRow).select().single();
+          if (insResp.error) { console.warn('generated invoice insert failed:', insResp.error); continue; }
+          var newInvoiceId = insResp.data.id;
+          if (items.length > 0) {
+            var newItems = items.map(function(it, idx) {
+              var qty = parseFloat(it.quantity) || 0;
+              var rate = parseFloat(it.rate) || 0;
+              return { invoice_id: newInvoiceId, position: idx, description: it.description, quantity: qty, rate: rate, amount: (qty * rate).toFixed(2) };
+            });
+            await supabase.from('invoice_line_items').insert(newItems);
+          }
+          // Advance next_due_date
+          var nextDue = this.advance(r.next_due_date, r.frequency);
+          await supabase.from('recurring_invoices').update({ next_due_date: nextDue }).eq('id', r.id);
+          generated++;
+        }
+        if (generated > 0 && typeof inv2Toast === 'function') {
+          inv2Toast('Auto-generated ' + generated + ' invoice' + (generated === 1 ? '' : 's') + ' from recurring schedules.');
+        }
+        // Refresh history + recurring list
+        if (typeof invSupa !== 'undefined') invSupa.refresh();
+        await this.refresh();
+      } catch (e) { console.warn('runDueGenerations error:', e); }
+    }
+  };
 
   // Phase 6 (a): Customer database
   var custSupa = {
@@ -3658,6 +3935,63 @@
   document.getElementById('invoice-history-filter').addEventListener('change', function(e) {
     invSupa.historyFilter = e.target.value;
     invSupa.render();
+  });
+
+  // Phase 6 (d): "Make recurring" button → show schedule form
+  document.getElementById('inv2-make-recurring-btn').addEventListener('click', function() {
+    var form = document.getElementById('inv2-recurring-form');
+    var dateInp = document.getElementById('inv2-recur-start');
+    if (!dateInp.value) dateInp.value = inv2Today();
+    form.style.display = 'block';
+    form.scrollIntoView({ behavior:'smooth', block:'center' });
+  });
+  document.getElementById('inv2-recur-cancel-btn').addEventListener('click', function() {
+    document.getElementById('inv2-recurring-form').style.display = 'none';
+  });
+  document.getElementById('inv2-recur-create-btn').addEventListener('click', async function() {
+    var btn = this;
+    var freq = document.getElementById('inv2-recur-freq').value;
+    var firstDue = document.getElementById('inv2-recur-start').value || inv2Today();
+    btn.disabled = true; btn.textContent = 'Creating…';
+    var saved = await recurSupa.create(freq, firstDue);
+    btn.disabled = false; btn.textContent = 'Create recurring template';
+    if (!saved) return;
+    document.getElementById('inv2-recurring-form').style.display = 'none';
+    inv2Toast('Recurring template created. First invoice will generate on ' + recurSupa.fmtDate(firstDue) + '.');
+    recurSupa.refresh();
+    // If first due date is today or earlier, generate now
+    if (firstDue <= inv2Today()) {
+      recurSupa.runDueGenerations();
+    }
+  });
+
+  // Recurring list click handler (pause/resume/end/delete)
+  document.getElementById('recurring-invoices-list').addEventListener('click', async function(e) {
+    var btn = e.target.closest('button[data-rec-act]');
+    if (!btn) return;
+    var act = btn.getAttribute('data-rec-act');
+    var id = btn.getAttribute('data-rec-id');
+    var rec = recurSupa.list.find(function(r) { return r.id === id; });
+    if (!rec) return;
+    if (act === 'pause' || act === 'resume') {
+      var newStatus = act === 'pause' ? 'paused' : 'active';
+      if (await recurSupa.updateStatus(id, newStatus)) {
+        inv2Toast(act === 'pause' ? 'Paused.' : 'Resumed.');
+        recurSupa.refresh();
+      }
+    } else if (act === 'end') {
+      if (!confirm('End this recurring template? It will stop generating new invoices but past invoices remain in your history.')) return;
+      if (await recurSupa.updateStatus(id, 'ended')) {
+        inv2Toast('Ended.');
+        recurSupa.refresh();
+      }
+    } else if (act === 'delete') {
+      if (!confirm('Delete this recurring template entirely? This cannot be undone. Past invoices remain in your history.')) return;
+      if (await recurSupa.remove(id)) {
+        inv2Toast('Deleted.');
+        recurSupa.refresh();
+      }
+    }
   });
 
   // Phase 6 (a): customer picker change → auto-fill client fields
