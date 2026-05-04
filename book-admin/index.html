@@ -406,6 +406,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     var action = btn.dataset.action;
     var id = btn.dataset.id;
     var newStatus = action === 'approve' ? 'approved' : 'declined';
+    var req = requests.find(function (r) { return r.id === id; });
     btn.disabled = true; btn.textContent = action === 'approve' ? 'Approving…' : 'Declining…';
     var resp = await supabase
       .from('booking_requests')
@@ -416,9 +417,29 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       btn.disabled = false; btn.textContent = action === 'approve' ? 'Approve' : 'Decline';
       return;
     }
+
+    // Fire customer email (best-effort, don't block on failure)
+    if (req && req.customer_email) {
+      fetch('/api/booking-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: action === 'approve' ? 'request_approved' : 'request_declined',
+          customer_name: req.customer_name,
+          customer_email: req.customer_email,
+          service_type: req.service_type,
+          requested_date: req.requested_date,
+          requested_time: req.requested_time,
+          business_name: profile.business_name,
+          owner_email: profile.contact_email,
+          owner_phone: profile.contact_phone
+        })
+      }).catch(function (e) { console.warn('booking-notify failed:', e); });
+    }
+
     var msg = $('req-msg');
     msg.className = 'adm-success';
-    msg.textContent = 'Request ' + newStatus + '. Remember to email the customer with the next step.';
+    msg.textContent = 'Request ' + newStatus + '. ' + (req && req.customer_email ? 'Customer is being notified by email.' : 'Email the customer manually.');
     msg.style.display = 'block';
     setTimeout(function () { msg.style.display = 'none'; }, 4500);
     loadRequests();

@@ -4,6 +4,7 @@
   "description": "Operaite - Small Business Command Center",
   "type": "module",
   "dependencies": {
+    "resend": "^4.0.0",
     "stripe": "^14.0.0"
   }
 }
