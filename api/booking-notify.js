@@ -16,6 +16,42 @@ import { Resend } from 'resend';
 const FROM = 'Operaite <notifications@operaite.net>';
 const SITE = 'https://operaite.net';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const DAILY_LIMIT_PER_IP = 50;
+
+// ===== Rate limiting (Upstash REST) — same pattern as /api/ai-public =====
+function getClientIp(req) {
+  var xff = (req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+  if (xff) return xff;
+  return req.headers['x-real-ip'] || (req.socket && req.socket.remoteAddress) || 'unknown';
+}
+function todayKey(ip) {
+  var date = new Date().toISOString().slice(0, 10);
+  var safe = String(ip).replace(/[^a-zA-Z0-9.:_-]/g, '_').slice(0, 64);
+  return 'booking-notify:' + date + ':' + safe;
+}
+async function rateLimitCheck(ip) {
+  var url = process.env.UPSTASH_REDIS_REST_URL;
+  var token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) {
+    console.warn('[booking-notify] Upstash not configured — running without rate limit.');
+    return { allowed: true, count: 0 };
+  }
+  var key = todayKey(ip);
+  var headers = { 'Authorization': 'Bearer ' + token };
+  try {
+    var incrRes = await fetch(url + '/incr/' + encodeURIComponent(key), { method: 'POST', headers: headers });
+    if (!incrRes.ok) throw new Error('Upstash incr failed: ' + incrRes.status);
+    var incrData = await incrRes.json();
+    var count = Number(incrData.result || 0);
+    if (count === 1) {
+      await fetch(url + '/expire/' + encodeURIComponent(key) + '/90000', { method: 'POST', headers: headers }).catch(function(){});
+    }
+    return { allowed: count <= DAILY_LIMIT_PER_IP, count: count };
+  } catch (e) {
+    console.error('[booking-notify] Rate limit check failed:', e.message);
+    return { allowed: true, count: 0 }; // fail open on infrastructure errors
+  }
+}
 
 function clampStr(s, max) {
   return String(s == null ? '' : s).slice(0, max);
@@ -225,6 +261,13 @@ export default async function handler(req, res) {
   if (!process.env.RESEND_API_KEY) {
     console.warn('RESEND_API_KEY not set — booking emails disabled');
     return res.status(200).json({ ok: false, reason: 'email_disabled' });
+  }
+
+  // Rate limit by IP — anti-spam for the public booking submit endpoint
+  var ip = getClientIp(req);
+  var rl = await rateLimitCheck(ip);
+  if (!rl.allowed) {
+    return res.status(429).json({ error: 'rate_limited', message: 'Too many booking notifications from this IP today.' });
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY);
