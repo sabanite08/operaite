@@ -1489,6 +1489,16 @@
             <!-- Bill to -->
             <div class="inv2-section">
               <h3 class="inv2-h3">3. Bill to</h3>
+              <div class="inv2-field" id="inv-customer-picker-wrap" style="display:none;">
+                <label class="inv2-label" for="inv-customer-picker">Saved customer (optional)</label>
+                <div style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;">
+                  <select class="inv2-input" id="inv-customer-picker" style="flex:1;min-width:180px;">
+                    <option value="">— Pick a saved customer —</option>
+                  </select>
+                  <button type="button" class="inv2-btn-secondary" id="inv-customer-save-btn" style="white-space:nowrap;">Save current as customer</button>
+                </div>
+                <div style="font-size:12px;color:#888;margin-top:4px;">Pick to auto-fill, or fill the fields below and click "Save current as customer" for next time.</div>
+              </div>
               <div class="inv2-field"><label class="inv2-label" for="inv-to">Client name</label><input type="text" class="inv2-input" id="inv-to" placeholder="Client Name or Company"></div>
               <div class="inv2-row" style="margin-bottom:8px;">
                 <div><label class="inv2-label" for="inv-to-email">Email (optional)</label><input type="email" class="inv2-input" id="inv-to-email" placeholder="ap@client.co"></div>
@@ -2444,6 +2454,10 @@
     if (typeof invSupa !== 'undefined' && invSupa.enabled()) {
       invSupa.refresh();
     }
+    // Phase 6 (a): load saved customers for the invoice picker
+    if (typeof custSupa !== 'undefined' && custSupa.enabled()) {
+      custSupa.refresh();
+    }
     // Booking inbox: load pending booking requests for the in-scheduler view
     if (typeof bookingInbox !== 'undefined') {
       bookingInbox.init();
@@ -2739,6 +2753,7 @@
       if (typeof loaded.tax === 'number') inv2.tax = loaded.tax;
       if (typeof loaded.discount === 'number') inv2.discount = loaded.discount;
       if (typeof loaded.notes === 'string') inv2.notes = loaded.notes;
+      if (loaded.customerId !== undefined) inv2.customerId = loaded.customerId;
     } catch (e) {}
   }
   function inv2Calc() {
@@ -2753,6 +2768,54 @@
     var total = afterDiscount + tax;
     return { subtotal: subtotal, discount: discount, tax: tax, total: total };
   }
+
+  // Phase 6 (a): Customer database
+  var custSupa = {
+    customers: [],
+    enabled: function() { return !!(currentUser && currentUser.id); },
+    list: async function() {
+      if (!this.enabled()) return [];
+      try {
+        var resp = await supabase.from('customers').select('*').eq('user_id', currentUser.id).order('name', { ascending: true });
+        if (resp.error) { console.warn('custSupa.list failed:', resp.error); return []; }
+        return resp.data || [];
+      } catch (e) { console.warn('custSupa.list error:', e); return []; }
+    },
+    save: async function(customer) {
+      if (!this.enabled()) return null;
+      var row = {
+        user_id: currentUser.id,
+        name: (customer.name || '').slice(0, 200),
+        email: customer.email ? customer.email.slice(0, 320) : null,
+        phone: customer.phone ? customer.phone.slice(0, 30) : null,
+        address: customer.address ? customer.address.slice(0, 500) : null
+      };
+      if (!row.name) return null;
+      try {
+        var resp = await supabase.from('customers').insert(row).select().single();
+        if (resp.error) { console.warn('custSupa.save failed:', resp.error); return null; }
+        return resp.data;
+      } catch (e) { console.warn('custSupa.save error:', e); return null; }
+    },
+    renderPicker: function() {
+      var sel = document.getElementById('inv-customer-picker');
+      var wrap = document.getElementById('inv-customer-picker-wrap');
+      if (!sel || !wrap) return;
+      if (!this.enabled()) { wrap.style.display = 'none'; return; }
+      wrap.style.display = '';
+      var current = sel.value;
+      var html = '<option value="">— Pick a saved customer —</option>';
+      this.customers.forEach(function(c) {
+        html += '<option value="' + c.id + '">' + inv2Esc(c.name) + (c.email ? ' &middot; ' + inv2Esc(c.email) : '') + '</option>';
+      });
+      sel.innerHTML = html;
+      if (current && sel.querySelector('option[value="' + current + '"]')) sel.value = current;
+    },
+    refresh: async function() {
+      this.customers = await this.list();
+      this.renderPicker();
+    }
+  };
 
   // Phase 4: invoice history (NEW functionality)
   var invSupa = {
@@ -2777,6 +2840,7 @@
       var totals = inv2Calc();
       var row = {
         user_id: currentUser.id,
+        customer_id: inv2.customerId || null,
         invoice_number: inv2.invoice.number || ('INV-' + Date.now()),
         business_name: inv2.business.name || null,
         business_email: inv2.business.email || null,
@@ -3596,6 +3660,49 @@
     invSupa.render();
   });
 
+  // Phase 6 (a): customer picker change → auto-fill client fields
+  document.getElementById('inv-customer-picker').addEventListener('change', function(e) {
+    var id = e.target.value;
+    if (!id) {
+      inv2.customerId = null;
+      inv2Save();
+      return;
+    }
+    var c = custSupa.customers.find(function(x) { return x.id === id; });
+    if (!c) return;
+    inv2.client.name = c.name || '';
+    inv2.client.email = c.email || '';
+    inv2.client.phone = c.phone || '';
+    inv2.client.address = c.address || '';
+    inv2.customerId = c.id;
+    inv2Save();
+    inv2RenderForm();
+    inv2RenderPreview();
+    inv2Toast('Loaded ' + (c.name || 'customer') + '.');
+  });
+
+  // Phase 6 (a): "Save current as customer" button
+  document.getElementById('inv-customer-save-btn').addEventListener('click', async function() {
+    var btn = this;
+    var name = (inv2.client.name || '').trim();
+    if (!name) { alert('Enter a client name first.'); return; }
+    btn.disabled = true; var orig = btn.textContent; btn.textContent = 'Saving…';
+    var saved = await custSupa.save({
+      name: name,
+      email: inv2.client.email || '',
+      phone: inv2.client.phone || '',
+      address: inv2.client.address || ''
+    });
+    btn.disabled = false; btn.textContent = orig;
+    if (!saved) { alert('Could not save customer.'); return; }
+    inv2.customerId = saved.id;
+    inv2Save();
+    await custSupa.refresh();
+    var sel = document.getElementById('inv-customer-picker');
+    if (sel) sel.value = saved.id;
+    inv2Toast('Saved ' + saved.name + ' as a customer.');
+  });
+
   // List click handlers (view / duplicate / mark paid / unpay / delete)
   document.getElementById('invoice-history-list').addEventListener('click', async function(e) {
     var btn = e.target.closest('button[data-inv-act]');
@@ -3636,7 +3743,8 @@
         items: items,
         tax: parseFloat(inv.tax_rate) || 0,
         discount: parseFloat(inv.discount_amount) || 0,
-        notes: inv.notes || ''
+        notes: inv.notes || '',
+        customerId: inv.customer_id || null
       };
       inv2Save();
       inv2RenderForm();
