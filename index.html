@@ -1423,6 +1423,23 @@
           </div>
         </div>
 
+        <div class="card" id="invoice-history-card" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div class="card-title" style="margin-bottom:0;display:flex;align-items:center;gap:10px;">
+              📋 Saved invoices
+              <span id="invoice-history-count" style="background:#534AB7;color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:11px;">0</span>
+            </div>
+            <select id="invoice-history-filter" style="width:auto;font-size:13px;margin-top:0;">
+              <option value="all">All</option>
+              <option value="sent">Sent (unpaid)</option>
+              <option value="paid">Paid</option>
+              <option value="overdue">Overdue</option>
+              <option value="void">Void</option>
+            </select>
+          </div>
+          <div id="invoice-history-list"></div>
+        </div>
+
         <div class="inv2-grid">
 
           <!-- Form column -->
@@ -1536,6 +1553,7 @@
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Download PDF
               </button>
+              <button type="button" class="inv2-btn-secondary" id="inv2-save-btn"><span class="inv2-spark">💾</span> Save invoice</button>
               <button type="button" class="inv2-btn-secondary" id="inv2-reminder-btn"><span class="inv2-spark">✉️</span> Draft reminder</button>
               <button type="button" class="inv2-btn-ghost" id="inv2-reset-btn">New invoice</button>
             </div>
@@ -2409,6 +2427,10 @@
     if (typeof acctSupa !== 'undefined' && acctSupa.enabled()) {
       acctSupa.syncOnLogin();
     }
+    // Phase 4: load saved invoices history
+    if (typeof invSupa !== 'undefined' && invSupa.enabled()) {
+      invSupa.refresh();
+    }
     // Booking inbox: load pending booking requests for the in-scheduler view
     if (typeof bookingInbox !== 'undefined') {
       bookingInbox.init();
@@ -2718,6 +2740,198 @@
     var total = afterDiscount + tax;
     return { subtotal: subtotal, discount: discount, tax: tax, total: total };
   }
+
+  // Phase 4: invoice history (NEW functionality)
+  var invSupa = {
+    enabled: function() { return !!(currentUser && currentUser.id); },
+    history: [],
+    historyFilter: 'all',
+
+    save: async function() {
+      if (!this.enabled()) {
+        alert('Please log in to save invoices.');
+        return null;
+      }
+      // Validate at least one line item with content
+      var validItems = (inv2.items || []).filter(function(it) {
+        var d = (it.desc || '').trim();
+        return d && (parseFloat(it.rate) || 0) > 0;
+      });
+      if (validItems.length === 0) {
+        alert('Please add at least one line item with a description and rate.');
+        return null;
+      }
+      var totals = inv2Calc();
+      var row = {
+        user_id: currentUser.id,
+        invoice_number: inv2.invoice.number || ('INV-' + Date.now()),
+        business_name: inv2.business.name || null,
+        business_email: inv2.business.email || null,
+        business_phone: inv2.business.phone || null,
+        business_address: inv2.business.address || null,
+        client_name: inv2.client.name || null,
+        client_email: inv2.client.email || null,
+        client_phone: inv2.client.phone || null,
+        client_address: inv2.client.address || null,
+        issue_date: inv2.invoice.date || new Date().toISOString().slice(0,10),
+        due_date: inv2.invoice.due || null,
+        subtotal: totals.subtotal.toFixed(2),
+        tax_rate: parseFloat(inv2.tax) || 0,
+        tax_amount: totals.tax.toFixed(2),
+        discount_amount: totals.discount.toFixed(2),
+        total: totals.total.toFixed(2),
+        status: 'sent',
+        notes: inv2.notes || null,
+        template: inv2.template || 'classic',
+        currency: getCurrencySymbol()
+      };
+      try {
+        var insResp = await supabase.from('invoices').insert(row).select().single();
+        if (insResp.error) { alert('Could not save invoice: ' + insResp.error.message); return null; }
+        var invoiceId = insResp.data.id;
+        // Insert line items
+        var lineRows = validItems.map(function(it, i) {
+          var qty = parseFloat(it.qty) || 0;
+          var rate = parseFloat(it.rate) || 0;
+          return {
+            invoice_id: invoiceId,
+            position: i,
+            description: (it.desc || '').slice(0, 1000),
+            quantity: qty,
+            rate: rate,
+            amount: (qty * rate).toFixed(2)
+          };
+        });
+        if (lineRows.length > 0) {
+          var lineResp = await supabase.from('invoice_line_items').insert(lineRows);
+          if (lineResp.error) console.warn('line items insert failed:', lineResp.error);
+        }
+        return insResp.data;
+      } catch (e) {
+        console.warn('invSupa.save error:', e);
+        alert('Could not save invoice. See console for details.');
+        return null;
+      }
+    },
+
+    list: async function() {
+      if (!this.enabled()) return [];
+      try {
+        var resp = await supabase
+          .from('invoices')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('issue_date', { ascending: false })
+          .order('created_at', { ascending: false });
+        if (resp.error) { console.warn('invSupa.list failed:', resp.error); return []; }
+        return resp.data || [];
+      } catch (e) { console.warn('invSupa.list error:', e); return []; }
+    },
+
+    getLineItems: async function(invoiceId) {
+      try {
+        var resp = await supabase
+          .from('invoice_line_items')
+          .select('*')
+          .eq('invoice_id', invoiceId)
+          .order('position', { ascending: true });
+        if (resp.error) { console.warn('getLineItems failed:', resp.error); return []; }
+        return resp.data || [];
+      } catch (e) { console.warn('getLineItems error:', e); return []; }
+    },
+
+    updateStatus: async function(id, status) {
+      if (!this.enabled()) return false;
+      try {
+        var patch = { status: status };
+        if (status === 'paid') patch.paid_at = new Date().toISOString();
+        var resp = await supabase.from('invoices').update(patch).eq('id', id);
+        if (resp.error) { alert('Could not update: ' + resp.error.message); return false; }
+        return true;
+      } catch (e) { console.warn('updateStatus error:', e); return false; }
+    },
+
+    remove: async function(id) {
+      if (!this.enabled()) return false;
+      try {
+        var resp = await supabase.from('invoices').delete().eq('id', id);
+        if (resp.error) { alert('Could not delete: ' + resp.error.message); return false; }
+        return true;
+      } catch (e) { console.warn('remove error:', e); return false; }
+    },
+
+    fmtMoney: function(n, currency) {
+      var num = parseFloat(n) || 0;
+      return (currency || '$') + num.toFixed(2);
+    },
+    fmtDate: function(iso) {
+      if (!iso) return '';
+      var d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    },
+
+    statusPill: function(status) {
+      var colors = {
+        sent:    { bg: '#dbeafe', fg: '#1e40af' },
+        paid:    { bg: '#d1fae5', fg: '#065f46' },
+        overdue: { bg: '#fee2e2', fg: '#991b1b' },
+        void:    { bg: '#f3f4f6', fg: '#666' },
+        draft:   { bg: '#fef3c7', fg: '#854d0e' }
+      };
+      var c = colors[status] || colors.sent;
+      return '<span style="background:' + c.bg + ';color:' + c.fg + ';font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:0.05em;">' + status + '</span>';
+    },
+
+    render: function() {
+      var card = document.getElementById('invoice-history-card');
+      var list = document.getElementById('invoice-history-list');
+      var count = document.getElementById('invoice-history-count');
+      if (!card || !list || !count) return;
+      if (!this.history || this.history.length === 0) {
+        card.style.display = 'none';
+        return;
+      }
+      card.style.display = 'block';
+      count.textContent = this.history.length;
+      var filtered = this.historyFilter === 'all' ? this.history : this.history.filter(function(r) { return r.status === invSupa.historyFilter; });
+      if (filtered.length === 0) {
+        list.innerHTML = '<div style="text-align:center;color:#888;font-size:13px;padding:18px 10px;">No invoices match this filter.</div>';
+        return;
+      }
+      list.innerHTML = filtered.map(function(inv) {
+        var actions = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">' +
+          '<button class="btn sm" data-inv-act="view" data-inv-id="' + inv.id + '" style="padding:5px 10px;font-size:12px;">View</button>' +
+          '<button class="btn sm" data-inv-act="duplicate" data-inv-id="' + inv.id + '" style="padding:5px 10px;font-size:12px;">Duplicate</button>' +
+          (inv.status === 'paid'
+            ? '<button class="btn sm" data-inv-act="unpay" data-inv-id="' + inv.id + '" style="padding:5px 10px;font-size:12px;">Unmark paid</button>'
+            : '<button class="btn sm" data-inv-act="paid" data-inv-id="' + inv.id + '" style="padding:5px 10px;font-size:12px;background:#10B981;color:#fff;border-color:#10B981;">Mark paid</button>') +
+          '<button class="btn sm" data-inv-act="delete" data-inv-id="' + inv.id + '" style="padding:5px 10px;font-size:12px;color:#c44;border-color:#f5c2c2;">Delete</button>' +
+          '</div>';
+        return '<div style="border-bottom:1px solid #f0f0ec;padding:10px 0;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-start;">' +
+          '<div style="min-width:140px;flex-shrink:0;">' +
+            '<div style="font-size:13.5px;font-weight:700;color:#1a1a1a;">' + inv2Esc(inv.invoice_number) + '</div>' +
+            '<div style="font-size:11.5px;color:#999;">' + invSupa.fmtDate(inv.issue_date) + '</div>' +
+          '</div>' +
+          '<div style="flex:1;min-width:120px;">' +
+            '<div style="font-size:13.5px;color:#1a1a1a;">' + inv2Esc(inv.client_name || '—') + '</div>' +
+            '<div style="font-size:11.5px;color:#888;">' + invSupa.fmtMoney(inv.total, inv.currency || '$') + '</div>' +
+          '</div>' +
+          '<div style="flex-shrink:0;align-self:center;">' + invSupa.statusPill(inv.status) + '</div>' +
+          '<div style="width:100%;">' + actions + '</div>' +
+        '</div>';
+      }).join('');
+    },
+
+    refresh: async function() {
+      if (!this.enabled()) {
+        this.history = [];
+        this.render();
+        return;
+      }
+      this.history = await this.list();
+      this.render();
+    }
+  };
 
   function inv2RenderTemplates() {
     document.querySelectorAll('#inv2-templates .inv2-tpl').forEach(function(el) {
@@ -3333,6 +3547,93 @@
 
   // Action buttons
   document.getElementById('inv2-pdf-btn').addEventListener('click', inv2DownloadPDF);
+
+  // Save invoice → persist to Supabase, bump seq, reset draft
+  document.getElementById('inv2-save-btn').addEventListener('click', async function() {
+    var btn = this;
+    var orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'Saving…';
+    var saved = await invSupa.save();
+    btn.disabled = false;
+    btn.innerHTML = orig;
+    if (!saved) return;
+    inv2BumpSeq();
+    // Reset draft (mirrors inv2-reset-btn)
+    try { localStorage.removeItem(INV2_KEY); } catch (e) {}
+    inv2 = {
+      template: 'classic',
+      business: { name: '', email: '', phone: '', address: '', logo: null },
+      client: { name: '', email: '', phone: '', address: '' },
+      invoice: { number: inv2DefaultNumber(), date: inv2Today(), due: inv2AddDays(inv2Today(), 30) },
+      items: [{ desc: '', qty: 1, rate: 0 }],
+      tax: 0, discount: 0, notes: ''
+    };
+    if (typeof applyProfileToForms === 'function') applyProfileToForms();
+    syncFormToState();
+    inv2RenderForm();
+    inv2RenderPreview();
+    inv2Toast('Invoice ' + saved.invoice_number + ' saved.');
+    invSupa.refresh();
+  });
+
+  // Filter dropdown
+  document.getElementById('invoice-history-filter').addEventListener('change', function(e) {
+    invSupa.historyFilter = e.target.value;
+    invSupa.render();
+  });
+
+  // List click handlers (view / duplicate / mark paid / unpay / delete)
+  document.getElementById('invoice-history-list').addEventListener('click', async function(e) {
+    var btn = e.target.closest('button[data-inv-act]');
+    if (!btn) return;
+    var act = btn.getAttribute('data-inv-act');
+    var id = btn.getAttribute('data-inv-id');
+    var inv = invSupa.history.find(function(r) { return r.id === id; });
+    if (!inv) return;
+
+    if (act === 'paid') {
+      if (await invSupa.updateStatus(id, 'paid')) {
+        inv2Toast('Marked as paid.');
+        invSupa.refresh();
+      }
+    } else if (act === 'unpay') {
+      if (await invSupa.updateStatus(id, 'sent')) {
+        inv2Toast('Marked as unpaid.');
+        invSupa.refresh();
+      }
+    } else if (act === 'delete') {
+      if (!confirm('Delete invoice ' + inv.invoice_number + '? This cannot be undone.')) return;
+      if (await invSupa.remove(id)) {
+        inv2Toast('Deleted.');
+        invSupa.refresh();
+      }
+    } else if (act === 'view' || act === 'duplicate') {
+      var lineItems = await invSupa.getLineItems(id);
+      var items = lineItems.length > 0
+        ? lineItems.map(function(li) { return { desc: li.description, qty: li.quantity, rate: li.rate }; })
+        : [{ desc: '', qty: 1, rate: 0 }];
+      inv2 = {
+        template: inv.template || 'classic',
+        business: { name: inv.business_name || '', email: inv.business_email || '', phone: inv.business_phone || '', address: inv.business_address || '', logo: inv2.business.logo || null },
+        client: { name: inv.client_name || '', email: inv.client_email || '', phone: inv.client_phone || '', address: inv.client_address || '' },
+        invoice: act === 'duplicate'
+          ? { number: inv2DefaultNumber(), date: inv2Today(), due: inv2AddDays(inv2Today(), 30) }
+          : { number: inv.invoice_number, date: inv.issue_date, due: inv.due_date || '' },
+        items: items,
+        tax: parseFloat(inv.tax_rate) || 0,
+        discount: parseFloat(inv.discount_amount) || 0,
+        notes: inv.notes || ''
+      };
+      inv2Save();
+      inv2RenderForm();
+      inv2RenderPreview();
+      inv2Toast(act === 'duplicate' ? 'Loaded as new draft. Review before saving.' : 'Loaded for viewing. Click "New invoice" when done.');
+      // Scroll the editor into view
+      document.querySelector('.inv2-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
   document.getElementById('inv2-reset-btn').addEventListener('click', function() {
     if (!confirm('Start a new invoice? Current data will be cleared.')) return;
     try { localStorage.removeItem(INV2_KEY); } catch (e) {}
