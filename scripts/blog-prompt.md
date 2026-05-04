@@ -19,7 +19,7 @@ STEP 3 — POST REQUIREMENTS
 - ≤1000 words. Compelling, substantive, concrete examples and real numbers, no AI filler.
 - H2-driven structure, scannable, FAQ block at the end when it strengthens SEO.
 - In <head>: title (≤60 chars), meta description (150–160 chars), canonical URL, OG tags, Twitter card, JSON-LD Article schema (datePublished, author "Operaite", image), Search Console verification meta (copied from existing post).
-- Soft-pitch the matching Operaite feature with a clean CTA near the end linking to operaite.net (mention 7-day free trial, $29/mo).
+- Soft-pitch the matching Operaite feature with a clean CTA near the end linking to https://operaite.net/#signup (mention 7-day free trial, $29/mo). Both the top-nav CTA and the bottom cta-btn must use href="/#signup" (NOT href="/"). The homepage hash-link goes to the signup section; href="/" just lands on the homepage hero with no signup focus.
 - Mirror the structure and styling of an existing post — use blog.css, do not invent new CSS.
 
 STEP 4 — SITEMAP
