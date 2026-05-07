@@ -5234,7 +5234,9 @@
       };
       if (currentUser.subscribed) { loadApp(); } else { showScreen('payment'); initStripe(); }
     } else {
-      showScreen('landing');
+      var initialHash = (window.location.hash || '').replace('#', '');
+      var hashScreen = (initialHash === 'signup' || initialHash === 'login') ? initialHash : 'landing';
+      showScreen(hashScreen);
     }
   })();
 })();
