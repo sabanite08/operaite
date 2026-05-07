@@ -185,6 +185,25 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .tool-logo-btn:hover { background: #f3f3f1; }
 .tool-logo-btn.danger:hover { color: #e24b4a; border-color: #fca5a5; background: #fef2f2; }
 
+.tool-templates { display: flex; gap: 10px; flex-wrap: wrap; }
+.tool-tpl { flex: 1; min-width: 90px; border: 2px solid #e8e8e5; border-radius: 10px; cursor: pointer; padding: 0; overflow: hidden; background: #fff; transition: border-color 0.15s, transform 0.15s; font-family: inherit; }
+.tool-tpl:hover { border-color: #c5c2ed; }
+.tool-tpl.selected { border-color: #534AB7; box-shadow: 0 4px 14px rgba(83,74,183,0.12); }
+.tool-tpl-thumb { height: 72px; padding: 8px 10px; border-bottom: 1px solid #f3f3f1; display: flex; flex-direction: column; gap: 4px; }
+.tool-tpl[data-tpl="modern"] .tool-tpl-thumb { background: linear-gradient(135deg,#534AB7 0%,#8B5CF6 100%); }
+.tool-tpl[data-tpl="modern"] .tool-tpl-line { background: rgba(255,255,255,0.45); }
+.tool-tpl[data-tpl="modern"] .tool-tpl-line.short { background: rgba(255,255,255,0.7); }
+.tool-tpl[data-tpl="classic"] .tool-tpl-thumb { background: #fff; }
+.tool-tpl[data-tpl="classic"] .tool-tpl-line { background: #1a1a1a; opacity: 0.55; }
+.tool-tpl[data-tpl="classic"] .tool-tpl-line.short { background: #534AB7; opacity: 1; }
+.tool-tpl[data-tpl="minimal"] .tool-tpl-thumb { background: #fafaf9; }
+.tool-tpl[data-tpl="minimal"] .tool-tpl-line { background: #ccc; }
+.tool-tpl[data-tpl="minimal"] .tool-tpl-line.short { background: #888; }
+.tool-tpl-line { height: 4px; border-radius: 2px; }
+.tool-tpl-line.short { width: 50%; }
+.tool-tpl-label { font-size: 12px; color: #555; padding: 7px 0; text-align: center; font-weight: 600; background: #fff; }
+.tool-tpl.selected .tool-tpl-label { color: #534AB7; }
+
 .tool-preview-wrap { position: sticky; top: 80px; }
 @media (max-width: 1000px) { .tool-preview-wrap { position: static; } }
 .tool-preview-card { background: #fff; border: 1px solid #e8e8e5; border-radius: 14px; padding: 1rem; box-shadow: 0 8px 28px rgba(83,74,183,0.08); }
@@ -196,12 +215,45 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .tool-btn-ghost { background: #fff; color: #1a1a1a; font-family: inherit; font-size: 14px; font-weight: 500; border: 1px solid #e0e0db; border-radius: 9px; padding: 11px 16px; cursor: pointer; }
 .tool-btn-ghost:hover { background: #f3f3f1; }
 
-.prev-header { background: linear-gradient(135deg,#534AB7 0%,#8B5CF6 100%); color: #fff; margin: -28px -32px 22px; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.prev-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 22px; }
 .prev-logo { max-width: 110px; max-height: 56px; object-fit: contain; }
-.prev-logo-placeholder { width: 100px; height: 36px; background: rgba(255,255,255,0.18); border-radius: 6px; }
-.prev-biz-name-light { font-size: 18px; font-weight: 800; color: #fff; }
-.prev-est-title { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; text-align: right; color: #fff; }
-.prev-est-meta { font-size: 11px; color: rgba(255,255,255,0.85); text-align: right; margin-top: 4px; }
+.prev-logo-placeholder { width: 100px; height: 36px; background: #f3f3f1; border-radius: 6px; }
+.prev-biz-name { font-size: 18px; font-weight: 800; color: #1a1a1a; }
+.prev-est-title { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; text-align: right; color: #1a1a1a; }
+.prev-est-meta { font-size: 11px; color: #888; text-align: right; margin-top: 4px; }
+
+/* Modern template overrides */
+.tool-preview-frame.modern .prev-header { background: linear-gradient(135deg,#534AB7 0%,#8B5CF6 100%); color: #fff; margin: -28px -32px 22px; padding: 24px 32px; }
+.tool-preview-frame.modern .prev-biz-name { color: #fff; }
+.tool-preview-frame.modern .prev-logo-placeholder { background: rgba(255,255,255,0.18); }
+.tool-preview-frame.modern .prev-est-title { color: #fff; }
+.tool-preview-frame.modern .prev-est-meta { color: rgba(255,255,255,0.85); }
+.tool-preview-frame.modern .prev-table th { color: #534AB7; border-bottom-color: #534AB7; }
+.tool-preview-frame.modern .prev-totals-row.grand { color: #1a1a1a; border-top-color: #534AB7; }
+.tool-preview-frame.modern .prev-totals-row.grand .v { color: #534AB7; }
+
+/* Classic template — bordered formal layout */
+.tool-preview-frame.classic .prev-header { padding-bottom: 16px; border-bottom: 2px solid #1a1a1a; }
+.tool-preview-frame.classic .prev-est-title { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; }
+.tool-preview-frame.classic .prev-table th { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+.tool-preview-frame.classic .prev-totals-row.grand { color: #1a1a1a; border-top-color: #1a1a1a; }
+.tool-preview-frame.classic .prev-totals-row.grand .v { color: #534AB7; }
+.tool-preview-frame.classic .prev-scope { background: #fafaf9; border-left-color: #1a1a1a; }
+.tool-preview-frame.classic .prev-scope-label { color: #1a1a1a; }
+
+/* Minimal template — flat, light, monoline */
+.tool-preview-frame.minimal .prev-header { padding-bottom: 12px; }
+.tool-preview-frame.minimal .prev-est-title { font-size: 14px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; }
+.tool-preview-frame.minimal .prev-est-meta { color: #aaa; }
+.tool-preview-frame.minimal .prev-biz-name { font-weight: 600; color: #1a1a1a; }
+.tool-preview-frame.minimal .prev-table th { color: #999; font-weight: 500; border-bottom-width: 1px; border-bottom-color: #e0e0db; }
+.tool-preview-frame.minimal .prev-table td { border-bottom: none; }
+.tool-preview-frame.minimal .prev-totals-row.grand { color: #1a1a1a; border-top-color: #888; border-top-width: 1px; }
+.tool-preview-frame.minimal .prev-totals-row.grand .v { color: #1a1a1a; }
+.tool-preview-frame.minimal .prev-scope { background: #fafaf9; border-left-color: #888; }
+.tool-preview-frame.minimal .prev-scope-label { color: #888; }
+.tool-preview-frame.minimal .prev-accept { background: transparent; border: 1px solid #e8e8e5; }
+.tool-preview-frame.minimal .prev-accept-title { color: #888; }
 .prev-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 20px; }
 .prev-party-label { font-size: 9.5px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
 .prev-party-name { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; }
@@ -295,6 +347,36 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <form class="tool-form" id="form" autocomplete="off" onsubmit="event.preventDefault();">
 
       <div class="tool-form-section">
+        <h3 class="tool-form-h3">Choose a template</h3>
+        <div class="tool-templates" id="templates">
+          <button type="button" class="tool-tpl selected" data-tpl="modern">
+            <div class="tool-tpl-thumb">
+              <div class="tool-tpl-line short"></div>
+              <div class="tool-tpl-line"></div>
+              <div class="tool-tpl-line"></div>
+            </div>
+            <div class="tool-tpl-label">Modern</div>
+          </button>
+          <button type="button" class="tool-tpl" data-tpl="classic">
+            <div class="tool-tpl-thumb">
+              <div class="tool-tpl-line short"></div>
+              <div class="tool-tpl-line"></div>
+              <div class="tool-tpl-line"></div>
+            </div>
+            <div class="tool-tpl-label">Classic</div>
+          </button>
+          <button type="button" class="tool-tpl" data-tpl="minimal">
+            <div class="tool-tpl-thumb">
+              <div class="tool-tpl-line short"></div>
+              <div class="tool-tpl-line"></div>
+              <div class="tool-tpl-line"></div>
+            </div>
+            <div class="tool-tpl-label">Minimal</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="tool-form-section">
         <h3 class="tool-form-h3">Your business</h3>
         <div class="tool-field">
           <label class="tool-label">Logo</label>
@@ -376,7 +458,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <!-- ===== PREVIEW ===== -->
     <div class="tool-preview-wrap">
       <div class="tool-preview-card">
-        <div class="tool-preview-frame" id="preview"></div>
+        <div class="tool-preview-frame modern" id="preview"></div>
         <div class="tool-preview-actions">
           <button type="button" class="tool-btn-primary" id="download-btn">↓ Download PDF</button>
           <button type="button" class="tool-btn-ghost" id="reset-btn">Reset</button>
@@ -492,6 +574,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   }
 
   var state = {
+    template: 'modern',
     business: { name: '', email: '', phone: '', address: '', logo: null },
     client: { name: '', email: '', address: '' },
     estimate: {
@@ -514,6 +597,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       var loaded = JSON.parse(raw);
+      if (loaded.template) state.template = loaded.template;
       if (loaded.business) Object.assign(state.business, loaded.business);
       if (loaded.client) Object.assign(state.client, loaded.client);
       if (loaded.estimate) Object.assign(state.estimate, loaded.estimate);
@@ -576,6 +660,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     setVal('est-notes', state.notes);
     renderLogoPreview();
     renderItems();
+    renderTemplatePicker();
+  }
+
+  function renderTemplatePicker() {
+    document.querySelectorAll('.tool-tpl').forEach(function(el) {
+      el.classList.toggle('selected', el.getAttribute('data-tpl') === state.template);
+    });
   }
 
   function renderLogoPreview() {
@@ -612,11 +703,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   function renderPreview() {
     var t = calc();
     var preview = document.getElementById('preview');
+    preview.className = 'tool-preview-frame ' + state.template;
 
     var logoHtml = state.business.logo
       ? '<img class="prev-logo" src="' + state.business.logo + '" alt="" />'
       : (state.business.name
-          ? '<div class="prev-biz-name-light">' + escapeHtml(state.business.name) + '</div>'
+          ? '<div class="prev-biz-name">' + escapeHtml(state.business.name) + '</div>'
           : '<div class="prev-logo-placeholder"></div>');
 
     var bizDetail = [state.business.address, state.business.email, state.business.phone].filter(Boolean).join('\n');
@@ -704,6 +796,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   function buildDocDef() {
     var t = calc();
     var sym = CURRENCY_SYMBOLS[state.estimate.currency] || '$';
+    var template = state.template;
     var bizDetail = [state.business.address, state.business.email, state.business.phone].filter(Boolean).join('\n');
     var clientDetail = [state.client.address, state.client.email].filter(Boolean).join('\n');
 
@@ -728,40 +821,92 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     if (t.tax > 0) totalsBody.push([{ text: 'Tax', style: 'totalLabel' }, { text: sym + t.tax.toFixed(2), style: 'totalValue' }]);
     totalsBody.push([{ text: 'TOTAL', style: 'grandLabel' }, { text: sym + t.total.toFixed(2), style: 'grandValue' }]);
 
-    var headerStack = state.business.logo
-      ? { image: state.business.logo, fit: [110, 50] }
-      : { text: state.business.name || 'Your business', style: 'logoText' };
-
     var content = [];
 
-    // Modern gradient-style header (solid fill since pdfmake doesn't gradient)
-    content.push({
-      table: {
-        widths: ['*'],
-        body: [[{
-          columns: [
-            { width: '*', stack: [headerStack], margin: [24, 22, 0, 22] },
-            {
-              width: 'auto',
-              alignment: 'right',
-              margin: [0, 22, 24, 22],
-              stack: [
-                { text: 'ESTIMATE', style: 'estTitle' },
-                { text: '#' + (state.estimate.number || ''), style: 'estMeta' },
-                { text: 'Issued ' + formatDate(state.estimate.issue), style: 'estMeta' },
-                { text: 'Valid until ' + formatDate(state.estimate.valid), style: 'estMeta' }
-              ]
-            }
-          ]
-        }]]
-      },
-      layout: {
-        hLineWidth: function() { return 0; },
-        vLineWidth: function() { return 0; },
-        fillColor: function() { return BRAND_PURPLE; }
-      }
-    });
-    content.push({ text: '', margin: [0, 0, 0, 14] });
+    if (template === 'modern') {
+      var headerStackModern = state.business.logo
+        ? { image: state.business.logo, fit: [110, 50] }
+        : { text: state.business.name || 'Your business', style: 'logoText' };
+      content.push({
+        table: {
+          widths: ['*'],
+          body: [[{
+            columns: [
+              { width: '*', stack: [headerStackModern], margin: [24, 22, 0, 22] },
+              {
+                width: 'auto',
+                alignment: 'right',
+                margin: [0, 22, 24, 22],
+                stack: [
+                  { text: 'ESTIMATE', style: 'estTitleModern' },
+                  { text: '#' + (state.estimate.number || ''), style: 'estMetaModern' },
+                  { text: 'Issued ' + formatDate(state.estimate.issue), style: 'estMetaModern' },
+                  { text: 'Valid until ' + formatDate(state.estimate.valid), style: 'estMetaModern' }
+                ]
+              }
+            ]
+          }]]
+        },
+        layout: {
+          hLineWidth: function() { return 0; },
+          vLineWidth: function() { return 0; },
+          fillColor: function() { return BRAND_PURPLE; }
+        }
+      });
+      content.push({ text: '', margin: [0, 0, 0, 14] });
+    } else if (template === 'classic') {
+      content.push({
+        columns: [
+          {
+            width: '*',
+            stack: [
+              state.business.logo
+                ? { image: state.business.logo, fit: [110, 50], margin: [0,0,0,8] }
+                : { text: state.business.name || 'Your business', style: 'logoTextDark' }
+            ]
+          },
+          {
+            width: 'auto',
+            alignment: 'right',
+            stack: [
+              { text: 'ESTIMATE', style: 'estTitleClassic' },
+              { text: '#' + (state.estimate.number || ''), style: 'estMetaClassic' },
+              { text: 'Issued ' + formatDate(state.estimate.issue), style: 'estMetaClassic' },
+              { text: 'Valid until ' + formatDate(state.estimate.valid), style: 'estMetaClassic' }
+            ]
+          }
+        ]
+      });
+      // Bold underline below classic header
+      content.push({
+        canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 1.5, lineColor: BRAND_DARK }],
+        margin: [0, 8, 0, 18]
+      });
+    } else {
+      // minimal
+      content.push({
+        columns: [
+          {
+            width: '*',
+            stack: [
+              state.business.logo
+                ? { image: state.business.logo, fit: [100, 44], margin: [0,0,0,6] }
+                : { text: state.business.name || 'Your business', style: 'logoTextDark' }
+            ]
+          },
+          {
+            width: 'auto',
+            alignment: 'right',
+            stack: [
+              { text: 'ESTIMATE', style: 'estTitleMinimal' },
+              { text: '#' + (state.estimate.number || ''), style: 'estMetaMinimal' },
+              { text: formatDate(state.estimate.issue) + ' → ' + formatDate(state.estimate.valid), style: 'estMetaMinimal' }
+            ]
+          }
+        ],
+        margin: [0, 0, 0, 22]
+      });
+    }
 
     if (state.estimate.title) {
       content.push({ text: state.estimate.title, italics: true, fontSize: 11, color: BRAND_GRAY, margin: [0, 0, 0, 14] });
@@ -824,12 +969,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       layout: {
         hLineWidth: function(i, node) {
           if (i === 0) return 0;
-          if (i === 1) return 1.5;
-          if (i === node.table.body.length) return 0.5;
-          return 0.4;
+          if (i === 1) return template === 'minimal' ? 0.5 : 1.5;
+          if (i === node.table.body.length) return template === 'minimal' ? 0 : 0.5;
+          return template === 'minimal' ? 0 : 0.4;
         },
         vLineWidth: function() { return 0; },
-        hLineColor: function(i) { return i === 1 ? BRAND_PURPLE : '#e8e8e5'; },
+        hLineColor: function(i) {
+          if (i === 1) return template === 'modern' ? BRAND_PURPLE : BRAND_DARK;
+          return '#e8e8e5';
+        },
         paddingTop: function() { return 7; },
         paddingBottom: function() { return 7; }
       },
@@ -849,7 +997,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
               return 0;
             },
             vLineWidth: function() { return 0; },
-            hLineColor: function() { return BRAND_PURPLE; },
+            hLineColor: function() { return template === 'modern' ? BRAND_PURPLE : BRAND_DARK; },
             paddingTop: function() { return 4; },
             paddingBottom: function() { return 4; }
           }
@@ -929,9 +1077,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       content: content,
       defaultStyle: { font: 'Roboto', fontSize: 10, color: BRAND_DARK },
       styles: {
-        estTitle: { fontSize: 26, bold: true, color: '#fff', margin: [0,0,0,4] },
-        estMeta: { fontSize: 9.5, color: '#fff' },
+        // Modern header
+        estTitleModern: { fontSize: 26, bold: true, color: '#fff', margin: [0,0,0,4] },
+        estMetaModern: { fontSize: 9.5, color: '#fff' },
         logoText: { fontSize: 18, bold: true, color: '#fff' },
+        // Classic header
+        estTitleClassic: { fontSize: 24, bold: true, color: BRAND_DARK, margin: [0,0,0,4] },
+        estMetaClassic: { fontSize: 9.5, color: BRAND_GRAY },
+        // Minimal header
+        estTitleMinimal: { fontSize: 14, color: BRAND_DARK, characterSpacing: 1.5, margin: [0,0,0,4] },
+        estMetaMinimal: { fontSize: 9, color: BRAND_LIGHT_GRAY },
+        logoTextDark: { fontSize: 16, bold: true, color: BRAND_DARK },
+        // Parties + body shared
         partyLabel: { fontSize: 8, bold: true, color: BRAND_LIGHT_GRAY, characterSpacing: 0.6, margin: [0,0,0,3] },
         partyName: { fontSize: 11, bold: true, color: BRAND_DARK, margin: [0,0,0,2] },
         partyDetail: { fontSize: 9.5, color: BRAND_GRAY, lineHeight: 1.35 },
@@ -943,7 +1100,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         totalLabel: { fontSize: 10, color: BRAND_GRAY, alignment: 'right', margin: [0,2,0,2] },
         totalValue: { fontSize: 10, color: BRAND_DARK, alignment: 'right', margin: [0,2,0,2] },
         grandLabel: { fontSize: 12, bold: true, color: BRAND_DARK, alignment: 'right', margin: [0,5,0,0] },
-        grandValue: { fontSize: 14, bold: true, color: BRAND_PURPLE, alignment: 'right', margin: [0,3,0,0] },
+        grandValue: { fontSize: 14, bold: true, color: template === 'modern' ? BRAND_PURPLE : BRAND_DARK, alignment: 'right', margin: [0,3,0,0] },
         notesText: { fontSize: 9.5, color: BRAND_GRAY, lineHeight: 1.5 },
         acceptText: { fontSize: 9, color: BRAND_GRAY, lineHeight: 1.5 },
         acceptCap: { fontSize: 8, color: BRAND_LIGHT_GRAY, characterSpacing: 0.5 },
@@ -1042,6 +1199,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     document.getElementById('add-item').addEventListener('click', function() {
       state.items.push({ desc: '', qty: 1, rate: 0 });
       renderItems();
+      renderPreview();
+      save();
+    });
+
+    document.getElementById('templates').addEventListener('click', function(e) {
+      var btn = e.target.closest('.tool-tpl');
+      if (!btn) return;
+      var tpl = btn.getAttribute('data-tpl');
+      if (!tpl || tpl === state.template) return;
+      state.template = tpl;
+      renderTemplatePicker();
       renderPreview();
       save();
     });
