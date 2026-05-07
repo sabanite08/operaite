@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Free Job Cost Calculator for Service Trades | Operaite</title>
+<meta name="description" content="Free job cost calculator. Enter labor hours, materials, overhead, and target profit — get the full job cost breakdown and the price to quote your customer." />
+<meta name="keywords" content="job cost calculator, contractor job costing, labor materials overhead profit, construction estimate calculator, service trade pricing" />
+<meta name="robots" content="index, follow" />
+<meta name="google-site-verification" content="-oHzSM7njuBW-4QSh84w7wYMt5g093PkdQxGWN0nqgI" />
+<link rel="canonical" href="https://operaite.net/tools/job-cost-calculator" />
+
+<link rel="manifest" href="/manifest.json" />
+<link rel="apple-touch-icon" href="/logo_option1.png" />
+<link rel="icon" type="image/png" href="/logo_option1.png" />
+<meta name="theme-color" content="#534AB7" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://operaite.net/tools/job-cost-calculator" />
+<meta property="og:site_name" content="Operaite" />
+<meta property="og:title" content="Free Job Cost Calculator for Service Trades" />
+<meta property="og:description" content="Enter labor, materials, overhead, profit — get the full job cost breakdown and the price to quote. Free, instant, no signup." />
+<meta property="og:image" content="https://operaite.net/og-image.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Free Job Cost Calculator for Service Trades" />
+<meta name="twitter:description" content="Labor + materials + overhead + profit = the price to quote." />
+<meta name="twitter:image" content="https://operaite.net/og-image.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Operaite Free Job Cost Calculator",
+  "url": "https://operaite.net/tools/job-cost-calculator",
+  "description": "Free job cost calculator for service trades. Enter labor hours, materials, overhead, and target profit to get the full job cost and quote price.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0.00", "priceCurrency": "USD" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Operaite",
+    "url": "https://operaite.net",
+    "logo": "https://operaite.net/logo_option1.png"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Operaite", "item": "https://operaite.net" },
+    { "@type": "ListItem", "position": 2, "name": "Free Tools", "item": "https://operaite.net/tools/" },
+    { "@type": "ListItem", "position": 3, "name": "Job Cost Calculator", "item": "https://operaite.net/tools/job-cost-calculator" }
+  ]
+}
+</script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f8; color: #1a1a1a; line-height: 1.5; }
+
+.tool-nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(232,232,229,0.7); height: 62px; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; }
+.tool-nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: inherit; }
+.tool-nav-brand-icon { width: 40px; height: 40px; background: #534AB7; border-radius: 11px; display: flex; align-items: center; justify-content: center; }
+.tool-nav-brand-name { font-size: 22px; font-weight: 700; }
+.tool-nav-brand-name span { color: #534AB7; }
+.tool-nav-links { display: flex; align-items: center; gap: 8px; }
+.tool-nav-link { font-family: inherit; font-size: 14px; color: #555; padding: 8px 14px; border-radius: 8px; text-decoration: none; }
+.tool-nav-link:hover { background: #f3f3f1; color: #1a1a1a; }
+.tool-nav-btn { background: #534AB7; font-family: inherit; font-size: 14px; font-weight: 600; color: #fff; padding: 9px 20px; border-radius: 9px; text-decoration: none; }
+.tool-nav-btn:hover { background: #3C3489; }
+@media (max-width: 700px) { .tool-nav { padding: 0 1.25rem; } }
+
+.hero { padding: 60px 2rem 30px; text-align: center; max-width: 760px; margin: 0 auto; }
+.hero-eyebrow { display: inline-flex; background: #EEEDFE; color: #534AB7; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 1.25rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.hero h1 { font-size: 42px; font-weight: 800; line-height: 1.1; letter-spacing: -1.2px; margin-bottom: 1rem; }
+.hero h1 em { background: linear-gradient(135deg,#534AB7 0%,#8B5CF6 40%,#EC4899 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font-style: normal; }
+.hero p { font-size: 17px; color: #666; line-height: 1.6; max-width: 580px; margin: 0 auto; }
+@media (max-width: 700px) { .hero { padding: 40px 1.25rem 20px; } .hero h1 { font-size: 28px; letter-spacing: -0.5px; } .hero p { font-size: 15px; } }
+
+.calc { max-width: 1000px; margin: 30px auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+@media (max-width: 800px) { .calc { grid-template-columns: 1fr; padding: 0 1.25rem; gap: 1.5rem; } }
+
+.form-card, .result-card { background: #fff; border: 1px solid #ececea; border-radius: 14px; padding: 1.75rem; }
+.form-card h2 { font-size: 18px; font-weight: 700; margin-bottom: 1.25rem; }
+
+.field { margin-bottom: 1.25rem; }
+.field label { display: block; font-size: 13.5px; font-weight: 600; color: #333; margin-bottom: 0.4rem; }
+.field .hint { display: block; font-size: 12px; color: #888; margin-top: 0.25rem; line-height: 1.4; }
+.input-wrap { position: relative; }
+.input-wrap .prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888; font-weight: 500; pointer-events: none; }
+.input-wrap .suffix { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #888; font-weight: 500; pointer-events: none; }
+.field input[type="number"] { width: 100%; padding: 11px 32px 11px 28px; font-family: inherit; font-size: 15px; border: 1px solid #d8d8d4; border-radius: 8px; background: #fff; }
+.field input[type="number"].right-suffix { padding: 11px 36px 11px 12px; }
+.field input[type="number"]:focus { outline: 2px solid #534AB7; outline-offset: -1px; border-color: #534AB7; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+.result-card { background: linear-gradient(135deg,#534AB7 0%,#3C3489 100%); color: #fff; border: none; }
+.result-card .result-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+.result-card .result-main { font-size: 56px; font-weight: 800; line-height: 1; letter-spacing: -1.5px; margin-bottom: 0.25rem; }
+.result-card .result-unit { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
+.result-card .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); }
+.result-card .result-cell { padding: 0; }
+.result-card .result-cell .cell-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+.result-card .result-cell .cell-val { font-size: 19px; font-weight: 700; color: #fff; }
+.breakdown { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); }
+.breakdown h3 { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.75rem; }
+.breakdown-row { display: flex; justify-content: space-between; font-size: 13px; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.breakdown-row:last-child { border-bottom: none; font-weight: 700; padding-top: 0.6rem; }
+.breakdown-row .key { color: rgba(255,255,255,0.7); }
+.breakdown-row .val { color: #fff; font-variant-numeric: tabular-nums; }
+
+.explainer { max-width: 760px; margin: 50px auto; padding: 0 2rem; }
+.explainer h2 { font-size: 24px; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.4px; }
+.explainer p { font-size: 15px; color: #444; line-height: 1.7; margin-bottom: 1rem; }
+.explainer ul { font-size: 15px; color: #444; line-height: 1.75; margin: 0 0 1rem 1.25rem; }
+.explainer h3 { font-size: 17px; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+.explainer .formula { background: #f3f3f1; padding: 14px 16px; border-left: 3px solid #534AB7; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 13px; line-height: 1.7; margin: 1rem 0; }
+@media (max-width: 700px) { .explainer { padding: 0 1.25rem; } .explainer h2 { font-size: 20px; } }
+
+.cta-banner { background: linear-gradient(135deg,#534AB7 0%,#2d2580 100%); padding: 60px 2rem; text-align: center; }
+.cta-banner h2 { font-size: 30px; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 0.65rem; }
+.cta-banner p { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+.cta-banner-btn { background: #fff; color: #534AB7; font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 30px; border-radius: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block; }
+.cta-banner-btn:hover { background: #f0effd; }
+.cta-banner-note { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+
+.tool-footer { background: #1a1a1a; padding: 2rem; }
+.tool-footer-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; }
+.tool-footer-brand { display: flex; align-items: center; gap: 8px; }
+.tool-footer-brand-icon { width: 26px; height: 26px; background: #534AB7; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.tool-footer-brand-name { font-size: 16px; font-weight: 700; color: #fff; }
+.tool-footer-brand-name span { color: #7b74d4; }
+.tool-footer-links { display: flex; gap: 1.5rem; }
+.tool-footer-links a { font-size: 13px; color: #888; text-decoration: none; }
+.tool-footer-links a:hover { color: #fff; }
+.tool-footer-copy { font-size: 12px; color: #555; }
+.tool-footer-sister { max-width: 1000px; margin: 1.25rem auto 0; padding-top: 1.25rem; border-top: 1px solid #2a2a2a; font-size: 11px; color: #555; text-align: center; }
+.tool-footer-sister a { color: #888; text-decoration: underline; }
+@media (max-width: 700px) { .tool-footer-inner { flex-direction: column; align-items: flex-start; } }
+</style>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<nav class="tool-nav">
+  <a href="/" class="tool-nav-brand">
+    <div class="tool-nav-brand-icon">
+      <svg width="24" height="24" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <span class="tool-nav-brand-name">Opera<span>ite</span></span>
+  </a>
+  <div class="tool-nav-links">
+    <a class="tool-nav-link" href="/tools/">All tools</a>
+    <a class="tool-nav-btn" href="/#signup">Try Operaite free</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">✦ Free · No signup · Instant</div>
+  <h1>What should you <em>quote</em> for this job?</h1>
+  <p>Enter your real labor hours, materials cost, overhead percent, and target profit — get the full job-cost breakdown plus the price to put on the customer&rsquo;s estimate. Stops the &ldquo;I forgot to add overhead&rdquo; underpricing trap that ruins half of small trade shops.</p>
+</header>
+
+<section class="calc" aria-label="Job cost calculator">
+
+  <div class="form-card">
+    <h2>Your job inputs</h2>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="labHours">Labor hours</label>
+        <div class="input-wrap">
+          <input id="labHours" type="number" min="0" step="0.5" value="16" class="right-suffix" />
+          <span class="suffix">hrs</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="labRate">Loaded labor rate</label>
+        <div class="input-wrap">
+          <span class="prefix">$</span>
+          <input id="labRate" type="number" min="0" step="1" value="55" />
+        </div>
+      </div>
+    </div>
+    <span class="hint" style="display:block;font-size:12px;color:#888;margin-top:-0.75rem;margin-bottom:1.25rem;line-height:1.4;">Loaded rate = wage + payroll taxes + workers&rsquo; comp + benefits. For a $30/hr employee, loaded is typically $42-55/hr.</span>
+
+    <div class="field">
+      <label for="materials">Materials cost</label>
+      <div class="input-wrap">
+        <span class="prefix">$</span>
+        <input id="materials" type="number" min="0" step="50" value="450" />
+      </div>
+      <span class="hint">Total materials before any markup. Some trades mark materials up separately (see Materials Markup section below).</span>
+    </div>
+
+    <div class="field">
+      <label for="materialMarkup">Materials markup</label>
+      <div class="input-wrap">
+        <input id="materialMarkup" type="number" min="0" max="200" step="5" value="20" class="right-suffix" />
+        <span class="suffix">%</span>
+      </div>
+      <span class="hint">Standard residential is 15-25% on top of materials cost. Specialty / hard-to-source items can warrant 50%+.</span>
+    </div>
+
+    <div class="field">
+      <label for="overhead">Overhead percent</label>
+      <div class="input-wrap">
+        <input id="overhead" type="number" min="0" max="100" step="1" value="20" class="right-suffix" />
+        <span class="suffix">%</span>
+      </div>
+      <span class="hint">Office, vehicles, insurance, software, marketing &mdash; spread over your direct costs. Most small trades run 15-25%.</span>
+    </div>
+
+    <div class="field">
+      <label for="profit">Target profit margin</label>
+      <div class="input-wrap">
+        <input id="profit" type="number" min="0" max="60" step="1" value="15" class="right-suffix" />
+        <span class="suffix">%</span>
+      </div>
+      <span class="hint">Profit ON TOP of all costs &mdash; this is what goes into your bank account, not what pays the bills. Target 10-20% for sustainable growth.</span>
+    </div>
+
+  </div>
+
+  <div class="result-card">
+    <div class="result-label">Quote price</div>
+    <div class="result-main"><span id="quotePrice">$1,684</span></div>
+    <div class="result-unit">All-in price to put on the customer&rsquo;s estimate.</div>
+
+    <div class="result-grid">
+      <div class="result-cell">
+        <div class="cell-label">Total cost to you</div>
+        <div class="cell-val" id="totalCost">$1,464</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Profit on this job</div>
+        <div class="cell-val" id="jobProfit">$220</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Effective hourly rate</div>
+        <div class="cell-val" id="effectiveRate">$105/hr</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Margin</div>
+        <div class="cell-val" id="finalMargin">13.1%</div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <h3>How it adds up</h3>
+      <div class="breakdown-row"><span class="key">Labor cost</span><span class="val" id="bdLabor">$880</span></div>
+      <div class="breakdown-row"><span class="key">Materials (with markup)</span><span class="val" id="bdMaterials">$540</span></div>
+      <div class="breakdown-row"><span class="key">+ Overhead allocation</span><span class="val" id="bdOverhead">$284</span></div>
+      <div class="breakdown-row"><span class="key">+ Target profit</span><span class="val" id="bdProfit">$220</span></div>
+      <div class="breakdown-row"><span class="key">Quote price</span><span class="val" id="bdQuote">$1,924</span></div>
+    </div>
+  </div>
+
+</section>
+
+<section class="explainer">
+  <h2>Job costing in 4 buckets</h2>
+  <p>Every job has the same four cost buckets. Most small trades remember the first two and forget the second two — which is why they wonder why they're "busy but broke."</p>
+  <ul>
+    <li><strong>1. Direct labor</strong> &mdash; loaded hourly rate &times; hours. Loaded means wage + payroll taxes + workers&rsquo; comp + benefits, not just the take-home wage.</li>
+    <li><strong>2. Materials</strong> &mdash; cost + markup. The markup pays for sourcing time, returns, breakage, and inventory carrying cost.</li>
+    <li><strong>3. Overhead</strong> &mdash; office rent, vehicles, insurance, software, marketing, owner&rsquo;s admin time. Spread over every job as a percentage of direct costs.</li>
+    <li><strong>4. Profit</strong> &mdash; what the business needs to keep growing. NOT what pays the owner&rsquo;s salary (that&rsquo;s in labor or overhead). Profit is reinvestment, savings, and bonuses.</li>
+  </ul>
+
+  <h3>Loaded labor rate &mdash; what it actually is</h3>
+  <p>If you pay a tech $30/hour cash, your real cost is closer to $45-55/hour. Add:</p>
+  <ul>
+    <li>Payroll taxes (employer portion of FICA, FUTA, SUTA): ~10% of wage</li>
+    <li>Workers&rsquo; comp insurance: 5-15% depending on trade (roofing &amp; HVAC are the high end)</li>
+    <li>Liability + auto insurance allocation: 3-8%</li>
+    <li>Benefits (if any &mdash; health, retirement match, vacation): 10-25%</li>
+    <li>Vehicles, fuel, tools allocated to that tech: 5-15%</li>
+  </ul>
+  <p>For a typical $30/hr W-2 tech: loaded cost is $42-55/hr. For a $50/hr tech: loaded cost is $70-90/hr. Always quote off loaded cost, never wage.</p>
+
+  <h3>Overhead allocation</h3>
+  <p>Overhead is "the stuff you pay for whether or not the job happens." Easiest way to allocate it: total annual overhead &divide; total annual revenue = overhead percent. Apply that percent to direct costs on each job.</p>
+  <p>Example: $80,000 annual overhead, $400,000 annual revenue = 20% overhead rate. A job with $1,000 in direct costs gets $200 added for overhead allocation.</p>
+
+  <h3>The full formula</h3>
+  <div class="formula">
+    direct_cost = (labor_hrs &times; labor_rate) + (materials &times; (1 + material_markup))<br>
+    overhead_amt = direct_cost &times; overhead_pct<br>
+    total_cost = direct_cost + overhead_amt<br>
+    profit_amt = total_cost &times; profit_margin &divide; (1 &minus; profit_margin)<br>
+    quote_price = total_cost + profit_amt
+  </div>
+
+  <h3>Why your quotes have been too low</h3>
+  <p>Most small trades quote (labor &times; rate) + (materials &times; markup) and call it done. That covers buckets 1 and 2 but not 3 and 4. On a $1,000 direct-cost job, you&rsquo;ve undercut yourself by $400+ in overhead and profit &mdash; that&rsquo;s the money you needed to pay the office staff, fuel the truck, and keep the lights on.</p>
+
+  <p>Use this calculator before sending every estimate. Want to send the polished doc with line items? See our <a href="/tools/free-invoice-generator" style="color: #534AB7;">free invoice generator</a> or <a href="/features/client-proposals" style="color: #534AB7;">Operaite&rsquo;s proposal feature</a>.</p>
+</section>
+
+<section class="cta-banner">
+  <h2>Stop quoting from gut feel.</h2>
+  <p>Operaite&rsquo;s proposal generator pre-fills your loaded labor rate, default materials markup, overhead %, and profit target so every quote you send hits your real margin &mdash; not the napkin math version.</p>
+  <a class="cta-banner-btn" href="/#signup">Start your 7-day free trial</a>
+  <div class="cta-banner-note">$29/mo after trial. Cancel anytime.</div>
+</section>
+
+<footer class="tool-footer">
+  <div class="tool-footer-inner">
+    <div class="tool-footer-brand">
+      <div class="tool-footer-brand-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="tool-footer-brand-name">Opera<span>ite</span></span>
+    </div>
+    <div class="tool-footer-links">
+      <a href="/">Home</a>
+      <a href="/tools/">All tools</a>
+      <a href="/blog/">Blog</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
+    <div class="tool-footer-copy">&copy; 2026 Operaite. All rights reserved.</div>
+  </div>
+  <div class="tool-footer-sister">
+    Sister project: <a href="https://projectcalc.app">ProjectCalc</a> &mdash; free calculators for any project
+  </div>
+</footer>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const fmtMoney = (n) => '$' + Math.round(n).toLocaleString();
+  const fmtPct = (n) => n.toFixed(1) + '%';
+
+  function calc() {
+    const labHours = +$('labHours').value || 0;
+    const labRate = +$('labRate').value || 0;
+    const materials = +$('materials').value || 0;
+    const matMarkupPct = (+$('materialMarkup').value || 0) / 100;
+    const overheadPct = (+$('overhead').value || 0) / 100;
+    const profitPct = (+$('profit').value || 0) / 100;
+
+    const laborCost = labHours * labRate;
+    const materialsWithMarkup = materials * (1 + matMarkupPct);
+    const directCost = laborCost + materialsWithMarkup;
+    const overheadAmt = directCost * overheadPct;
+    const totalCost = directCost + overheadAmt;
+    // Quote = totalCost / (1 - profitPct), so profit margin is on the FINAL price, not on cost.
+    const quote = profitPct >= 1 ? totalCost : totalCost / (1 - profitPct);
+    const jobProfit = quote - totalCost;
+    const finalMarginPct = quote > 0 ? (jobProfit / quote) * 100 : 0;
+    const effectiveRate = labHours > 0 ? quote / labHours : 0;
+
+    $('quotePrice').textContent = fmtMoney(quote);
+    $('totalCost').textContent = fmtMoney(totalCost);
+    $('jobProfit').textContent = fmtMoney(jobProfit);
+    $('effectiveRate').textContent = fmtMoney(effectiveRate) + '/hr';
+    $('finalMargin').textContent = fmtPct(finalMarginPct);
+
+    $('bdLabor').textContent = fmtMoney(laborCost);
+    $('bdMaterials').textContent = fmtMoney(materialsWithMarkup);
+    $('bdOverhead').textContent = fmtMoney(overheadAmt);
+    $('bdProfit').textContent = fmtMoney(jobProfit);
+    $('bdQuote').textContent = fmtMoney(quote);
+  }
+
+  ['labHours', 'labRate', 'materials', 'materialMarkup', 'overhead', 'profit'].map($).forEach(el => el.addEventListener('input', calc));
+  calc();
+})();
+</script>
+
+</body></html>

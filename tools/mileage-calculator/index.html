@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Free Mileage Reimbursement Calculator (2026 IRS Rate) | Operaite</title>
+<meta name="description" content="Free mileage calculator using the 2026 IRS standard rate. Enter your business miles and tax bracket — get your deduction and the tax savings it generates." />
+<meta name="keywords" content="mileage calculator, IRS mileage rate 2026, business mileage deduction, mileage reimbursement, contractor mileage, self-employed mileage" />
+<meta name="robots" content="index, follow" />
+<meta name="google-site-verification" content="-oHzSM7njuBW-4QSh84w7wYMt5g093PkdQxGWN0nqgI" />
+<link rel="canonical" href="https://operaite.net/tools/mileage-calculator" />
+
+<link rel="manifest" href="/manifest.json" />
+<link rel="apple-touch-icon" href="/logo_option1.png" />
+<link rel="icon" type="image/png" href="/logo_option1.png" />
+<meta name="theme-color" content="#534AB7" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://operaite.net/tools/mileage-calculator" />
+<meta property="og:site_name" content="Operaite" />
+<meta property="og:title" content="Free Mileage Reimbursement Calculator (2026 IRS Rate)" />
+<meta property="og:description" content="Enter your business miles — get the deduction and tax savings. Uses the 2026 IRS standard mileage rate." />
+<meta property="og:image" content="https://operaite.net/og-image.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Free Mileage Reimbursement Calculator (2026 IRS Rate)" />
+<meta name="twitter:description" content="Calculate your business mileage deduction and the tax savings using the 2026 IRS rate." />
+<meta name="twitter:image" content="https://operaite.net/og-image.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Operaite Free Mileage Calculator",
+  "url": "https://operaite.net/tools/mileage-calculator",
+  "description": "Free mileage reimbursement calculator using the IRS standard mileage rate for 2026.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0.00", "priceCurrency": "USD" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Operaite",
+    "url": "https://operaite.net",
+    "logo": "https://operaite.net/logo_option1.png"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Operaite", "item": "https://operaite.net" },
+    { "@type": "ListItem", "position": 2, "name": "Free Tools", "item": "https://operaite.net/tools/" },
+    { "@type": "ListItem", "position": 3, "name": "Mileage Calculator", "item": "https://operaite.net/tools/mileage-calculator" }
+  ]
+}
+</script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f8; color: #1a1a1a; line-height: 1.5; }
+
+.tool-nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(232,232,229,0.7); height: 62px; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; }
+.tool-nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: inherit; }
+.tool-nav-brand-icon { width: 40px; height: 40px; background: #534AB7; border-radius: 11px; display: flex; align-items: center; justify-content: center; }
+.tool-nav-brand-name { font-size: 22px; font-weight: 700; }
+.tool-nav-brand-name span { color: #534AB7; }
+.tool-nav-links { display: flex; align-items: center; gap: 8px; }
+.tool-nav-link { font-family: inherit; font-size: 14px; color: #555; padding: 8px 14px; border-radius: 8px; text-decoration: none; }
+.tool-nav-link:hover { background: #f3f3f1; color: #1a1a1a; }
+.tool-nav-btn { background: #534AB7; font-family: inherit; font-size: 14px; font-weight: 600; color: #fff; padding: 9px 20px; border-radius: 9px; text-decoration: none; }
+.tool-nav-btn:hover { background: #3C3489; }
+@media (max-width: 700px) { .tool-nav { padding: 0 1.25rem; } }
+
+.hero { padding: 60px 2rem 30px; text-align: center; max-width: 760px; margin: 0 auto; }
+.hero-eyebrow { display: inline-flex; background: #EEEDFE; color: #534AB7; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 1.25rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.hero h1 { font-size: 42px; font-weight: 800; line-height: 1.1; letter-spacing: -1.2px; margin-bottom: 1rem; }
+.hero h1 em { background: linear-gradient(135deg,#534AB7 0%,#8B5CF6 40%,#EC4899 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font-style: normal; }
+.hero p { font-size: 17px; color: #666; line-height: 1.6; max-width: 580px; margin: 0 auto; }
+@media (max-width: 700px) { .hero { padding: 40px 1.25rem 20px; } .hero h1 { font-size: 28px; letter-spacing: -0.5px; } .hero p { font-size: 15px; } }
+
+.calc { max-width: 1000px; margin: 30px auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+@media (max-width: 800px) { .calc { grid-template-columns: 1fr; padding: 0 1.25rem; gap: 1.5rem; } }
+
+.form-card, .result-card { background: #fff; border: 1px solid #ececea; border-radius: 14px; padding: 1.75rem; }
+.form-card h2 { font-size: 18px; font-weight: 700; margin-bottom: 1.25rem; }
+
+.field { margin-bottom: 1.25rem; }
+.field label { display: block; font-size: 13.5px; font-weight: 600; color: #333; margin-bottom: 0.4rem; }
+.field .hint { display: block; font-size: 12px; color: #888; margin-top: 0.25rem; line-height: 1.4; }
+.input-wrap { position: relative; }
+.input-wrap .prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888; font-weight: 500; pointer-events: none; }
+.input-wrap .suffix { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #888; font-weight: 500; pointer-events: none; }
+.field input[type="number"] { width: 100%; padding: 11px 32px 11px 28px; font-family: inherit; font-size: 15px; border: 1px solid #d8d8d4; border-radius: 8px; background: #fff; }
+.field input[type="number"].right-suffix { padding: 11px 36px 11px 12px; }
+.field input[type="number"]:focus { outline: 2px solid #534AB7; outline-offset: -1px; border-color: #534AB7; }
+.field select { width: 100%; padding: 11px 14px; font-family: inherit; font-size: 15px; border: 1px solid #d8d8d4; border-radius: 8px; background: #fff; }
+.field select:focus { outline: 2px solid #534AB7; outline-offset: -1px; border-color: #534AB7; }
+
+.result-card { background: linear-gradient(135deg,#534AB7 0%,#3C3489 100%); color: #fff; border: none; }
+.result-card .result-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+.result-card .result-main { font-size: 56px; font-weight: 800; line-height: 1; letter-spacing: -1.5px; margin-bottom: 0.25rem; }
+.result-card .result-unit { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
+.result-card .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); }
+.result-card .result-cell { padding: 0; }
+.result-card .result-cell .cell-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+.result-card .result-cell .cell-val { font-size: 19px; font-weight: 700; color: #fff; }
+.breakdown { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); }
+.breakdown h3 { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.75rem; }
+.breakdown-row { display: flex; justify-content: space-between; font-size: 13px; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.breakdown-row:last-child { border-bottom: none; font-weight: 700; padding-top: 0.6rem; }
+.breakdown-row .key { color: rgba(255,255,255,0.7); }
+.breakdown-row .val { color: #fff; font-variant-numeric: tabular-nums; }
+
+.explainer { max-width: 760px; margin: 50px auto; padding: 0 2rem; }
+.explainer h2 { font-size: 24px; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.4px; }
+.explainer p { font-size: 15px; color: #444; line-height: 1.7; margin-bottom: 1rem; }
+.explainer ul { font-size: 15px; color: #444; line-height: 1.75; margin: 0 0 1rem 1.25rem; }
+.explainer h3 { font-size: 17px; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+.explainer .formula { background: #f3f3f1; padding: 14px 16px; border-left: 3px solid #534AB7; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 13px; line-height: 1.7; margin: 1rem 0; }
+.explainer table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 14px; }
+.explainer table th, .explainer table td { padding: 10px 12px; border-bottom: 1px solid #e8e8e5; text-align: left; }
+.explainer table th { background: #f5f5f3; font-weight: 600; color: #333; }
+@media (max-width: 700px) { .explainer { padding: 0 1.25rem; } .explainer h2 { font-size: 20px; } }
+
+.cta-banner { background: linear-gradient(135deg,#534AB7 0%,#2d2580 100%); padding: 60px 2rem; text-align: center; }
+.cta-banner h2 { font-size: 30px; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 0.65rem; }
+.cta-banner p { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+.cta-banner-btn { background: #fff; color: #534AB7; font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 30px; border-radius: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block; }
+.cta-banner-btn:hover { background: #f0effd; }
+.cta-banner-note { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+
+.tool-footer { background: #1a1a1a; padding: 2rem; }
+.tool-footer-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; }
+.tool-footer-brand { display: flex; align-items: center; gap: 8px; }
+.tool-footer-brand-icon { width: 26px; height: 26px; background: #534AB7; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.tool-footer-brand-name { font-size: 16px; font-weight: 700; color: #fff; }
+.tool-footer-brand-name span { color: #7b74d4; }
+.tool-footer-links { display: flex; gap: 1.5rem; }
+.tool-footer-links a { font-size: 13px; color: #888; text-decoration: none; }
+.tool-footer-links a:hover { color: #fff; }
+.tool-footer-copy { font-size: 12px; color: #555; }
+.tool-footer-sister { max-width: 1000px; margin: 1.25rem auto 0; padding-top: 1.25rem; border-top: 1px solid #2a2a2a; font-size: 11px; color: #555; text-align: center; }
+.tool-footer-sister a { color: #888; text-decoration: underline; }
+@media (max-width: 700px) { .tool-footer-inner { flex-direction: column; align-items: flex-start; } }
+</style>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<nav class="tool-nav">
+  <a href="/" class="tool-nav-brand">
+    <div class="tool-nav-brand-icon">
+      <svg width="24" height="24" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <span class="tool-nav-brand-name">Opera<span>ite</span></span>
+  </a>
+  <div class="tool-nav-links">
+    <a class="tool-nav-link" href="/tools/">All tools</a>
+    <a class="tool-nav-btn" href="/#signup">Try Operaite free</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">✦ Free · No signup · Instant</div>
+  <h1>Your <em>mileage deduction</em>, in seconds.</h1>
+  <p>Enter your business miles for the year and your tax bracket &mdash; get your deduction and the actual tax savings. Uses the 2026 IRS standard mileage rate of <strong>70&cent; per mile</strong> for business travel.</p>
+</header>
+
+<section class="calc" aria-label="Mileage calculator">
+
+  <div class="form-card">
+    <h2>Your numbers</h2>
+
+    <div class="field">
+      <label for="miles">Business miles driven</label>
+      <div class="input-wrap">
+        <input id="miles" type="number" min="0" step="100" value="12000" class="right-suffix" />
+        <span class="suffix">mi</span>
+      </div>
+      <span class="hint">Total business-use miles for the year. Service trades typically log 8,000-25,000 business miles annually.</span>
+    </div>
+
+    <div class="field">
+      <label for="rate">IRS standard mileage rate</label>
+      <div class="input-wrap">
+        <input id="rate" type="number" min="0" max="2" step="0.005" value="0.70" />
+        <span class="hint" style="margin-top: 0.25rem;">2026 rate: $0.70/mi business, $0.21/mi medical/moving, $0.14/mi charitable. The 2025 business rate was $0.67/mi.</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="bracket">Your marginal tax bracket</label>
+      <select id="bracket">
+        <option value="0.12">12% (single $11,925-$48,475)</option>
+        <option value="0.22" selected>22% (single $48,475-$103,350)</option>
+        <option value="0.24">24% (single $103,350-$197,300)</option>
+        <option value="0.32">32% (single $197,300-$250,525)</option>
+        <option value="0.35">35% (single $250,525-$626,350)</option>
+        <option value="0.37">37% (single $626,350+)</option>
+      </select>
+      <span class="hint">Pick the federal bracket your last dollar of income falls into. Self-employed: add 15.3% SE tax on top of the federal bracket.</span>
+    </div>
+
+    <div class="field">
+      <label for="includeSe">Add self-employment tax savings?</label>
+      <select id="includeSe">
+        <option value="yes" selected>Yes (I'm 1099 / sole prop / LLC)</option>
+        <option value="no">No (I'm W-2 employee getting reimbursed)</option>
+      </select>
+      <span class="hint">If you&rsquo;re self-employed, the deduction also reduces self-employment tax (15.3% up to the SS wage base, then 2.9%).</span>
+    </div>
+
+  </div>
+
+  <div class="result-card">
+    <div class="result-label">Your tax savings</div>
+    <div class="result-main"><span id="savings">$3,142</span></div>
+    <div class="result-unit"><span id="savingsNote">From $8,400 deduction at 22% federal + 15.3% SE</span></div>
+
+    <div class="result-grid">
+      <div class="result-cell">
+        <div class="cell-label">Total deduction</div>
+        <div class="cell-val" id="deduction">$8,400</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Federal income tax saved</div>
+        <div class="cell-val" id="fedTax">$1,848</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">SE tax saved</div>
+        <div class="cell-val" id="seTax">$1,294</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Effective rate</div>
+        <div class="cell-val" id="effRate">37.4%</div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <h3>The math</h3>
+      <div class="breakdown-row"><span class="key">Miles &times; rate</span><span class="val" id="bdMiles">12,000 &times; $0.70</span></div>
+      <div class="breakdown-row"><span class="key">Total deduction</span><span class="val" id="bdDeduction">$8,400</span></div>
+      <div class="breakdown-row"><span class="key">&times; combined tax rate</span><span class="val" id="bdRate">37.3%</span></div>
+      <div class="breakdown-row"><span class="key">Tax savings</span><span class="val" id="bdSavings">$3,142</span></div>
+    </div>
+  </div>
+
+</section>
+
+<section class="explainer">
+  <h2>Standard mileage vs actual expense</h2>
+  <p>The IRS lets self-employed taxpayers choose between two methods to deduct vehicle expenses:</p>
+
+  <h3>Standard mileage (what this calculator uses)</h3>
+  <p>Multiply business miles by the IRS standard rate. The rate already includes gas, insurance, depreciation, maintenance, and registration. You can&rsquo;t deduct those separately if you use this method.</p>
+  <ul>
+    <li><strong>Pros</strong>: Dead simple. Just track miles. No receipts needed.</li>
+    <li><strong>Cons</strong>: Lower deduction if you have a fuel-hungry truck or expensive vehicle.</li>
+    <li><strong>Best for</strong>: Most service trades, especially with 4-cylinder vans, smaller pickups, or used vehicles.</li>
+  </ul>
+
+  <h3>Actual expense method</h3>
+  <p>Track every vehicle expense (gas, insurance, depreciation, repairs, registration) and deduct the business-use percentage of each.</p>
+  <ul>
+    <li><strong>Pros</strong>: Higher deduction if you drive a fuel-hungry truck (F-250, big diesel) or your vehicle has high depreciation.</li>
+    <li><strong>Cons</strong>: Requires meticulous records, all receipts, and a vehicle log of personal vs business miles.</li>
+    <li><strong>Best for</strong>: Heavy-duty trucks, premium vehicles, vehicles dedicated 100% to business.</li>
+  </ul>
+
+  <h3>You can&rsquo;t switch easily</h3>
+  <p>If you used the actual expense method in year 1, you&rsquo;re typically locked in for the life of that vehicle (with some exceptions for fully-depreciated leased vehicles). Pick carefully on year 1 with a new vehicle.</p>
+
+  <h3>What counts as business miles</h3>
+  <ul>
+    <li><strong>Counts</strong>: Driving from your home office to a job site, between job sites, to suppliers, to client meetings, to bank/post office for business errands.</li>
+    <li><strong>Doesn&rsquo;t count</strong>: Driving from home to your regular office (commuting). Personal errands. Side trips on a business route.</li>
+    <li><strong>Gray area</strong>: Picking up materials on the way to a job IS business; stopping for groceries on the way home from a job is not. The drive from supplier to job is business, then your remaining drive to home becomes personal.</li>
+  </ul>
+
+  <h3>The full formula</h3>
+  <div class="formula">
+    deduction = business_miles &times; IRS_rate<br>
+    federal_savings = deduction &times; marginal_federal_bracket<br>
+    SE_savings (if 1099) = deduction &times; 0.153 (up to $176,100 SS wage base in 2026)<br>
+    total_savings = federal_savings + SE_savings
+  </div>
+
+  <h3>2026 IRS mileage rates</h3>
+  <table>
+    <tr><th>Type of travel</th><th>2026 rate</th></tr>
+    <tr><td>Business</td><td>$0.70 per mile</td></tr>
+    <tr><td>Medical or moving (military)</td><td>$0.21 per mile</td></tr>
+    <tr><td>Charitable</td><td>$0.14 per mile</td></tr>
+  </table>
+  <p>The IRS publishes new rates each November for the following calendar year. Always double-check at irs.gov for the current year before filing.</p>
+
+  <h3>Track miles like a pro (avoid an audit)</h3>
+  <p>The IRS expects a contemporaneous log: date, starting/ending odometer, miles driven, business purpose. Apps like MileIQ, Stride, or QuickBooks Self-Employed auto-track via GPS. The cheap option: notebook in the truck, log every business trip same-day.</p>
+  <p><strong>Don&rsquo;t reconstruct miles at year-end.</strong> The IRS rejects reconstructed logs in audits. Track as you drive.</p>
+</section>
+
+<section class="cta-banner">
+  <h2>Track miles AND log every job from one app.</h2>
+  <p>Operaite&rsquo;s accounting tracker links every job to its location and date so you have a backup record of your business driving alongside your invoices, expenses, and revenue &mdash; clean handoff to your tax preparer.</p>
+  <a class="cta-banner-btn" href="/#signup">Start your 7-day free trial</a>
+  <div class="cta-banner-note">$29/mo after trial. Cancel anytime.</div>
+</section>
+
+<footer class="tool-footer">
+  <div class="tool-footer-inner">
+    <div class="tool-footer-brand">
+      <div class="tool-footer-brand-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="tool-footer-brand-name">Opera<span>ite</span></span>
+    </div>
+    <div class="tool-footer-links">
+      <a href="/">Home</a>
+      <a href="/tools/">All tools</a>
+      <a href="/blog/">Blog</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
+    <div class="tool-footer-copy">&copy; 2026 Operaite. All rights reserved.</div>
+  </div>
+  <div class="tool-footer-sister">
+    Sister project: <a href="https://projectcalc.app">ProjectCalc</a> &mdash; free calculators for any project
+  </div>
+</footer>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const fmtMoney = (n) => '$' + Math.round(n).toLocaleString();
+  const fmtPct = (n) => n.toFixed(1) + '%';
+
+  function calc() {
+    const miles = +$('miles').value || 0;
+    const rate = +$('rate').value || 0;
+    const fedBracket = +$('bracket').value || 0;
+    const includeSe = $('includeSe').value === 'yes';
+
+    const deduction = miles * rate;
+    const fedSavings = deduction * fedBracket;
+    // SE tax is 15.3% (12.4% SS + 2.9% Medicare). 2026 SS wage base: $176,100.
+    // Calculator can't know if user is over wage base, so default to full 15.3%.
+    const seSavings = includeSe ? deduction * 0.153 : 0;
+    const totalSavings = fedSavings + seSavings;
+    const effectiveRate = deduction > 0 ? (totalSavings / deduction) * 100 : 0;
+
+    $('deduction').textContent = fmtMoney(deduction);
+    $('fedTax').textContent = fmtMoney(fedSavings);
+    $('seTax').textContent = includeSe ? fmtMoney(seSavings) : '—';
+    $('effRate').textContent = fmtPct(effectiveRate);
+    $('savings').textContent = fmtMoney(totalSavings);
+
+    $('bdMiles').textContent = miles.toLocaleString() + ' &times; $' + rate.toFixed(2);
+    document.getElementById('bdMiles').innerHTML = miles.toLocaleString() + ' &times; $' + rate.toFixed(2);
+    $('bdDeduction').textContent = fmtMoney(deduction);
+    $('bdRate').textContent = fmtPct(effectiveRate);
+    $('bdSavings').textContent = fmtMoney(totalSavings);
+
+    $('savingsNote').textContent = 'From ' + fmtMoney(deduction) + ' deduction at ' + (fedBracket * 100).toFixed(0) + '% federal' + (includeSe ? ' + 15.3% SE' : '');
+  }
+
+  ['miles', 'rate'].map($).forEach(el => el.addEventListener('input', calc));
+  $('bracket').addEventListener('change', calc);
+  $('includeSe').addEventListener('change', calc);
+  calc();
+})();
+</script>
+
+</body></html>

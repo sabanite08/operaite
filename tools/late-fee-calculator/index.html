@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Free Late Fee Calculator for Past-Due Invoices | Operaite</title>
+<meta name="description" content="Free late fee calculator. Enter the invoice amount, days past due, and your fee policy — get the late fee owed and the total balance, plus state usury limits." />
+<meta name="keywords" content="late fee calculator, past due invoice fee, late payment fee, invoice late fee, contractor late fee, finance charge calculator" />
+<meta name="robots" content="index, follow" />
+<meta name="google-site-verification" content="-oHzSM7njuBW-4QSh84w7wYMt5g093PkdQxGWN0nqgI" />
+<link rel="canonical" href="https://operaite.net/tools/late-fee-calculator" />
+
+<link rel="manifest" href="/manifest.json" />
+<link rel="apple-touch-icon" href="/logo_option1.png" />
+<link rel="icon" type="image/png" href="/logo_option1.png" />
+<meta name="theme-color" content="#534AB7" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://operaite.net/tools/late-fee-calculator" />
+<meta property="og:site_name" content="Operaite" />
+<meta property="og:title" content="Free Late Fee Calculator for Past-Due Invoices" />
+<meta property="og:description" content="Enter invoice, days late, and policy — get the fee owed and total due. Free, instant, no signup." />
+<meta property="og:image" content="https://operaite.net/og-image.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Free Late Fee Calculator" />
+<meta name="twitter:description" content="Calculate late fees on past-due invoices, with state usury limits." />
+<meta name="twitter:image" content="https://operaite.net/og-image.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Operaite Free Late Fee Calculator",
+  "url": "https://operaite.net/tools/late-fee-calculator",
+  "description": "Free late fee calculator for past-due invoices. Supports flat fee, monthly percent, and daily interest policies.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0.00", "priceCurrency": "USD" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Operaite",
+    "url": "https://operaite.net",
+    "logo": "https://operaite.net/logo_option1.png"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Operaite", "item": "https://operaite.net" },
+    { "@type": "ListItem", "position": 2, "name": "Free Tools", "item": "https://operaite.net/tools/" },
+    { "@type": "ListItem", "position": 3, "name": "Late Fee Calculator", "item": "https://operaite.net/tools/late-fee-calculator" }
+  ]
+}
+</script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f8; color: #1a1a1a; line-height: 1.5; }
+
+.tool-nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(232,232,229,0.7); height: 62px; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; }
+.tool-nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: inherit; }
+.tool-nav-brand-icon { width: 40px; height: 40px; background: #534AB7; border-radius: 11px; display: flex; align-items: center; justify-content: center; }
+.tool-nav-brand-name { font-size: 22px; font-weight: 700; }
+.tool-nav-brand-name span { color: #534AB7; }
+.tool-nav-links { display: flex; align-items: center; gap: 8px; }
+.tool-nav-link { font-family: inherit; font-size: 14px; color: #555; padding: 8px 14px; border-radius: 8px; text-decoration: none; }
+.tool-nav-link:hover { background: #f3f3f1; color: #1a1a1a; }
+.tool-nav-btn { background: #534AB7; font-family: inherit; font-size: 14px; font-weight: 600; color: #fff; padding: 9px 20px; border-radius: 9px; text-decoration: none; }
+.tool-nav-btn:hover { background: #3C3489; }
+@media (max-width: 700px) { .tool-nav { padding: 0 1.25rem; } }
+
+.hero { padding: 60px 2rem 30px; text-align: center; max-width: 760px; margin: 0 auto; }
+.hero-eyebrow { display: inline-flex; background: #EEEDFE; color: #534AB7; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 1.25rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.hero h1 { font-size: 42px; font-weight: 800; line-height: 1.1; letter-spacing: -1.2px; margin-bottom: 1rem; }
+.hero h1 em { background: linear-gradient(135deg,#534AB7 0%,#8B5CF6 40%,#EC4899 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font-style: normal; }
+.hero p { font-size: 17px; color: #666; line-height: 1.6; max-width: 580px; margin: 0 auto; }
+@media (max-width: 700px) { .hero { padding: 40px 1.25rem 20px; } .hero h1 { font-size: 28px; letter-spacing: -0.5px; } .hero p { font-size: 15px; } }
+
+.calc { max-width: 1000px; margin: 30px auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+@media (max-width: 800px) { .calc { grid-template-columns: 1fr; padding: 0 1.25rem; gap: 1.5rem; } }
+
+.form-card, .result-card { background: #fff; border: 1px solid #ececea; border-radius: 14px; padding: 1.75rem; }
+.form-card h2 { font-size: 18px; font-weight: 700; margin-bottom: 1.25rem; }
+
+.field { margin-bottom: 1.25rem; }
+.field label { display: block; font-size: 13.5px; font-weight: 600; color: #333; margin-bottom: 0.4rem; }
+.field .hint { display: block; font-size: 12px; color: #888; margin-top: 0.25rem; line-height: 1.4; }
+.input-wrap { position: relative; }
+.input-wrap .prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888; font-weight: 500; pointer-events: none; }
+.input-wrap .suffix { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #888; font-weight: 500; pointer-events: none; }
+.field input[type="number"] { width: 100%; padding: 11px 32px 11px 28px; font-family: inherit; font-size: 15px; border: 1px solid #d8d8d4; border-radius: 8px; background: #fff; }
+.field input[type="number"].right-suffix { padding: 11px 36px 11px 12px; }
+.field input[type="number"]:focus { outline: 2px solid #534AB7; outline-offset: -1px; border-color: #534AB7; }
+.field select { width: 100%; padding: 11px 14px; font-family: inherit; font-size: 15px; border: 1px solid #d8d8d4; border-radius: 8px; background: #fff; }
+.field select:focus { outline: 2px solid #534AB7; outline-offset: -1px; border-color: #534AB7; }
+
+.result-card { background: linear-gradient(135deg,#534AB7 0%,#3C3489 100%); color: #fff; border: none; }
+.result-card .result-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+.result-card .result-main { font-size: 56px; font-weight: 800; line-height: 1; letter-spacing: -1.5px; margin-bottom: 0.25rem; }
+.result-card .result-unit { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
+.result-card .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); }
+.result-card .result-cell { padding: 0; }
+.result-card .result-cell .cell-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+.result-card .result-cell .cell-val { font-size: 19px; font-weight: 700; color: #fff; }
+.breakdown { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); }
+.breakdown h3 { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.75rem; }
+.breakdown-row { display: flex; justify-content: space-between; font-size: 13px; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.breakdown-row:last-child { border-bottom: none; font-weight: 700; padding-top: 0.6rem; }
+.breakdown-row .key { color: rgba(255,255,255,0.7); }
+.breakdown-row .val { color: #fff; font-variant-numeric: tabular-nums; }
+
+.explainer { max-width: 760px; margin: 50px auto; padding: 0 2rem; }
+.explainer h2 { font-size: 24px; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.4px; }
+.explainer p { font-size: 15px; color: #444; line-height: 1.7; margin-bottom: 1rem; }
+.explainer ul { font-size: 15px; color: #444; line-height: 1.75; margin: 0 0 1rem 1.25rem; }
+.explainer h3 { font-size: 17px; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+.explainer .formula { background: #f3f3f1; padding: 14px 16px; border-left: 3px solid #534AB7; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 13px; line-height: 1.7; margin: 1rem 0; }
+.explainer table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 14px; }
+.explainer table th, .explainer table td { padding: 10px 12px; border-bottom: 1px solid #e8e8e5; text-align: left; }
+.explainer table th { background: #f5f5f3; font-weight: 600; color: #333; }
+@media (max-width: 700px) { .explainer { padding: 0 1.25rem; } .explainer h2 { font-size: 20px; } }
+
+.cta-banner { background: linear-gradient(135deg,#534AB7 0%,#2d2580 100%); padding: 60px 2rem; text-align: center; }
+.cta-banner h2 { font-size: 30px; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 0.65rem; }
+.cta-banner p { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+.cta-banner-btn { background: #fff; color: #534AB7; font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 30px; border-radius: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block; }
+.cta-banner-btn:hover { background: #f0effd; }
+.cta-banner-note { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+
+.tool-footer { background: #1a1a1a; padding: 2rem; }
+.tool-footer-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; }
+.tool-footer-brand { display: flex; align-items: center; gap: 8px; }
+.tool-footer-brand-icon { width: 26px; height: 26px; background: #534AB7; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.tool-footer-brand-name { font-size: 16px; font-weight: 700; color: #fff; }
+.tool-footer-brand-name span { color: #7b74d4; }
+.tool-footer-links { display: flex; gap: 1.5rem; }
+.tool-footer-links a { font-size: 13px; color: #888; text-decoration: none; }
+.tool-footer-links a:hover { color: #fff; }
+.tool-footer-copy { font-size: 12px; color: #555; }
+.tool-footer-sister { max-width: 1000px; margin: 1.25rem auto 0; padding-top: 1.25rem; border-top: 1px solid #2a2a2a; font-size: 11px; color: #555; text-align: center; }
+.tool-footer-sister a { color: #888; text-decoration: underline; }
+@media (max-width: 700px) { .tool-footer-inner { flex-direction: column; align-items: flex-start; } }
+</style>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<nav class="tool-nav">
+  <a href="/" class="tool-nav-brand">
+    <div class="tool-nav-brand-icon">
+      <svg width="24" height="24" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <span class="tool-nav-brand-name">Opera<span>ite</span></span>
+  </a>
+  <div class="tool-nav-links">
+    <a class="tool-nav-link" href="/tools/">All tools</a>
+    <a class="tool-nav-btn" href="/#signup">Try Operaite free</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">✦ Free · No signup · Instant</div>
+  <h1>Calculate the <em>late fee</em> on a past-due invoice.</h1>
+  <p>Enter the invoice amount, days past due, and your late fee policy &mdash; get the fee owed and the total balance the customer owes today. Supports flat fees, monthly percentages, and daily interest.</p>
+</header>
+
+<section class="calc" aria-label="Late fee calculator">
+
+  <div class="form-card">
+    <h2>Invoice details</h2>
+
+    <div class="field">
+      <label for="invoiceAmt">Original invoice amount</label>
+      <div class="input-wrap">
+        <span class="prefix">$</span>
+        <input id="invoiceAmt" type="number" min="0" step="100" value="2500" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="daysLate">Days past due</label>
+      <div class="input-wrap">
+        <input id="daysLate" type="number" min="0" max="3650" step="1" value="30" class="right-suffix" />
+        <span class="suffix">days</span>
+      </div>
+      <span class="hint">Count from the day after the invoice due date. A Net 30 invoice issued Jan 1 (due Jan 31) is 1 day late on Feb 1.</span>
+    </div>
+
+    <div class="field">
+      <label for="policyType">Late fee policy</label>
+      <select id="policyType">
+        <option value="monthly">Monthly percent (1.5% per month)</option>
+        <option value="flat">Flat one-time fee ($25)</option>
+        <option value="daily">Daily interest (0.05% per day)</option>
+        <option value="combo">Flat fee + monthly percent</option>
+      </select>
+      <span class="hint">Most common policies. Always disclose the policy in your contract or invoice terms before charging.</span>
+    </div>
+
+    <div class="field" id="flatField">
+      <label for="flatFee">Flat fee amount</label>
+      <div class="input-wrap">
+        <span class="prefix">$</span>
+        <input id="flatFee" type="number" min="0" step="5" value="25" />
+      </div>
+    </div>
+
+    <div class="field" id="rateField">
+      <label for="rate">Monthly rate</label>
+      <div class="input-wrap">
+        <input id="rate" type="number" min="0" max="10" step="0.1" value="1.5" class="right-suffix" />
+        <span class="suffix">% / mo</span>
+      </div>
+      <span class="hint">1-2% per month is standard and enforceable in most US states. Above 2% per month risks state usury limits.</span>
+    </div>
+
+  </div>
+
+  <div class="result-card">
+    <div class="result-label">Total balance due</div>
+    <div class="result-main"><span id="totalDue">$2,538</span></div>
+    <div class="result-unit"><span id="dueNote">$2,500 invoice + $37.50 late fees</span></div>
+
+    <div class="result-grid">
+      <div class="result-cell">
+        <div class="cell-label">Late fees</div>
+        <div class="cell-val" id="lateFees">$37.50</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Effective APR</div>
+        <div class="cell-val" id="effectiveApr">18%</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Days past due</div>
+        <div class="cell-val" id="daysOut">30</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Original invoice</div>
+        <div class="cell-val" id="origInvoice">$2,500</div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <h3>How it adds up</h3>
+      <div class="breakdown-row"><span class="key">Original invoice</span><span class="val" id="bdInvoice">$2,500</span></div>
+      <div class="breakdown-row"><span class="key">+ Late fee</span><span class="val" id="bdFee">$37.50</span></div>
+      <div class="breakdown-row"><span class="key">Total balance due</span><span class="val" id="bdTotal">$2,538</span></div>
+    </div>
+  </div>
+
+</section>
+
+<section class="explainer">
+  <h2>Late fee policies that actually work</h2>
+  <p>You have three common late fee structures and one combo. Each has tradeoffs for collection rate, customer relationship, and legal exposure.</p>
+
+  <h3>1. Flat one-time fee ($25-$50)</h3>
+  <p>The simplest. Charged once when the invoice goes past due, regardless of how late. Best for small invoices and high-volume work where a percentage doesn&rsquo;t add up to anything meaningful.</p>
+  <ul>
+    <li><strong>Pros</strong>: Easy to communicate, no compounding math, customers don&rsquo;t feel "punished" for being a few days late.</li>
+    <li><strong>Cons</strong>: No incentive to pay sooner once they&rsquo;re past due (the fee is the same at 1 day or 100 days).</li>
+  </ul>
+
+  <h3>2. Monthly percent (1-2% per month)</h3>
+  <p>The most common policy in trades and B2B. Charged each month the invoice remains unpaid &mdash; usually 1.5% per month, which is 18% APR (the credit card industry standard).</p>
+  <ul>
+    <li><strong>Pros</strong>: Compounds pressure to pay, scales with invoice size, legally defensible in nearly all US states.</li>
+    <li><strong>Cons</strong>: Confuses customers who don&rsquo;t track timing carefully. Above 2% per month risks state usury laws.</li>
+  </ul>
+
+  <h3>3. Daily interest (0.04-0.05% per day)</h3>
+  <p>Same effective rate as monthly percent but charged daily. Same APR (18% = 0.0493% per day). Used when you want a "drip" of pressure every day rather than a monthly bump.</p>
+
+  <h3>4. Combo (flat fee + monthly percent)</h3>
+  <p>The hammer. $25-$50 flat fee day 1 past due, then 1.5% per month after that. Maximum collection pressure but use carefully &mdash; this is what makes the difference between a customer paying late and a customer disputing the entire invoice.</p>
+
+  <h3>State usury limits</h3>
+  <p>Maximum legal interest rates on commercial debt vary by state. <strong>1.5% per month (18% APR) is safe in all 50 states.</strong> Higher rates are legal in some states for B2B but not B2C:</p>
+  <table>
+    <tr><th>State</th><th>Max commercial rate</th></tr>
+    <tr><td>California</td><td>10% APR (consumer); no limit B2B</td></tr>
+    <tr><td>Florida</td><td>18% APR consumer; 25% APR B2B</td></tr>
+    <tr><td>New York</td><td>16% APR (consumer); 25% B2B</td></tr>
+    <tr><td>Texas</td><td>18% APR (most cases)</td></tr>
+    <tr><td>Most others</td><td>18-24% APR is the safe ceiling</td></tr>
+  </table>
+  <p>This is general guidance, not legal advice &mdash; for high-value invoices, ask a lawyer in your state.</p>
+
+  <h3>Disclose the policy upfront</h3>
+  <p>You can&rsquo;t charge a late fee that wasn&rsquo;t disclosed before the work was done. Put the late fee policy in your <a href="/blog/cancellation-policy-for-trades" style="color: #534AB7;">contract or proposal</a> AND on the original invoice. If the customer disputes it later, you need both.</p>
+
+  <p>Standard language: <em>"Past due invoices are subject to a late fee of 1.5% per month (18% APR), accruing from the day after the due date."</em></p>
+
+  <h3>The full formulas</h3>
+  <div class="formula">
+    flat: late_fee = flat_amount<br>
+    monthly: late_fee = invoice &times; rate &times; (days &divide; 30)<br>
+    daily: late_fee = invoice &times; daily_rate &times; days<br>
+    combo: late_fee = flat_amount + (invoice &times; monthly_rate &times; days &divide; 30)
+  </div>
+
+  <p>Want help drafting the late fee letter to the customer? See our <a href="/blog/late-fee-letter-to-customer" style="color: #534AB7;">late fee letter template</a>.</p>
+</section>
+
+<section class="cta-banner">
+  <h2>Auto-apply late fees on every overdue invoice.</h2>
+  <p>Operaite&rsquo;s invoicing module tracks due dates automatically, applies your default late fee policy on day 1 past due, and emails the customer the updated balance &mdash; without you having to chase it.</p>
+  <a class="cta-banner-btn" href="/#signup">Start your 7-day free trial</a>
+  <div class="cta-banner-note">$29/mo after trial. Cancel anytime.</div>
+</section>
+
+<footer class="tool-footer">
+  <div class="tool-footer-inner">
+    <div class="tool-footer-brand">
+      <div class="tool-footer-brand-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="tool-footer-brand-name">Opera<span>ite</span></span>
+    </div>
+    <div class="tool-footer-links">
+      <a href="/">Home</a>
+      <a href="/tools/">All tools</a>
+      <a href="/blog/">Blog</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
+    <div class="tool-footer-copy">&copy; 2026 Operaite. All rights reserved.</div>
+  </div>
+  <div class="tool-footer-sister">
+    Sister project: <a href="https://projectcalc.app">ProjectCalc</a> &mdash; free calculators for any project
+  </div>
+</footer>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const fmtMoney = (n) => '$' + n.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  const fmtMoneyR = (n) => '$' + Math.round(n).toLocaleString();
+
+  function updateFieldVisibility() {
+    const policy = $('policyType').value;
+    $('flatField').style.display = (policy === 'flat' || policy === 'combo') ? 'block' : 'none';
+    $('rateField').style.display = (policy === 'monthly' || policy === 'daily' || policy === 'combo') ? 'block' : 'none';
+  }
+
+  function calc() {
+    const invoice = +$('invoiceAmt').value || 0;
+    const days = +$('daysLate').value || 0;
+    const policy = $('policyType').value;
+    const flatFee = +$('flatFee').value || 0;
+    const monthlyRate = (+$('rate').value || 0) / 100;
+
+    let lateFee = 0;
+    let aprPct = 0;
+
+    if (policy === 'flat') {
+      lateFee = flatFee;
+      aprPct = invoice > 0 && days > 0 ? (lateFee / invoice) * (365 / days) * 100 : 0;
+    } else if (policy === 'monthly') {
+      lateFee = invoice * monthlyRate * (days / 30);
+      aprPct = monthlyRate * 12 * 100;
+    } else if (policy === 'daily') {
+      // Treat input as monthly rate, convert to daily
+      const dailyRate = monthlyRate / 30;
+      lateFee = invoice * dailyRate * days;
+      aprPct = dailyRate * 365 * 100;
+    } else if (policy === 'combo') {
+      const monthlyPart = invoice * monthlyRate * (days / 30);
+      lateFee = flatFee + monthlyPart;
+      aprPct = monthlyRate * 12 * 100;
+    }
+
+    const total = invoice + lateFee;
+
+    $('totalDue').textContent = fmtMoneyR(total);
+    $('lateFees').textContent = fmtMoney(lateFee);
+    $('effectiveApr').textContent = aprPct.toFixed(1) + '%';
+    $('daysOut').textContent = days.toString();
+    $('origInvoice').textContent = fmtMoneyR(invoice);
+
+    $('bdInvoice').textContent = fmtMoneyR(invoice);
+    $('bdFee').textContent = fmtMoney(lateFee);
+    $('bdTotal').textContent = fmtMoneyR(total);
+
+    $('dueNote').textContent = fmtMoneyR(invoice) + ' invoice + ' + fmtMoney(lateFee) + ' late fees';
+  }
+
+  ['invoiceAmt', 'daysLate', 'flatFee', 'rate'].map($).forEach(el => el.addEventListener('input', calc));
+  $('policyType').addEventListener('change', function() { updateFieldVisibility(); calc(); });
+  updateFieldVisibility();
+  calc();
+})();
+</script>
+
+</body></html>

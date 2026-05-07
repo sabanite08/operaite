@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Free Profit Margin Calculator | Operaite</title>
+<meta name="description" content="Free profit margin calculator. Enter revenue and cost — get gross profit, profit margin percent, and the equivalent markup. Trade-friendly benchmarks included." />
+<meta name="keywords" content="profit margin calculator, gross margin calculator, net margin, contractor margin, small business margin, margin vs markup" />
+<meta name="robots" content="index, follow" />
+<meta name="google-site-verification" content="-oHzSM7njuBW-4QSh84w7wYMt5g093PkdQxGWN0nqgI" />
+<link rel="canonical" href="https://operaite.net/tools/profit-margin-calculator" />
+
+<link rel="manifest" href="/manifest.json" />
+<link rel="apple-touch-icon" href="/logo_option1.png" />
+<link rel="icon" type="image/png" href="/logo_option1.png" />
+<meta name="theme-color" content="#534AB7" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://operaite.net/tools/profit-margin-calculator" />
+<meta property="og:site_name" content="Operaite" />
+<meta property="og:title" content="Free Profit Margin Calculator" />
+<meta property="og:description" content="Enter revenue and cost — get profit, margin %, and equivalent markup. Free, instant, no signup." />
+<meta property="og:image" content="https://operaite.net/og-image.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Free Profit Margin Calculator" />
+<meta name="twitter:description" content="Enter revenue and cost — get profit, margin %, and equivalent markup." />
+<meta name="twitter:image" content="https://operaite.net/og-image.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Operaite Free Profit Margin Calculator",
+  "url": "https://operaite.net/tools/profit-margin-calculator",
+  "description": "Free profit margin calculator. Enter revenue and cost to get gross profit, profit margin percent, and equivalent markup percent.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0.00", "priceCurrency": "USD" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Operaite",
+    "url": "https://operaite.net",
+    "logo": "https://operaite.net/logo_option1.png"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Operaite", "item": "https://operaite.net" },
+    { "@type": "ListItem", "position": 2, "name": "Free Tools", "item": "https://operaite.net/tools/" },
+    { "@type": "ListItem", "position": 3, "name": "Profit Margin Calculator", "item": "https://operaite.net/tools/profit-margin-calculator" }
+  ]
+}
+</script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f8; color: #1a1a1a; line-height: 1.5; }
+
+.tool-nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(232,232,229,0.7); height: 62px; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; }
+.tool-nav-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: inherit; }
+.tool-nav-brand-icon { width: 40px; height: 40px; background: #534AB7; border-radius: 11px; display: flex; align-items: center; justify-content: center; }
+.tool-nav-brand-name { font-size: 22px; font-weight: 700; }
+.tool-nav-brand-name span { color: #534AB7; }
+.tool-nav-links { display: flex; align-items: center; gap: 8px; }
+.tool-nav-link { font-family: inherit; font-size: 14px; color: #555; padding: 8px 14px; border-radius: 8px; text-decoration: none; }
+.tool-nav-link:hover { background: #f3f3f1; color: #1a1a1a; }
+.tool-nav-btn { background: #534AB7; font-family: inherit; font-size: 14px; font-weight: 600; color: #fff; padding: 9px 20px; border-radius: 9px; text-decoration: none; }
+.tool-nav-btn:hover { background: #3C3489; }
+@media (max-width: 700px) { .tool-nav { padding: 0 1.25rem; } }
+
+.hero { padding: 60px 2rem 30px; text-align: center; max-width: 760px; margin: 0 auto; }
+.hero-eyebrow { display: inline-flex; background: #EEEDFE; color: #534AB7; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 1.25rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.hero h1 { font-size: 42px; font-weight: 800; line-height: 1.1; letter-spacing: -1.2px; margin-bottom: 1rem; }
+.hero h1 em { background: linear-gradient(135deg,#534AB7 0%,#8B5CF6 40%,#EC4899 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font-style: normal; }
+.hero p { font-size: 17px; color: #666; line-height: 1.6; max-width: 580px; margin: 0 auto; }
+@media (max-width: 700px) { .hero { padding: 40px 1.25rem 20px; } .hero h1 { font-size: 28px; letter-spacing: -0.5px; } .hero p { font-size: 15px; } }
+
+.calc { max-width: 1000px; margin: 30px auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+@media (max-width: 800px) { .calc { grid-template-columns: 1fr; padding: 0 1.25rem; gap: 1.5rem; } }
+
+.form-card, .result-card { background: #fff; border: 1px solid #ececea; border-radius: 14px; padding: 1.75rem; }
+.form-card h2 { font-size: 18px; font-weight: 700; margin-bottom: 1.25rem; }
+
+.field { margin-bottom: 1.25rem; }
+.field label { display: block; font-size: 13.5px; font-weight: 600; color: #333; margin-bottom: 0.4rem; }
+.field .hint { display: block; font-size: 12px; color: #888; margin-top: 0.25rem; line-height: 1.4; }
+.input-wrap { position: relative; }
+.input-wrap .prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888; font-weight: 500; pointer-events: none; }
+.input-wrap .suffix { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #888; font-weight: 500; pointer-events: none; }
+.field input[type="number"] { width: 100%; padding: 11px 32px 11px 28px; font-family: inherit; font-size: 15px; border: 1px solid #d8d8d4; border-radius: 8px; background: #fff; }
+.field input[type="number"].right-suffix { padding: 11px 36px 11px 12px; }
+.field input[type="number"]:focus { outline: 2px solid #534AB7; outline-offset: -1px; border-color: #534AB7; }
+
+.result-card { background: linear-gradient(135deg,#534AB7 0%,#3C3489 100%); color: #fff; border: none; }
+.result-card .result-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; }
+.result-card .result-main { font-size: 56px; font-weight: 800; line-height: 1; letter-spacing: -1.5px; margin-bottom: 0.25rem; }
+.result-card .result-unit { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
+.result-card .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); }
+.result-card .result-cell { padding: 0; }
+.result-card .result-cell .cell-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+.result-card .result-cell .cell-val { font-size: 19px; font-weight: 700; color: #fff; }
+.breakdown { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); }
+.breakdown h3 { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.75rem; }
+.breakdown-row { display: flex; justify-content: space-between; font-size: 13px; padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.breakdown-row:last-child { border-bottom: none; font-weight: 700; padding-top: 0.6rem; }
+.breakdown-row .key { color: rgba(255,255,255,0.7); }
+.breakdown-row .val { color: #fff; font-variant-numeric: tabular-nums; }
+
+.explainer { max-width: 760px; margin: 50px auto; padding: 0 2rem; }
+.explainer h2 { font-size: 24px; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.4px; }
+.explainer p { font-size: 15px; color: #444; line-height: 1.7; margin-bottom: 1rem; }
+.explainer ul { font-size: 15px; color: #444; line-height: 1.75; margin: 0 0 1rem 1.25rem; }
+.explainer h3 { font-size: 17px; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+.explainer .formula { background: #f3f3f1; padding: 14px 16px; border-left: 3px solid #534AB7; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 13px; line-height: 1.7; margin: 1rem 0; }
+.explainer table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 14px; }
+.explainer table th, .explainer table td { padding: 10px 12px; border-bottom: 1px solid #e8e8e5; text-align: left; }
+.explainer table th { background: #f5f5f3; font-weight: 600; color: #333; }
+@media (max-width: 700px) { .explainer { padding: 0 1.25rem; } .explainer h2 { font-size: 20px; } }
+
+.cta-banner { background: linear-gradient(135deg,#534AB7 0%,#2d2580 100%); padding: 60px 2rem; text-align: center; }
+.cta-banner h2 { font-size: 30px; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 0.65rem; }
+.cta-banner p { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+.cta-banner-btn { background: #fff; color: #534AB7; font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 30px; border-radius: 10px; border: none; cursor: pointer; text-decoration: none; display: inline-block; }
+.cta-banner-btn:hover { background: #f0effd; }
+.cta-banner-note { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+
+.tool-footer { background: #1a1a1a; padding: 2rem; }
+.tool-footer-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; }
+.tool-footer-brand { display: flex; align-items: center; gap: 8px; }
+.tool-footer-brand-icon { width: 26px; height: 26px; background: #534AB7; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.tool-footer-brand-name { font-size: 16px; font-weight: 700; color: #fff; }
+.tool-footer-brand-name span { color: #7b74d4; }
+.tool-footer-links { display: flex; gap: 1.5rem; }
+.tool-footer-links a { font-size: 13px; color: #888; text-decoration: none; }
+.tool-footer-links a:hover { color: #fff; }
+.tool-footer-copy { font-size: 12px; color: #555; }
+.tool-footer-sister { max-width: 1000px; margin: 1.25rem auto 0; padding-top: 1.25rem; border-top: 1px solid #2a2a2a; font-size: 11px; color: #555; text-align: center; }
+.tool-footer-sister a { color: #888; text-decoration: underline; }
+@media (max-width: 700px) { .tool-footer-inner { flex-direction: column; align-items: flex-start; } }
+</style>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<nav class="tool-nav">
+  <a href="/" class="tool-nav-brand">
+    <div class="tool-nav-brand-icon">
+      <svg width="24" height="24" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <span class="tool-nav-brand-name">Opera<span>ite</span></span>
+  </a>
+  <div class="tool-nav-links">
+    <a class="tool-nav-link" href="/tools/">All tools</a>
+    <a class="tool-nav-btn" href="/#signup">Try Operaite free</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">✦ Free · No signup · Instant</div>
+  <h1>What&rsquo;s your <em>profit margin</em>?</h1>
+  <p>Enter your revenue and cost — get the dollar profit, gross margin percent, and the equivalent markup. Useful for pricing single jobs, evaluating a quarter, or sanity-checking your books.</p>
+</header>
+
+<section class="calc" aria-label="Profit margin calculator">
+
+  <div class="form-card">
+    <h2>Your numbers</h2>
+
+    <div class="field">
+      <label for="revenue">Revenue (selling price)</label>
+      <div class="input-wrap">
+        <span class="prefix">$</span>
+        <input id="revenue" type="number" min="0" step="100" value="5000" />
+      </div>
+      <span class="hint">Total dollars collected — for one job, one quarter, or one year. Use whatever timeframe matches your cost number.</span>
+    </div>
+
+    <div class="field">
+      <label for="cost">Total cost</label>
+      <div class="input-wrap">
+        <span class="prefix">$</span>
+        <input id="cost" type="number" min="0" step="100" value="3000" />
+      </div>
+      <span class="hint">Direct costs only for gross margin (materials + labor). Include overhead too if you want net margin.</span>
+    </div>
+
+  </div>
+
+  <div class="result-card">
+    <div class="result-label">Profit margin</div>
+    <div class="result-main"><span id="marginPct">40.0%</span></div>
+    <div class="result-unit"><span id="marginNote">$2,000 profit on $5,000 revenue</span></div>
+
+    <div class="result-grid">
+      <div class="result-cell">
+        <div class="cell-label">Profit</div>
+        <div class="cell-val" id="profit">$2,000</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Equivalent markup</div>
+        <div class="cell-val" id="markup">66.7%</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Revenue</div>
+        <div class="cell-val" id="rev">$5,000</div>
+      </div>
+      <div class="result-cell">
+        <div class="cell-label">Cost</div>
+        <div class="cell-val" id="cst">$3,000</div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <h3>The math</h3>
+      <div class="breakdown-row"><span class="key">Revenue</span><span class="val" id="bdRev">$5,000</span></div>
+      <div class="breakdown-row"><span class="key">&minus; Cost</span><span class="val" id="bdCost">$3,000</span></div>
+      <div class="breakdown-row"><span class="key">Profit</span><span class="val" id="bdProfit">$2,000</span></div>
+    </div>
+  </div>
+
+</section>
+
+<section class="explainer">
+  <h2>Margin types — gross vs operating vs net</h2>
+  <p>"Profit margin" is shorthand for three different numbers depending on what costs you subtract. All three matter, and most small businesses only track one (the easy one) and miss the real picture.</p>
+  <ul>
+    <li><strong>Gross margin</strong> = (Revenue &minus; direct cost of goods/services) &divide; Revenue. This is what most calculators show. Includes materials, direct labor, subcontractors. Excludes overhead and admin.</li>
+    <li><strong>Operating margin</strong> = (Revenue &minus; direct costs &minus; operating expenses) &divide; Revenue. Operating expenses = rent, insurance, software, vehicles, marketing, office staff.</li>
+    <li><strong>Net margin</strong> = (Revenue &minus; ALL costs including taxes &amp; interest) &divide; Revenue. The number that hits your bank account.</li>
+  </ul>
+
+  <h3>Healthy margin benchmarks by service trade</h3>
+  <table>
+    <tr><th>Trade</th><th>Gross margin</th><th>Net margin</th></tr>
+    <tr><td>General contracting</td><td>15-25%</td><td>5-10%</td></tr>
+    <tr><td>Plumbing service</td><td>25-40%</td><td>10-15%</td></tr>
+    <tr><td>Electrical service</td><td>25-40%</td><td>10-15%</td></tr>
+    <tr><td>HVAC service &amp; install</td><td>30-45%</td><td>10-18%</td></tr>
+    <tr><td>Cleaning</td><td>40-55%</td><td>15-25%</td></tr>
+    <tr><td>Landscaping</td><td>35-50%</td><td>10-20%</td></tr>
+    <tr><td>Roofing</td><td>20-35%</td><td>5-12%</td></tr>
+    <tr><td>Specialty (custom carpentry, painting)</td><td>40-60%</td><td>15-25%</td></tr>
+  </table>
+
+  <h3>The full formula</h3>
+  <div class="formula">
+    profit = revenue &minus; cost<br>
+    margin_pct = profit &divide; revenue &times; 100<br>
+    markup_pct = profit &divide; cost &times; 100
+  </div>
+
+  <h3>Margin and markup are NOT the same</h3>
+  <p>This is the most common pricing confusion. A $3,000 job sold for $5,000 has:</p>
+  <ul>
+    <li><strong>40% margin</strong> ($2,000 profit ÷ $5,000 revenue)</li>
+    <li><strong>67% markup</strong> ($2,000 profit ÷ $3,000 cost)</li>
+  </ul>
+  <p>Same job. Two different numbers. Both correct. If you say "I run 40% margin" you mean the first; if you say "I mark up 40%" you mean something different. See the <a href="/tools/markup-calculator" style="color: #534AB7;">markup calculator</a> for the conversion.</p>
+
+  <h3>Why margin matters more than dollar profit</h3>
+  <p>A $50,000 job at 5% margin yields $2,500 profit. A $10,000 job at 30% margin yields $3,000 profit. The smaller job pays you more. Margin is the multiplier that determines whether scale helps you or kills you.</p>
+
+  <p>Most small trades start out chasing big jobs (high revenue, low margin) and then realize over time that they make more money on smaller higher-margin work. Track margin per job and you'll see which work to take more of and which to walk away from.</p>
+</section>
+
+<section class="cta-banner">
+  <h2>Track margin on every job, automatically.</h2>
+  <p>Operaite&rsquo;s accounting tracker logs revenue and costs per job, calculates gross and net margin in real time, and shows which clients and project types actually pay your bills.</p>
+  <a class="cta-banner-btn" href="/#signup">Start your 7-day free trial</a>
+  <div class="cta-banner-note">$29/mo after trial. Cancel anytime.</div>
+</section>
+
+<footer class="tool-footer">
+  <div class="tool-footer-inner">
+    <div class="tool-footer-brand">
+      <div class="tool-footer-brand-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M7 3V1M7 13v-2M3 7H1M13 7h-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="tool-footer-brand-name">Opera<span>ite</span></span>
+    </div>
+    <div class="tool-footer-links">
+      <a href="/">Home</a>
+      <a href="/tools/">All tools</a>
+      <a href="/blog/">Blog</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
+    <div class="tool-footer-copy">&copy; 2026 Operaite. All rights reserved.</div>
+  </div>
+  <div class="tool-footer-sister">
+    Sister project: <a href="https://projectcalc.app">ProjectCalc</a> &mdash; free calculators for any project
+  </div>
+</footer>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const fmtMoney = (n) => '$' + Math.round(n).toLocaleString();
+  const fmtPct = (n) => n.toFixed(1) + '%';
+
+  function calc() {
+    const revenue = +$('revenue').value || 0;
+    const cost = +$('cost').value || 0;
+    const profit = revenue - cost;
+    const margin = revenue > 0 ? (profit / revenue) * 100 : 0;
+    const markup = cost > 0 ? (profit / cost) * 100 : 0;
+
+    $('marginPct').textContent = fmtPct(margin);
+    $('profit').textContent = fmtMoney(profit);
+    $('markup').textContent = fmtPct(markup);
+    $('rev').textContent = fmtMoney(revenue);
+    $('cst').textContent = fmtMoney(cost);
+
+    $('bdRev').textContent = fmtMoney(revenue);
+    $('bdCost').textContent = fmtMoney(cost);
+    $('bdProfit').textContent = fmtMoney(profit);
+
+    $('marginNote').textContent = fmtMoney(profit) + ' profit on ' + fmtMoney(revenue) + ' revenue';
+  }
+
+  ['revenue', 'cost'].map($).forEach(el => el.addEventListener('input', calc));
+  calc();
+})();
+</script>
+
+</body></html>
